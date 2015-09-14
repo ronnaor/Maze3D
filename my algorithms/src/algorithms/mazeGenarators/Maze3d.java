@@ -1,5 +1,6 @@
 package algorithms.mazeGenarators;
 
+import java.nio.ByteBuffer;
 import java.util.Random;
 /**
  *  Maze3d abstract class implements Maze3dGenerator
@@ -27,6 +28,33 @@ public abstract class Maze3d implements Maze3dGenerator{
 		goalPosition = m.getGoalPosition();
 		maze = m.getMaze().clone();
 	}
+	
+	/**
+	 *  CTOR 
+	 * @param arr the byte arr we make the maze from
+	 */
+	public Maze3d(byte[] arr) { 
+		ByteBuffer buf = ByteBuffer.wrap(arr,0,arr.length);
+		int x=buf.getInt();
+		int y=buf.getInt();
+		int z=buf.getInt();
+		maze = new int[x][y][z];
+		x=buf.getInt();
+		y=buf.getInt();
+		z=buf.getInt();
+		startPosition = new Position(x,y,z);
+		x=buf.getInt();
+		y=buf.getInt();
+		z=buf.getInt();
+		goalPosition = new Position(x,y,z);
+		//To do fill the maze
+	}
+	
+	/*public byte[] toByteArray()
+	{
+		byte[] arr;
+		return arr;
+	}*/
 	
 	/**
 	 * Override Maze3dGenerator method measureAlgorithmTime
