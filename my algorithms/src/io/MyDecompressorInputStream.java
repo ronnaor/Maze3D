@@ -1,5 +1,7 @@
 package io;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -10,9 +12,6 @@ import java.util.List;
 public class MyDecompressorInputStream extends InputStream {
 
 	private InputStream in;
-	public MyDecompressorInputStream() {
-
-	}
 	
 	/**
 	 * Ctor for the class MyDecompressorInputStream
@@ -29,24 +28,23 @@ public class MyDecompressorInputStream extends InputStream {
 	 */
 	@Override
 	public int read() throws IOException {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return in.read();
 	}
 	
-	public byte[] readArr(byte[] arr) throws IOException {
+	public byte[] readArr() throws IOException {
 		List<Byte> tempList = new ArrayList<Byte>();
-		ByteBuffer buf = ByteBuffer.wrap(arr,0,arr.length);
+		
 		int cnt=0;
 		byte tempZeroOne;
 		int tempSeq;
 		for (int i=0; i<36; i++) // get the size of the maze (x,y,z) and the entrance and goal positions
 		{
-			tempList.add(buf.get());
+			tempList.add((byte) read());
 		}
-		while (buf.hasRemaining()) // get the Compressed maze and decompress it
+		while ((tempZeroOne=(byte) read()) != -1) // get the Compressed maze and decompress it
 		{
-			tempZeroOne=buf.get();
-			tempSeq=buf.get();
+			tempSeq=(byte) read();
 			for (int i=0; i<tempSeq; i++)
 			{
 				tempList.add(tempZeroOne);
@@ -75,43 +73,32 @@ public class MyDecompressorInputStream extends InputStream {
 	}
 	
 	public static void main(String[] args) {
-		MyDecompressorInputStream m = new MyDecompressorInputStream();
-		byte[] bb = new byte[42];
-		byte[] bbb = new byte[4];
-		for(int j=0;j<9;j++)
-		{
-			int temp=0;
-			bbb =m.convertIntToByte(300);
-			for (int i=j*4; i<((j*4)+4);i++)
-			{
-				bb[i]=bbb[temp];
-				temp++;
-			}
-		}
-		bb[36]=0;
-		bb[37]=4;
-		bb[38]=1;
-		bb[39]=3;
-		bb[40]=0;
-		bb[41]=5;
-		System.out.println("------------------------------------------------");
+		MyDecompressorInputStream m;
 		try {
-			byte[] t=m.readArr(bb);
-			for(byte a: t)
-			{
-				System.out.println(a);
+			m = new MyDecompressorInputStream(new FileInputStream("1.maz"));
+			try {
+				byte[] byteArr = m.readArr();
+				for (byte b : byteArr)
+				{
+					System.out.println(b);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-		
-			e.printStackTrace();
-		}
-		
-		try {
-			m.close();
-		} catch (IOException e) {
 			
-			e.printStackTrace();
+			
+			try {
+				m.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
 	}
-	
 }

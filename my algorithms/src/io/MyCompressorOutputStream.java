@@ -1,5 +1,8 @@
 package io;
 
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -7,9 +10,7 @@ import java.nio.ByteBuffer;
 public class MyCompressorOutputStream extends OutputStream {
 
 	private OutputStream out;
-	public MyCompressorOutputStream() {
-
-	}
+	
 	
 	/**
 	 * Ctor for the class MyCompressorOutputStream
@@ -25,7 +26,9 @@ public class MyCompressorOutputStream extends OutputStream {
 	 */
 	@Override 
 	public void write(int arg0) throws IOException {
-		System.out.println(arg0);
+		String s = ""+ arg0;
+		out.write(arg0);
+		
 
 	}
 
@@ -42,7 +45,14 @@ public class MyCompressorOutputStream extends OutputStream {
 		for (int i=0; i<9; i++) // get the size of the maze (x,y,z) and the entrance and goal positions and use write(int arg0) method
 		{
 			temp = buf.getInt();
-			write(temp);
+			byte[] TempArr = new byte[4];
+			TempArr =convertIntToByte(temp);
+			for (int j=0; j<4;j++)
+			{
+				write(TempArr[j]);
+
+			}
+			
 		}
 		
 		tempZeroOne= buf.get();
@@ -78,48 +88,55 @@ public class MyCompressorOutputStream extends OutputStream {
 
 	    return ByteBuffer.allocate(4).putInt(num).array();
 	}
-	/*public static void main(String[] args) {
-		MyCompressorOutputStream m = new MyCompressorOutputStream();
-		byte[] bb = new byte[50];
-		byte[] bbb = new byte[4];
-		for(int j=0;j<9;j++)
-		{
-			int temp=0;
-			bbb =m.convertIntToByte(300);
-			for (int i=j*4; i<((j*4)+4);i++)
+	public static void main(String[] args) {
+		MyCompressorOutputStream m;
+		try {
+			m = new MyCompressorOutputStream(new FileOutputStream("1.maz"));
+			byte[] bb = new byte[50];
+			byte[] bbb = new byte[4];
+			for(int j=0;j<9;j++)
 			{
-				bb[i]=bbb[temp];
-				temp++;
+				int temp=0;
+				bbb =m.convertIntToByte(300);
+				for (int i=j*4; i<((j*4)+4);i++)
+				{
+					bb[i]=bbb[temp];
+					temp++;
+				}
 			}
-		}
-		for (int i=36; i<41;i++)
-		{
-			bb[i]= 0;
-		}
-		for (int i=41; i<45;i++)
-		{
-			bb[i]= 1;
-		}
-		for (int i=45; i<49;i++)
-		{
-			bb[i]= 0;
-		}
-		for (int i=49; i<50;i++)
-		{
-			bb[i]= 1;
-		}
-		System.out.println("------------------------------------------------");
-		try {
-			m.write(bb);
-		} catch (IOException e) {
-		
-			e.printStackTrace();
-		}
-		try {
-			m.close();
-		} catch (IOException e) {
+			for (int i=36; i<41;i++)
+			{
+				bb[i]= 0;
+			}
+			for (int i=41; i<45;i++)
+			{
+				bb[i]= 1;
+			}
+			for (int i=45; i<49;i++)
+			{
+				bb[i]= 0;
+			}
+			for (int i=49; i<50;i++)
+			{
+				bb[i]= 1;
+			}
+			System.out.println("------------------------------------------------");
+			try {
+				m.write(bb);
+			} catch (IOException e) {
 			
-			e.printStackTrace();
+				e.printStackTrace();
+			}
+			try {
+				m.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-	}*/
-}
+		
+}}
