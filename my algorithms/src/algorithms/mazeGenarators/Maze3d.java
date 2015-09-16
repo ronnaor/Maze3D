@@ -1,6 +1,8 @@
 package algorithms.mazeGenarators;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 /**
  *  Maze3d abstract class implements Maze3dGenerator
@@ -35,26 +37,147 @@ public abstract class Maze3d implements Maze3dGenerator{
 	 */
 	public Maze3d(byte[] arr) { 
 		ByteBuffer buf = ByteBuffer.wrap(arr,0,arr.length);
+		//set x y z of the maze
 		int x=buf.getInt();
 		int y=buf.getInt();
 		int z=buf.getInt();
-		maze = new int[x][y][z];
+		this.maze = new int[x][y][z];
+		//set startPosition
 		x=buf.getInt();
 		y=buf.getInt();
 		z=buf.getInt();
-		startPosition = new Position(x,y,z);
+		this.startPosition = new Position(x,y,z);
+		//set goalPosition
 		x=buf.getInt();
 		y=buf.getInt();
 		z=buf.getInt();
-		goalPosition = new Position(x,y,z);
-		//To do fill the maze
+		//set the maze
+		this.goalPosition = new Position(x,y,z);
+		for (int i=0; i<this.maze.length; i++)
+		{
+			for (int j=0; j<this.maze[0].length; j++)
+			{
+				for (int k=0; k<this.maze[0][0].length; k++)
+				{
+					this.maze[i][j][k] = buf.get();
+				}
+			}
+		}
+		
 	}
 	
-	/*public byte[] toByteArray()
+	/**
+	 * method that convert an integer to a array of 4 bytes
+	 * @param num the number we want to convert
+	 * @return array of 4 bytes represent the int
+	 */
+	public byte[] convertIntToByte(int num)
+	{
+
+	    return ByteBuffer.allocate(4).putInt(num).array();
+	}
+	
+	
+	public byte[] toByteArray()
 	{
 		byte[] arr;
+		List<Byte> tempList = new ArrayList<Byte>();
+		int cnt=0;
+		byte[] tempArr;
+		//get the x size
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.maze.length);
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the y size
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.maze[0].length);
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the z size
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.maze[0][0].length);
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		
+		//get the startPosition x 
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.startPosition.getX());
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the startPosition y 
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.startPosition.getY());
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the startPosition z
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.startPosition.getZ());
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the goalPosition x 
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.goalPosition.getX());
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the goalPosition y
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.goalPosition.getY());
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		//get the goalPosition z
+		tempArr= new byte[4];
+		tempArr =convertIntToByte(this.goalPosition.getZ());
+		for (int j=0; j<4;j++)
+		{
+			tempList.add(tempArr[j]);
+
+		}
+		// get the maze
+		for (int i=0; i<this.maze.length; i++)
+		{
+			for (int j=0; j<this.maze[0].length; j++)
+			{
+				for (int k=0; k<this.maze[0][0].length; k++)
+				{
+					tempList.add((byte)this.maze[i][j][k]);
+				}
+			}
+		}
+		
+		arr = new byte[tempList.size()];
+		for (Byte b : tempList)
+		{
+			arr[cnt]=b.byteValue();
+			cnt++;
+		}
 		return arr;
-	}*/
+	}
+	
 	
 	/**
 	 * Override Maze3dGenerator method measureAlgorithmTime
@@ -272,4 +395,35 @@ public abstract class Maze3d implements Maze3dGenerator{
 		return posArr;
 	}
 	
+	/**
+	 * Override object method equals
+	 * @param obj the object we will check if equal
+	 * @return true if equal and false if not
+	 */
+	@Override
+    public boolean equals(Object obj){ //  override to Object's equals method
+		
+		if ( (((Maze3d)obj).getGoalPosition().equals(this.goalPosition)) && (((Maze3d)obj).getStartPosition().equals(this.startPosition)) && (((Maze3d)obj).getMaze().length==this.maze.length) && (((Maze3d)obj).getMaze()[0].length==this.maze[0].length)&& (((Maze3d)obj).getMaze()[0][0].length==this.maze[0][0].length))
+		{
+			for (int i=0; i<this.maze.length; i++)
+			{
+				for (int j=0; j<this.maze[0].length; j++)
+				{
+					for (int k=0; k<this.maze[0][0].length; k++)
+					{
+						if(this.maze[i][j][k] != ((Maze3d)obj).maze[i][j][k])
+						{
+							return false;
+						}
+					}
+				}
+			}
+			
+		}
+		else
+		{
+			return false;
+		}
+		return true;
+    }
 }

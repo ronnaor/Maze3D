@@ -1,7 +1,6 @@
 package io;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -32,7 +31,7 @@ public class MyDecompressorInputStream extends InputStream {
 		return in.read();
 	}
 	
-	public byte[] readArr() throws IOException {
+	public int read(byte[] arr) throws IOException {
 		List<Byte> tempList = new ArrayList<Byte>();
 		
 		int cnt=0;
@@ -51,13 +50,12 @@ public class MyDecompressorInputStream extends InputStream {
 			}
 		}
 		
-		byte[] byteArr = new byte[tempList.size()];
 		for (Byte b : tempList)
 		{
-			byteArr[cnt]=b.byteValue();
+			arr[cnt]=b.byteValue();
 			cnt++;
 		}
-		return byteArr;
+		return 0;
 	}
 
 	
@@ -72,33 +70,5 @@ public class MyDecompressorInputStream extends InputStream {
 	    return ByteBuffer.allocate(4).putInt(num).array();
 	}
 	
-	public static void main(String[] args) {
-		MyDecompressorInputStream m;
-		try {
-			m = new MyDecompressorInputStream(new FileInputStream("1.maz"));
-			try {
-				byte[] byteArr = m.readArr();
-				for (byte b : byteArr)
-				{
-					System.out.println(b);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			try {
-				m.close();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-		
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-	}
+
 }
