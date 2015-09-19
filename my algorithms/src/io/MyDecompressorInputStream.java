@@ -7,7 +7,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Class MyDecompressorInputStream that extends InputStream
+ */
 public class MyDecompressorInputStream extends InputStream {
 
 	private InputStream in;

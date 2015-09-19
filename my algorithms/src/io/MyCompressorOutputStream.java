@@ -4,7 +4,9 @@ package io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-
+/**
+ * Class MyCompressorOutputStream that extends OutputStream
+ */
 public class MyCompressorOutputStream extends OutputStream {
 
 	private OutputStream out;
@@ -35,29 +37,33 @@ public class MyCompressorOutputStream extends OutputStream {
 	 */
 	public void write(byte[] byteArr) throws IOException {
 		ByteBuffer buf = ByteBuffer.wrap(byteArr,0,byteArr.length);
+		//setting the buffer
 		int temp;
 		int tempZeroOne;
 		int cnt;
 		for (int i=0; i<9; i++) // get the size of the maze (x,y,z) and the entrance and goal positions and use write(int arg0) method
 		{
-			temp = buf.getInt();
 			byte[] TempArr = new byte[4];
-			TempArr =convertIntToByte(temp);
+			//building byte array
+			TempArr =convertIntToByte(buf.getInt());
+			//converting the integer to a array of 4 bytes
 			for (int j=0; j<4;j++)
 			{
 				write(TempArr[j]);
-
+				//writing the new array
 			}
 			
 		}
 		
 		tempZeroOne= buf.get();
+		//getting the byte at the buffer's current position 
 		cnt = 1;
 		
 		while (buf.hasRemaining()) // get the maze and Compress it and than use the write(int arg0) method
 		{
 			temp = buf.get();
 			if (temp==tempZeroOne)
+				//comparing between the buffer two positions before and after the check if any elemnts were left
 			{
 				cnt++;
 			}
