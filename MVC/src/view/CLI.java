@@ -3,7 +3,6 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -13,10 +12,15 @@ import java.util.Set;
 public class CLI extends Thread {
 	private BufferedReader in;
 	private PrintWriter out; 
-	private MyView myView;
+	private View myView;
 
-
-	public CLI(BufferedReader in,PrintWriter out,MyView myView) {
+	/**
+	 * Ctor
+	 * @param in BufferedReader
+	 * @param out PrintWriter
+	 * @param myView View
+	 */
+	public CLI(BufferedReader in,PrintWriter out,View myView) {
 		this.myView = myView;
 		this.in = in;
 		this.out = out;
@@ -34,7 +38,7 @@ public class CLI extends Thread {
 			while((str = in.readLine()).equals("exit"))
 				{
 				Boolean bool = true;
-				//bulding set of all the strings of the keys in the hashmaps	
+				//building set of all the strings of the keys in the hashmaps	
 				Set<String> keys = myView.getCommands().keySet();
 					for (String key : keys)
 					{
@@ -56,7 +60,6 @@ public class CLI extends Thread {
 			myView.getCommands().get(str).doCommand(null);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			}}

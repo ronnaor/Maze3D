@@ -73,7 +73,6 @@ public abstract class Maze3d implements Maze3dGenerator{
 	 */
 	public byte[] convertIntToByte(int num)
 	{
-
 	    return ByteBuffer.allocate(4).putInt(num).array();
 	}
 	

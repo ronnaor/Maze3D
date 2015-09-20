@@ -5,13 +5,14 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 import controller.Command;
+import controller.Controller;
 /**
  * class MyView that implements from View
  *
  */
 public class MyView implements View {
-
-	private HashMap<String, Command<View>> commands;
+	private Controller controller;
+	private HashMap<String, Command> commands;
 	private CLI cli;
 	
 	/**
@@ -29,14 +30,15 @@ public class MyView implements View {
 	}
 	/**
 	 * settings the commands from the new map
+	 *  @param map HashMap of commands
 	 */
 	@Override
-	public void setCommands(HashMap<String, Command<View>> map) {
-		this.commands = map;
+	public void setCommands(HashMap<String, Command> commands) {
+		this.commands = commands;
 	}
 
 	@Override
-	public void printDir(String str) {
+	public void printDir(String[] path) {
 		// TODO Auto-generated method stub
 
 	}
@@ -48,9 +50,33 @@ public class MyView implements View {
 	}
 
 	@Override
-	public void performCommand(String str) {
+	public void display(String[] mazeName) {
 		// TODO Auto-generated method stub
-
+		
+	}
+	
+	@Override
+	public void displayCrossSectionBy(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mazeSize(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void fileSize(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void displaySolution(String[] args) {
+		// TODO Auto-generated method stub
+		
 	}
 	/**
 	 * getting the cli object
@@ -70,8 +96,25 @@ public class MyView implements View {
 	 * getting the commands from MyView
 	 * @return the commands of HashMap
 	 */
-	public HashMap<String, Command<View>> getCommands() {
+	@Override
+	public HashMap<String, Command> getCommands() {
 		return commands;
 	}
+	/**
+	 * get the view controller
+	 * @return controller
+	 */
+	public Controller getController() {
+		return controller;
+	}
+	/**
+	 * set controller to the view
+	 * @param controller
+	 */
+	@Override
+	public void setController(Controller controller) {
+		this.controller = controller;
+	}
+	
 
 }

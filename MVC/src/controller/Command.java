@@ -1,13 +1,12 @@
 package controller;
 /**
  * 
- *command template interface
- * @param <T> the object type of the command
+ *command  interface
  */
-public interface Command <T>{
+public interface Command {
 	/**
 	 * doing the command
 	 * @param args the template array objects
 	 */
-	void doCommand(T[] args);
+	void doCommand(String[] args);
 }
