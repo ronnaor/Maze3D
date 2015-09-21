@@ -2,8 +2,11 @@ package model;
 
 import java.util.HashMap;
 
+import algorithms.mazeGenarators.Maze3d;
+import algorithms.mazeGenarators.Position;
+import algorithms.search.Solution;
 import controller.Command;
-import controller.Controller;
+import controller.MyController;
 
 /**
  * interface of model
@@ -16,11 +19,6 @@ public interface Model {
 	 */
 	void setCommands(HashMap<String,Command> commands);
 	/**
-	 * Performing the command
-	 * @param str which command to perform
-	 */
-	void performCommand(String str);
-	/**
 	 * Generating maze
 	 * @param args array of strings, the name of the maze, and the x,y,z sizes
 	 */
@@ -29,7 +27,7 @@ public interface Model {
 	 * set a controller to the model
 	 * @param controller
 	 */
-	void setController(Controller controller);
+	void setController(MyController controller);
 	/**
 	 * save maze to a file
 	 * @param args array of strings: the name of the maze we save, and the name of the file we save to
@@ -43,6 +41,7 @@ public interface Model {
 	/**
 	 * solve the maze
 	 * @param args array of strings: the name of the maze, and the name of the algorithm we solve with 
+	 * @return 
 	 */
 	void solve(String[] args);
 	/**
@@ -50,4 +49,10 @@ public interface Model {
 	 * @param args  
 	 */
 	void exit(String[] args);
+	/**
+	 * getting the maze
+	 * @param mazeName the maze we want
+	 * @return the maze
+	 */
+	Maze3d getMaze(String mazeName);
 }

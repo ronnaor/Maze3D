@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import controller.Command;
 import controller.Controller;
+import controller.MyController;
 /**
  * interface view
  *
@@ -20,16 +21,10 @@ public interface View {
 	 */
 	void printDir(String[] path);
 	/**
-	 * getting the name of the command
-	 * @param str the name of the command
-	 */
-	void getCommandFromCLI(String str);
-	
-	/**
 	 * set controller to the view
 	 * @param controller
 	 */
-	void setController(Controller controller);
+	void setController(MyController controller);
 	/**
 	 * getting the commands from MyView
 	 * @return the commands of HashMap
@@ -61,4 +56,9 @@ public interface View {
 	 * @param args the name of the maze
 	 */
 	void displaySolution(String[] args);
+	/**
+	 * send what to print to output
+	 * @param str the output we want to display
+	 */
+	void printOutput(String str);
 }

@@ -2,6 +2,9 @@ package controller;
 
 import java.util.HashMap;
 
+import algorithms.mazeGenarators.Maze3d;
+import algorithms.mazeGenarators.Position;
+import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
@@ -163,5 +166,28 @@ public class MyController implements Controller {
 		});
 		
 	}
-
+	/**
+	 * casting and checking from string to integer
+	 * @param str the variable we want to change
+	 * @return The integer we changed the string to
+	 */
+	public static Integer tryParseInt(String str) {
+		   try {
+		      return Integer.parseInt(str);
+		   } catch (NumberFormatException ex) {
+		      return null;
+		   }
+		}
+	/**
+	 * sending the view what to print
+	 * @param string the output we want
+	 */
+	public void outPut(String string) 
+	{
+		view.printOutput(string);
+	}
+	public Maze3d getMaze(String mazeName) {
+		Maze3d maze = model.getMaze(mazeName);
+		return maze;
+	}
 }

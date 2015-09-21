@@ -1,17 +1,20 @@
 package view;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+import algorithms.mazeGenarators.Maze3d;
 import controller.Command;
 import controller.Controller;
+import controller.MyController;
 /**
  * class MyView that implements from View
  *
  */
 public class MyView implements View {
-	private Controller controller;
+	private MyController controller;
 	private HashMap<String, Command> commands;
 	private CLI cli;
 	
@@ -39,20 +42,61 @@ public class MyView implements View {
 
 	@Override
 	public void printDir(String[] path) {
-		// TODO Auto-generated method stub
-
+		if (path== null) 
+		{
+			cli.printOutput("not enough data");
+		} 
+		File file = new File(path[0]);
+		for (String s : file.list())
+		{
+			cli.printOutput(s);
+		}
 	}
 
 	@Override
-	public void getCommandFromCLI(String str) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void display(String[] mazeName) {
-		// TODO Auto-generated method stub
-		
+	public void display(String[] mazeName) 
+	{
+		if (mazeName== null) 
+		{
+			cli.printOutput("not enough data");
+		} 
+		Maze3d maze;
+		if ((maze= controller.getMaze(mazeName[0]))!= null)
+		{
+			for(int k=0;k<maze.getMaze()[0].length;k++)
+			{
+				int[][] maze2dy=maze.getCrossSectionByY(k);
+				
+				System.out.println("maze in level " +k + ":");
+				System.out.println("{");
+				for(int i=0;i<maze2dy.length;i++)
+				{
+					System.out.print("{");
+					for(int j=0;j<maze2dy[i].length;j++)
+					{
+						System.out.print(maze2dy[i][j]);
+						if (j != maze2dy[i].length-1)
+						{
+							System.out.print(", ");
+						}
+					}
+					System.out.println("},");
+				}
+				System.out.println("}");
+			}
+			System.out.println();
+			// prints the maze entrance
+			System.out.println("The entrance point of the maze:");
+			System.out.println(maze.getStartPosition());
+			// prints the maze exit position
+			System.out.println("The goal point of the maze:");
+			System.out.println(maze.getGoalPosition());
+			System.out.println();
+		}
+		else
+		{
+			cli.printOutput("no such maze");
+		}
 	}
 	
 	@Override
@@ -69,8 +113,11 @@ public class MyView implements View {
 	
 	@Override
 	public void fileSize(String[] args) {
-		// TODO Auto-generated method stub
-		
+		if (args.length < 1) 
+		{
+			cli.printOutput("not enough data");
+		}
+		cli.printOutput("The maze in the file size is: "+(new File(args[0]+".maz").length()));		
 	}
 	
 	@Override
@@ -112,9 +159,13 @@ public class MyView implements View {
 	 * @param controller
 	 */
 	@Override
-	public void setController(Controller controller) {
+	public void setController(MyController controller) {
 		this.controller = controller;
 	}
-	
+	@Override
+	public void printOutput(String str) {
+		cli.printOutput(str);
+		
+	}
 
 }

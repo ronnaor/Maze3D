@@ -78,6 +78,11 @@ public class CLI extends Thread {
 	public void setOut(PrintWriter out) {
 		this.out = out;
 	}
+
+	public void printOutput(String str) {
+		out.println(str);
+		out.flush();
+	}
 	
 
 }
