@@ -63,7 +63,7 @@ public class Demo {
 		System.out.println(maze.getGoalPosition());
 		System.out.println();
 		// using task to solve the maze with bfs and A*
-		/*Task<Position> task = new MazeSearcherTask(new MazeSearchable(maze,1));
+		Task<Position> task = new MazeSearcherTask(new MazeSearchable(maze,1));
 		System.out.println("Solution with BFS:");
 		task.doTask(new BFS<Position>());
 		System.out.println();
@@ -71,7 +71,7 @@ public class Demo {
 		task.doTask(new AStar<Position>(new MazeAirDistance()));
 		System.out.println();
 		System.out.println("Solution with A* manhatten distance heuristic:");
-		task.doTask(new AStar<Position>(new MazeManhattenDistance()));*/
+		task.doTask(new AStar<Position>(new MazeManhattenDistance()));
 		
 		////part 3
 		System.out.println("------------part3-------------");
@@ -124,8 +124,4 @@ public class Demo {
 
 	}
 	
-	public static void main(String[] args) {
-		Demo d = new Demo();
-		d.run();
-	}
 }

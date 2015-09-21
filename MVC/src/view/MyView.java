@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 import algorithms.mazeGenarators.Maze3d;
+import algorithms.mazeGenarators.Position;
+import algorithms.search.Solution;
 import controller.Command;
 import controller.Controller;
 import controller.MyController;
@@ -24,12 +26,12 @@ public class MyView implements View {
 	 * @param out the output stream object
 	 */
 	public MyView(BufferedReader in,PrintWriter out) {
-		cli.setIn(in);
-		cli.setOut(out);
+		 this.cli = new CLI(in,out,this);
 	}
-	void start()
+	@Override
+	public void start()
 	{
-		
+		cli.start();
 	}
 	/**
 	 * settings the commands from the new map
@@ -39,36 +41,49 @@ public class MyView implements View {
 	public void setCommands(HashMap<String, Command> commands) {
 		this.commands = commands;
 	}
-
+	@Override
+	public HashMap<String, Command> controllerCommands() {
+		return controller.getCommands();
+	}
 	@Override
 	public void printDir(String[] path) {
-		if (path== null) 
+		if (path.length<1)
 		{
 			cli.printOutput("not enough data");
-		} 
-		File file = new File(path[0]);
-		for (String s : file.list())
-		{
-			cli.printOutput(s);
 		}
+		else
+		{
+			File file; 
+			try
+			{
+			file= new File(path[0]);
+				for (String s : file.list())
+				{
+					cli.printOutput(s);
+				}
+			}
+			catch (Exception e) {
+				cli.printOutput("file does not exist");
+			}	
+		}
+		
 	}
 
 	@Override
-	public void display(String[] mazeName) 
+	public void display(Maze3d maze) 
 	{
-		if (mazeName== null) 
+		if (maze== null) 
 		{
-			cli.printOutput("not enough data");
+			cli.printOutput("this maze does not exist");
 		} 
-		Maze3d maze;
-		if ((maze= controller.getMaze(mazeName[0]))!= null)
+		else 
 		{
 			for(int k=0;k<maze.getMaze()[0].length;k++)
 			{
 				int[][] maze2dy=maze.getCrossSectionByY(k);
 				
-				System.out.println("maze in level " +k + ":");
-				System.out.println("{");
+				cli.printOutput("maze in level " +k + ":");
+				cli.printOutput("{");
 				for(int i=0;i<maze2dy.length;i++)
 				{
 					System.out.print("{");
@@ -80,35 +95,47 @@ public class MyView implements View {
 							System.out.print(", ");
 						}
 					}
-					System.out.println("},");
+					cli.printOutput("},");
 				}
-				System.out.println("}");
+				cli.printOutput("}");
 			}
-			System.out.println();
+			cli.printOutput("");
 			// prints the maze entrance
-			System.out.println("The entrance point of the maze:");
-			System.out.println(maze.getStartPosition());
+			cli.printOutput("The entrance point of the maze:");
+			cli.printOutput(maze.getStartPosition().toString());
 			// prints the maze exit position
-			System.out.println("The goal point of the maze:");
-			System.out.println(maze.getGoalPosition());
-			System.out.println();
+			cli.printOutput("The goal point of the maze:");
+			cli.printOutput(maze.getGoalPosition().toString());
+			cli.printOutput("");
 		}
-		else
+		
+	}
+	
+	@Override
+	public void displayCrossSectionBy(int[][] arr, String axis, String index )
+	{
+		cli.printOutput("maze in section " +axis + ":");
+		cli.printOutput("in level " +index + ":");
+		cli.printOutput("{");
+		for(int i=0;i<arr.length;i++)
 		{
-			cli.printOutput("no such maze");
+			System.out.print("{");
+			for(int j=0;j<arr[i].length;j++)
+			{
+				System.out.print(arr[i][j]);
+				if (j != arr[i].length-1)
+				{
+					System.out.print(", ");
+				}
+			}
+			cli.printOutput("},");
 		}
+		cli.printOutput("}");	
 	}
 	
 	@Override
-	public void displayCrossSectionBy(String[] args) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void mazeSize(String[] args) {
-		// TODO Auto-generated method stub
-		
+	public void mazeSize(int maze,String args) {
+		cli.printOutput("The maze "+args +" size is:"+maze);		
 	}
 	
 	@Override
@@ -117,13 +144,19 @@ public class MyView implements View {
 		{
 			cli.printOutput("not enough data");
 		}
-		cli.printOutput("The maze in the file size is: "+(new File(args[0]+".maz").length()));		
+		else
+		{
+			cli.printOutput("The maze in the file size is: "+(new File(args[0]+".maz").length()));	
+		}
+			
 	}
 	
 	@Override
-	public void displaySolution(String[] args) {
-		// TODO Auto-generated method stub
-		
+	public void displaySolution(Solution<Position> solve) {
+		for (Position s: solve.getPath())
+		{
+			cli.printOutput(s.toString());
+		}
 	}
 	/**
 	 * getting the cli object

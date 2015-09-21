@@ -2,8 +2,10 @@ package view;
 
 import java.util.HashMap;
 
+import algorithms.mazeGenarators.Maze3d;
+import algorithms.mazeGenarators.Position;
+import algorithms.search.Solution;
 import controller.Command;
-import controller.Controller;
 import controller.MyController;
 /**
  * interface view
@@ -34,18 +36,20 @@ public interface View {
 	 * display maze with the name mazeName
 	 * @param mazeName the name of the maze we want to display
 	 */
-	void display(String[] mazeName);
+	void display(Maze3d maze);
 	
 	/**
 	 * display cross section by axis (x,y,z), index and maze name
-	 * @param args array of strings: the axis, the index and the maze name
+	 * @param arr arr of ints
+	 * @param axis axis we print by
+	 * @param index index in the axis
 	 */
-	void displayCrossSectionBy(String[] args);
+	void displayCrossSectionBy(int[][] arr, String axis, String index);
 	/**
 	 * display the maze size
 	 * @param args the name of the maze
 	 */
-	void mazeSize(String[] args);
+	void mazeSize(int maze,String args);
 	/**
 	 * display the maze size in a file
 	 * @param args the name of the file
@@ -55,10 +59,21 @@ public interface View {
 	 * display the solution of a maze
 	 * @param args the name of the maze
 	 */
-	void displaySolution(String[] args);
+	void displaySolution(Solution<Position> solve);
 	/**
 	 * send what to print to output
 	 * @param str the output we want to display
 	 */
 	void printOutput(String str);
+	/**
+	 * starting the program
+	 */
+	void start();
+	/**
+	 * getting the commands of the controller
+	 * @return the commands in hasmap
+	 */
+	HashMap<String, Command> controllerCommands();
+	
+	
 }

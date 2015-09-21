@@ -54,5 +54,24 @@ public interface Model {
 	 * @param mazeName the maze we want
 	 * @return the maze
 	 */
-	Maze3d getMaze(String mazeName);
+	Maze3d getMaze(String[] args);
+	/**
+	 * getting a 2D array that represent the maze by section chosen
+	 * @param args strings :section, index, maze name
+	 * @return 2D array of ints
+	 */
+	int[][] getCrossSectionBy(String[] args);
+	/**
+	 * getting the maze size from memory
+	 * @param args stating which maze we want
+	 * @return int size of the maze
+	 */
+	int mazeSize(String[] args);
+	/**
+	 * getting solution of the selected algorithm that solved the maze
+	 * @param args the maze of which we want our solution
+	 * @return the solution 
+	 */
+	Solution<Position> getSoultion(String[] args);
+	
 }

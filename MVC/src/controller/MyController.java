@@ -96,24 +96,29 @@ public class MyController implements Controller {
 			
 			@Override
 			public void doCommand(String[] args) {
-				view.display(args);
-				
+				Maze3d maze = model.getMaze(args);
+				if (maze !=null)
+				{
+					view.display(maze);	
+				}
 			}
 		});
 		commands.put("display cross section by", new Command() {
 			
 			@Override
 			public void doCommand(String[] args) {
-				view.display(args);
-				
+				int[][] arr = model.getCrossSectionBy(args);
+				if (arr!=null)
+				{
+					view.displayCrossSectionBy(arr, args[0], args[1]);
+				}	
 			}
 		});
 		commands.put("save maze", new Command() {
 			
 			@Override
 			public void doCommand(String[] args) {
-				model.saveMaze(args);
-				
+				model.saveMaze(args);	
 			}
 		});
 		commands.put("load maze", new Command() {
@@ -128,8 +133,11 @@ public class MyController implements Controller {
 			
 			@Override
 			public void doCommand(String[] args) {
-				view.mazeSize(args);
-				
+				int maze= model.mazeSize(args);
+				if (maze!=0)
+				{
+					view.mazeSize(maze,args[0]);
+				}
 			}
 		});
 		commands.put("file size", new Command() {
@@ -152,8 +160,11 @@ public class MyController implements Controller {
 			
 			@Override
 			public void doCommand(String[] args) {
-				view.displaySolution(args);
-				
+				Solution<Position> solve= model.getSoultion(args);
+				if (solve != null)
+				{
+					view.displaySolution(solve);
+				}
 			}
 		});
 		commands.put("exit", new Command() {
@@ -186,8 +197,5 @@ public class MyController implements Controller {
 	{
 		view.printOutput(string);
 	}
-	public Maze3d getMaze(String mazeName) {
-		Maze3d maze = model.getMaze(mazeName);
-		return maze;
-	}
+	
 }

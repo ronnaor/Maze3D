@@ -9,8 +9,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Maze3dByteArr;
@@ -34,13 +35,15 @@ public class MyModel implements Model {
 	private HashMap<String, Maze3d> mazes;
 	private HashMap<String, Command> commands;
 	private HashMap<String, Solution<Position>> solutions;
-	
+	ExecutorService exe;
 	/**
 	 * Ctor of MyModel
 	 */
 	public MyModel() {
-		mazes = new HashMap<String, Maze3d>();
-		commands = new HashMap<String, Command>();
+		this.mazes = new HashMap<String, Maze3d>();
+		this.commands = new HashMap<String, Command>();
+		this.solutions = new HashMap<String, Solution<Position>>();
+		exe = Executors.newFixedThreadPool(13);
 	}
 	/**
 	 * get the model controller
@@ -91,21 +94,39 @@ public class MyModel implements Model {
 
 	@Override
 	public void generate3DMaze(String[] args) {
-		//checking if we have all the data we need
-		if (args.length < 4) 
-		{
-			controller.outPut("not enough data");
-		}
-		Integer x,y,z;
-		//cheking if the the 3 other variabels are int type
-		if (((x=MyController.tryParseInt(args[1]))!=null)&& ((y=MyController.tryParseInt(args[2]))!=null)&&
-			((z=MyController.tryParseInt(args[2]))!=null))
-		{
-			//creating the maze and adding it to the hasmap
-			Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
-			mazes.put(args[0], maze);
-			controller.outPut("maze "+args[0]+"is ready");
-		}
+		exe.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				//checking if we have all the data we need
+			Integer x,y,z;
+			if (args.length < 4) 
+			{
+				controller.outPut("not enough data");
+			}
+			
+			//cheking if the the 3 other variabels are int type
+			else if (((x=MyController.tryParseInt(args[1]))!=null)&& ((y=MyController.tryParseInt(args[2]))!=null)&&
+				((z=MyController.tryParseInt(args[3]))!=null))
+			{
+				//creating the maze and adding it to the hashmap
+				if (((int)x>0)&&((int)y>0)&&((int)z>0))
+				{
+				Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
+				mazes.put(args[0], maze);
+				controller.outPut("maze "+args[0]+" is ready");
+				}
+				else
+				{
+					controller.outPut("data input does not match the command requiremnts");
+				}
+			}
+			else
+			{
+				controller.outPut("data input does not match the command requiremnts");
+			}
+				}
+		});	
 	}
 	
 	@Override
@@ -162,46 +183,160 @@ public class MyModel implements Model {
 	@Override
 	public void solve(String[] args)
 	{
-		if (args.length < 2) 
-		{
-			controller.outPut("not enough data");
-		}
-		else if(mazes.containsKey(args[0]))
-		{
-			//Checking which algorithm was chosen and if a solution was already existing for the maze, it overwrites it.
-			if(args[1].equals("BFS"))
-			{
-				Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
-				solutions.put(args[0], s);
+		exe.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (args.length < 2) 
+				{
+					controller.outPut("not enough data");
+				}
+				else if(mazes.containsKey(args[0]))
+				{
+					//Checking which algorithm was chosen and if a solution was already existing for the maze, it overwrites it.
+					if(args[1].equals("BFS"))
+					{
+						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
+						solutions.put(args[0], s);
+					}
+					else if(args[1].equals("A* mnhtn"))
+					{
+						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
+						solutions.put(args[0], s);
+					}
+					else if(args[1].equals("A* air"))
+					{
+						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
+						solutions.put(args[0], s);
+					}
+					else
+					{
+						controller.outPut("no algorithm was chosen");
+					}
+				}
+				else
+				{
+					controller.outPut("no such maze exist");
+				}
+				
 			}
-			else if(args[1].equals("A* mnhtn"))
-			{
-				Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
-				solutions.put(args[0], s);
-			}
-			else if(args[1].equals("A* air"))
-			{
-				Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
-				solutions.put(args[0], s);
-			}
-			else
-			{
-				controller.outPut("no algorithm was chosen");
-			}
-		}
-		else
-		{
-			controller.outPut("no such maze exist");
-		}
+		});		
 	}
 	
 	@Override
 	public void exit(String[] args) {
+		exe.shutdown();
+		try 
+		{
+			while(!(exe.awaitTermination(2, TimeUnit.SECONDS)));
+		} 
+		catch (InterruptedException e)
+		{
+			controller.outPut(e.getMessage());
+		}
+		controller.outPut("Goodbye and good Java to you");
+	}
+	@Override
+	public Maze3d getMaze(String[] args) {
+		if (args.length<1) 
+		{
+			controller.outPut("not enough data");
+			return null;
+		} 
+		else if (mazes.containsKey(args[0]))
+		{
+			Maze3d maze;
+			maze= mazes.get(args[0]);
+			return maze;
+		}
+		else
+		{
+			controller.outPut("maze does not exist");
+			return null;
+		}
+	}
+	@Override
+	public int[][] getCrossSectionBy(String[] args) {
+		Integer y;
+		if (args.length < 3) 
+		{
+			controller.outPut("not enough data");
+			return null;
+		} 
+		else if ((mazes.containsKey(args[2]))&&((y=MyController.tryParseInt(args[1]))!=null))
+		{
+			Maze3d maze;
+			maze= mazes.get(args[2]);
+			int x=(int)y;
+			try
+			{
+				if (args[0].equalsIgnoreCase("X"))
+				{
+					return maze.getCrossSectionByX(x);
+				}
+				else if (args[0].equalsIgnoreCase("Y"))
+				{
+					return maze.getCrossSectionByY(x);
+				}
+				else if (args[0].equalsIgnoreCase("Z"))
+				{
+					return maze.getCrossSectionByZ(x);
+				}
+				else
+				{
+					controller.outPut("value is not as expected");
+					return null;
+				}
+			}
+			catch (Exception e)
+			{
+				controller.outPut(e.getMessage());
+				return null;
+			}
+		}
+		else
+		{
+			controller.outPut("value is not as expected to be int");
+			return null;
+		}
 		
 	}
 	@Override
-	public Maze3d getMaze(String mazeName) {
-		Maze3d maze = mazes.get(mazeName);
-		return maze;
+	public int mazeSize(String[] args) {
+		if (args.length<1) 
+		{
+			controller.outPut("not enough data");
+			return 0;
+		} 
+		else if (mazes.containsKey(args[0]))
+		{
+			Maze3d maze;
+			maze= mazes.get(args[0]);
+			int size = maze.getMaze().length*maze.getMaze()[0].length*maze.getMaze()[0][0].length;
+			return size;
+		}	
+		else
+		{
+			controller.outPut("no such maze");
+			return 0;
+		}
+	}
+	@Override
+	public Solution<Position> getSoultion(String[] args) {
+		if (args.length<1) 
+		{
+			controller.outPut("not enough data");
+			return null;
+		} 
+		else if (solutions.containsKey(args[0]))
+		{
+			Solution<Position> solve = solutions.get(args[0]);
+			return solve;
+		}
+		else
+		{
+			controller.outPut("solution wasn't created");
+			return null;
+		}
 	}
 }

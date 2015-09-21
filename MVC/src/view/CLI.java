@@ -3,6 +3,7 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -29,43 +30,64 @@ public class CLI extends Thread {
 	public void start()
 	{		 
 		new Thread(new Runnable() {
-			
 			@Override
-			public void run() {		 
-		String str;
-		try {
-			//continuing until getting exit command
-			while((str = in.readLine()).equals("exit"))
-				{
-				Boolean bool = true;
-				//building set of all the strings of the keys in the hashmaps	
-				Set<String> keys = myView.getCommands().keySet();
-					for (String key : keys)
-					{
-						//comparing the key string to the string from the input stream
-						if (key.equals(str))
+			public void run() {	
+				String str;
+				try {
+					//continuing until getting exit command
+					printOutput("Please enter your choice");
+					while(!(str = in.readLine()).equals("exit"))						
 						{
-							myView.getCommands().get(str).doCommand(null);
-							bool = false;
-							//breaking the for loop because there could be only one command with this name
-							break;
+						Boolean bool = true;
+						//building set of all the strings of the keys in the hashmaps	
+						Set<String> keys = myView.controllerCommands().keySet();
+							for (String key : keys)
+							{
+								//comparing the key string to the string from the input stream
+								if (key.equals(str))
+								{
+									ArrayList<String> list = new ArrayList<String>();	
+									printOutput("Please enter the value for the command, when finished enter Stop");
+									String answer = in.readLine();
+									if(!answer.equalsIgnoreCase("Stop"))
+										{
+										list.add(answer);
+										}
+									while (!answer.equalsIgnoreCase("Stop"))
+									{
+										printOutput("Please enter the value for the command, when finished enter Stop");
+										if (!(answer =in.readLine()).equalsIgnoreCase("stop")) 
+										{
+											list.add(answer);
+										}
+									}
+									int cnt = 0;
+									String[] strings = new String[list.size()];
+									for (String s : list)
+									{
+										strings[cnt]=s;
+										cnt++;
+									}
+									myView.controllerCommands().get(str).doCommand(strings);
+									bool = false;
+									//breaking the for loop because there could be only one command with this name
+									break;
+								}								
+							}						
+							if (bool)
+							{
+								out.println("Command not found");
+								out.flush();
+							}
+							printOutput("Please enter your choice");
 						}
-					}
-					if (bool)
-					{
-						out.println("Command not found");
-						out.flush();
-					}
+					myView.controllerCommands().get(str).doCommand(null);	
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			myView.getCommands().get(str).doCommand(null);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-			}}
-	).start();
+					}}
+			).start();
 	}
-	
 	public BufferedReader getIn() {
 		return in;
 	}
