@@ -94,6 +94,7 @@ public class MyModel implements Model {
 
 	@Override
 	public void generate3DMaze(String[] args) {
+		//open new thread
 		exe.execute(new Runnable() {
 			
 			@Override
@@ -110,11 +111,11 @@ public class MyModel implements Model {
 				((z=MyController.tryParseInt(args[3]))!=null))
 			{
 				//creating the maze and adding it to the hashmap
-				if (((int)x>0)&&((int)y>0)&&((int)z>0))
-				{
 				Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
-				mazes.put(args[0], maze);
-				controller.outPut("maze "+args[0]+" is ready");
+				if (maze != null)
+				{
+					mazes.put(args[0], maze);
+					controller.outPut("maze "+args[0]+" is ready");
 				}
 				else
 				{
@@ -131,6 +132,7 @@ public class MyModel implements Model {
 	
 	@Override
 	public void saveMaze(String[] args) {
+		//checking if we have all the data we need
 		if (args.length < 2) 
 		{
 			controller.outPut("not enough data");
@@ -155,6 +157,7 @@ public class MyModel implements Model {
 	
 	@Override
 	public void loadMaze(String[] args) {
+		//checking if we have all the data we need
 		if (args.length < 2) 
 		{
 			controller.outPut("not enough data");
@@ -183,10 +186,12 @@ public class MyModel implements Model {
 	@Override
 	public void solve(String[] args)
 	{
+		//open new thread
 		exe.execute(new Runnable() {
 			
 			@Override
 			public void run() {
+				//checking if we have all the data we need
 				if (args.length < 2) 
 				{
 					controller.outPut("not enough data");
@@ -194,20 +199,24 @@ public class MyModel implements Model {
 				else if(mazes.containsKey(args[0]))
 				{
 					//Checking which algorithm was chosen and if a solution was already existing for the maze, it overwrites it.
-					if(args[1].equals("BFS"))
+					if(args[1].equalsIgnoreCase("BFS"))
 					{
 						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
 						solutions.put(args[0], s);
+						controller.outPut("solution for "+ args[0]+ " is ready");
 					}
-					else if(args[1].equals("A* mnhtn"))
+					else if(args[1].equalsIgnoreCase("A* manhatten"))
+						
 					{
 						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
 						solutions.put(args[0], s);
+						controller.outPut("solution for "+ args[0]+ " is ready");
 					}
-					else if(args[1].equals("A* air"))
+					else if(args[1].equalsIgnoreCase("A* air"))
 					{
 						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[0]),1)); //get Solution of the maze
 						solutions.put(args[0], s);
+						controller.outPut("solution for "+ args[0]+ " is ready");
 					}
 					else
 					{
@@ -258,6 +267,7 @@ public class MyModel implements Model {
 	@Override
 	public int[][] getCrossSectionBy(String[] args) {
 		Integer y;
+		//checking if we have all the data we need
 		if (args.length < 3) 
 		{
 			controller.outPut("not enough data");
@@ -284,25 +294,26 @@ public class MyModel implements Model {
 				}
 				else
 				{
-					controller.outPut("value is not as expected");
+					controller.outPut("values is not as expected");
 					return null;
 				}
 			}
 			catch (Exception e)
 			{
-				controller.outPut(e.getMessage());
+				controller.outPut("values is not as expected");
 				return null;
 			}
 		}
 		else
 		{
-			controller.outPut("value is not as expected to be int");
+			controller.outPut("values is not as expected");
 			return null;
 		}
 		
 	}
 	@Override
 	public int mazeSize(String[] args) {
+		//checking if we have all the data we need
 		if (args.length<1) 
 		{
 			controller.outPut("not enough data");
@@ -323,6 +334,7 @@ public class MyModel implements Model {
 	}
 	@Override
 	public Solution<Position> getSoultion(String[] args) {
+		//checking if we have all the data we need
 		if (args.length<1) 
 		{
 			controller.outPut("not enough data");

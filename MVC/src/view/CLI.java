@@ -88,19 +88,39 @@ public class CLI extends Thread {
 					}}
 			).start();
 	}
+	/**
+	 * get the in of CLI
+	 * @return BufferedReader object
+	 */
 	public BufferedReader getIn() {
 		return in;
 	}
+	/**
+	 * set in object
+	 * @param in BufferedReader object
+	 */
 	public void setIn(BufferedReader in) {
 		this.in = in;
 	}
+	/**
+	 * get out of CLI
+	 * @return PrintWriter object
+	 */
 	public PrintWriter getOut() {
 		return out;
 	}
+	/**
+	 * set out of CLI
+	 * @param out PrintWriter object
+	 */
 	public void setOut(PrintWriter out) {
 		this.out = out;
 	}
 
+	/**
+	 * print using the out object
+	 * @param str the string we want to print
+	 */
 	public void printOutput(String str) {
 		out.println(str);
 		out.flush();

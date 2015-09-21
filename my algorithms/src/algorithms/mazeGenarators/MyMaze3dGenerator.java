@@ -15,6 +15,10 @@ public class MyMaze3dGenerator extends Maze3d {
 	 */
 	@Override
 	public Maze3d generate(int sizeX, int sizeY, int sizeZ) {	
+		if (sizeX<=0 || sizeY<=0 || sizeZ<=0)
+		{
+			return null;
+		}
 		maze = new int [sizeX] [sizeY] [sizeZ]; // init the maze to the selected Size
 		for (int i=0; i<sizeX; i++) //init the maze cells to 2 for unvisited cells 
 		{
