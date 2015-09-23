@@ -105,7 +105,7 @@ public class MyModel implements Model {
 			{
 				controller.outPut("not enough data");
 			}		
-			//cheking if the the 3 other variabels are int type
+			//Checking if the the 3 other variables are int type
 			else if (((x=MyController.tryParseInt(args[1]))!=null)&& ((y=MyController.tryParseInt(args[2]))!=null)&&
 				((z=MyController.tryParseInt(args[3]))!=null))
 			{
@@ -114,7 +114,7 @@ public class MyModel implements Model {
 				if (maze != null)
 				{
 					mazes.put(args[0], maze);
-					controller.outPut("maze "+args[1]+" is ready");
+					controller.outPut("maze "+args[0]+" is ready");
 				}
 				else
 				{
@@ -143,7 +143,7 @@ public class MyModel implements Model {
 			out.write(mazes.get(args[0]).toByteArray());			
 			out.flush();
 			out.close();
-			controller.outPut("Maze "+ args[1]+" was saved");
+			controller.outPut("Maze "+ args[0]+" was saved");
 			}
 			catch (Exception e) {
 				controller.outPut("Couldn't save the maze - fatal error");
