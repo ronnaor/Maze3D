@@ -104,8 +104,7 @@ public class MyModel implements Model {
 			if (args.length < 4) 
 			{
 				controller.outPut("not enough data");
-			}
-			
+			}		
 			//cheking if the the 3 other variabels are int type
 			else if (((x=MyController.tryParseInt(args[1]))!=null)&& ((y=MyController.tryParseInt(args[2]))!=null)&&
 				((z=MyController.tryParseInt(args[3]))!=null))
@@ -115,7 +114,7 @@ public class MyModel implements Model {
 				if (maze != null)
 				{
 					mazes.put(args[0], maze);
-					controller.outPut("maze "+args[0]+" is ready");
+					controller.outPut("maze "+args[1]+" is ready");
 				}
 				else
 				{
@@ -141,9 +140,10 @@ public class MyModel implements Model {
 		{
 			try {
 			OutputStream out = new MyCompressorOutputStream(new FileOutputStream(args[1]+".maz"));
-			out.write(mazes.get(args[0]).toByteArray());
+			out.write(mazes.get(args[0]).toByteArray());			
 			out.flush();
 			out.close();
+			controller.outPut("Maze "+ args[1]+" was saved");
 			}
 			catch (Exception e) {
 				controller.outPut("Couldn't save the maze - fatal error");
@@ -171,6 +171,7 @@ public class MyModel implements Model {
 				in.close();
 				Maze3d loaded=new Maze3dByteArr(b);
 				mazes.put(args[1], loaded);
+				controller.outPut("Maze was loaded succesfully");
 			}
 			catch (Exception e) {
 				controller.outPut("Error in loading file");

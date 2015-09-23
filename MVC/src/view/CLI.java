@@ -34,13 +34,19 @@ public class CLI extends Thread {
 			public void run() {	
 				String str;
 				try {
+					//getting all the key strings of the commands
+					Set<String> keys = myView.controllerCommands().keySet();
+					//printing the first user request menu
+					printOutput("Please enter your choice exactly as written here:");
+					for (String key : keys)
+					{
+						printOutput(key);
+					}
 					//continuing until getting exit command
-					printOutput("Please enter your choice");
 					while(!(str = in.readLine()).equals("exit"))						
 						{
 						Boolean bool = true;
 						//building set of all the strings of the keys in the hashmaps	
-						Set<String> keys = myView.controllerCommands().keySet();
 							for (String key : keys)
 							{
 								//comparing the key string to the string from the input stream
@@ -79,7 +85,13 @@ public class CLI extends Thread {
 								out.println("Command not found");
 								out.flush();
 							}
-							printOutput("Please enter your choice");
+							//printing the first user request menu
+							printOutput("\nPlease enter your choice exactly as written here:");
+							for (String key : keys)
+							{
+								printOutput(key);
+							}
+							printOutput("");
 						}
 					myView.controllerCommands().get(str).doCommand(null);	
 				} catch (IOException e) {
