@@ -47,6 +47,7 @@ public class MyView implements View {
 	}
 	@Override
 	public void printDir(String[] path) {
+		//checking that we got enough data
 		if (path.length<1)
 		{
 			cli.printOutput("not enough data");
@@ -66,7 +67,6 @@ public class MyView implements View {
 				cli.printOutput("file does not exist");
 			}	
 		}
-		
 	}
 
 	@Override

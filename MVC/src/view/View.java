@@ -45,10 +45,11 @@ public interface View {
 	 * @param index index in the axis
 	 */
 	void displayCrossSectionBy(int[][] arr, String axis, String index);
-	/**
-	 * display the maze size
-	 * @param args the name of the maze
-	 */
+/**
+ * displaying the size of the maze which is in the memory
+ * @param maze the size of the maze
+ * @param args the name of the maze
+ */
 	void mazeSize(int maze,String args);
 	/**
 	 * display the maze size in a file

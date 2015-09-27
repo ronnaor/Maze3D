@@ -15,8 +15,8 @@ import view.View;
  */
 public class Presenter implements Observer {
 
-	private Model model;
-	private View view;
+	protected Model model;
+	protected View view;
 	
 	/**
 	 * Ctor for Presenter
@@ -84,7 +84,7 @@ public class Presenter implements Observer {
 			switch(args[0])
 			{
 			case "dir": 
-				model.getDir(args);
+				view.printDir(args);
 				break;
 			case "generate 3d maze":
 				model.generate3DMaze(args);
@@ -93,7 +93,7 @@ public class Presenter implements Observer {
 				Maze3d maze = model.getMaze(args);
 				if (maze !=null)
 				{
-					view.displayMaze(maze);
+					view.display(maze);
 				}
 				else
 				{
@@ -118,10 +118,10 @@ public class Presenter implements Observer {
 				model.loadMaze(args);
 				break;
 			case "maze size":
-				int size= model.getMazeSize(args);
+				int size= model.mazeSize(args);
 				if (size!=0)
 				{
-					view.displayMazeSize(size,args[1]);
+					view.mazeSize(size,args[1]);
 				}
 				else
 				{
@@ -129,15 +129,7 @@ public class Presenter implements Observer {
 				}
 				break;
 			case "file size":
-				long l = model.getFileSize(args);
-				if (l!=0)
-				{
-					view.displayFileSize(l, args[1]);
-				}
-				else
-				{
-					view.printOutput("error in display file size");
-				}
+				view.fileSize(args);
 				break;
 			case "solve":
 				model.solve(args);
@@ -178,5 +170,8 @@ public class Presenter implements Observer {
 		      return null;
 		   }
 		}
+	public void outPut(String string) {
+		view.printOutput(string);		
+	}
 	
 }
