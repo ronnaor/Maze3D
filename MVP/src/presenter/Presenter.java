@@ -69,21 +69,15 @@ public class Presenter implements Observer {
 			case "printDir": 
 				view.printDir(args);
 				break;
-			case "mazeGenerated":
+			case "printUpdate":
 				view.printOutput(args[1]);
 				break;
-			case "mazeSaved":
-				view.printOutput(args[1]);
+			default:
+				view.printOutput("no such command");
 				break;
-			case "mazeloaded":
-				view.printOutput(args[1]);
-				break;
-			case "mazeSolved":
-				view.printOutput(args[1]);
-				break;
-			case "exit":
-				view.printOutput("Goodbye");
+					
 			}
+			
 		}
 		if (obs == view)
 		{
@@ -161,6 +155,9 @@ public class Presenter implements Observer {
 				break;
 			case "exit":
 				model.exit(args);
+				break;
+			default:
+				view.printOutput("no such command");
 				break;
 			}
 
