@@ -22,6 +22,7 @@ public class ViewCLI extends Observable implements View {
 	private BufferedReader in;
 	private PrintWriter out; 
 	private Presenter presenter;
+	private ArrayList<String> commands;
 	
 	/**
 	 * Ctor
@@ -31,6 +32,19 @@ public class ViewCLI extends Observable implements View {
 	public ViewCLI(BufferedReader in,PrintWriter out) {
 		this.in = in;
 		this.out = out;
+		this.commands = new ArrayList<>();
+		//setting the print for the menu
+		commands.add("exit");
+		commands.add("dir");
+		commands.add("generate 3d maze");
+		commands.add("display");
+		commands.add("display cross section by");
+		commands.add("save maze");
+		commands.add("load maze");
+		commands.add("maze size");
+		commands.add("file size");
+		commands.add("solve");
+		commands.add("display solution");
 	} 
 
 	/**
@@ -47,7 +61,7 @@ public class ViewCLI extends Observable implements View {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-	
+
 	public void start()
 	{		 
 		new Thread(new Runnable() {
@@ -58,6 +72,7 @@ public class ViewCLI extends Observable implements View {
 				try {
 					//printing the first user request menu
 					printOutput("Please enter the command you want to perform:");
+					printCommands(commands);
 					
 					//continuing until getting exit command
 					while(!(str = in.readLine()).equals("exit"))
@@ -90,6 +105,7 @@ public class ViewCLI extends Observable implements View {
 						notifyObservers(args);					
 						//printing the first user request menu
 						printOutput("\nPlease enter the command you want to perform:");
+						printCommands(commands);
 					}
 					//send command exit to presenter
 					args = new String[1];
@@ -112,9 +128,11 @@ public class ViewCLI extends Observable implements View {
 	@Override
 	public void printDir(String[] arr) {
 		out.println("The files and directories in the path are: ");
+		int cnt =1;
 		for (String s : arr)
 		{
-			out.println(s);
+			out.println(arr[cnt]);
+			cnt++;
 		}
 		out.flush();
 	}
@@ -203,6 +221,22 @@ public class ViewCLI extends Observable implements View {
 		
 	}
 
-	
+	public ArrayList<String> getCommands() {
+		return commands;
+	}
+
+	public void setCommands(ArrayList<String> commands) {
+		this.commands = commands;
+	}
+
+	public void printCommands(ArrayList<String> commands)
+	{
+		printOutput("");
+		for (String command : commands)
+		{
+		printOutput(command);
+		}
+		printOutput("");
+	}
 
 }

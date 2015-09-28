@@ -125,7 +125,7 @@ public class MyModel extends Observable implements Model {
 			catch (Exception e) {
 				str = new String[2];
 				str[0] = "printUpdate";
-				str[1] = "file does not exist";
+				str[1] = "path does not exist";
 				setChanged();
 				notifyObservers(str);
 			}	
