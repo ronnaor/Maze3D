@@ -98,6 +98,7 @@ public class MyModel extends Observable implements Model {
 			str = new String[2];
 			str[0] = "printUpdate";
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 		}
 		else
@@ -118,12 +119,14 @@ public class MyModel extends Observable implements Model {
 					str[cnt] = s;
 					cnt++;
 				}
+				setChanged();
 				notifyObservers(str);
 			}
 			catch (Exception e) {
 				str = new String[2];
 				str[0] = "printUpdate";
 				str[1] = "file does not exist";
+				setChanged();
 				notifyObservers(str);
 			}	
 		}	
@@ -145,6 +148,7 @@ public class MyModel extends Observable implements Model {
 					if (args.length < 5) 
 					{
 						str[1] = "not enough data";
+						setChanged();
 						notifyObservers(str);
 					}		
 					//Checking if the the 3 other variables are int type
@@ -157,17 +161,20 @@ public class MyModel extends Observable implements Model {
 						{
 							mazes.put(args[1], maze);
 							str[1] = "maze "+args[1]+" is ready";
+							setChanged();
 							notifyObservers(str);
 						}
 						else
 						{
 							str[1] = "data input does not match the command requiremnts";
+							setChanged();
 							notifyObservers(str);
 						}
 					}
 					else
 					{
 						str[1] = "data input does not match the command requiremnts";
+						setChanged();
 						notifyObservers(str);
 					}
 						}
@@ -182,6 +189,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length<2) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 			return null;
 		} 
@@ -194,6 +202,7 @@ public class MyModel extends Observable implements Model {
 		else
 		{
 			str[1] = "maze does not exist";
+			setChanged();
 			notifyObservers(str);
 			return null;
 		}
@@ -208,6 +217,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length < 4) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 			return null;
 		} 
@@ -233,6 +243,7 @@ public class MyModel extends Observable implements Model {
 				else
 				{
 					str[1] = "values is not as expected";
+					setChanged();
 					notifyObservers(str);
 					return null;
 				}
@@ -240,6 +251,7 @@ public class MyModel extends Observable implements Model {
 			catch (Exception e)
 			{
 				str[1] = "values is not as expected";
+				setChanged();
 				notifyObservers(str);
 				return null;
 			}
@@ -247,6 +259,7 @@ public class MyModel extends Observable implements Model {
 		else
 		{
 			str[1] = "values is not as expected";
+			setChanged();
 			notifyObservers(str);
 			return null;
 		}
@@ -260,6 +273,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length < 3) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 		}
 		else if(mazes.containsKey(args[1]))
@@ -270,16 +284,19 @@ public class MyModel extends Observable implements Model {
 			out.flush();
 			out.close();
 			str[1] = "Maze "+ args[1]+" was saved";
+			setChanged();
 			notifyObservers(str);
 			}
 			catch (Exception e) {
 				str[1] = "Couldn't save the maze - fatal error";
+				setChanged();
 				notifyObservers(str);
 			}
 		}
 		else
 		{
 			str[1] = "Maze does not exist";
+			setChanged();
 			notifyObservers(str);
 		}
 		
@@ -293,6 +310,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length < 3) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 		}
 		else if(!mazes.containsKey(args[2]))
@@ -305,16 +323,19 @@ public class MyModel extends Observable implements Model {
 				Maze3d loaded=new Maze3dByteArr(b);
 				mazes.put(args[2], loaded);
 				str[1] = "Maze was loaded succesfully";
+				setChanged();
 				notifyObservers(str);
 			}
 			catch (Exception e) {
 				str[1] = "Error in loading file";
+				setChanged();
 				notifyObservers(str);
 			}
 		}
 		else
 		{
 			str[1] = "Maze already exist";
+			setChanged();
 			notifyObservers(str);
 		}
 		
@@ -328,6 +349,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length<2) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 			return 0;
 		} 
@@ -341,6 +363,7 @@ public class MyModel extends Observable implements Model {
 		else
 		{
 			str[1] = "no such maze";
+			setChanged();
 			notifyObservers(str);
 			return 0;
 		}
@@ -353,6 +376,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length < 2) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 			return 0;
 		}
@@ -362,6 +386,7 @@ public class MyModel extends Observable implements Model {
 			if (l==0)
 			{
 				str[1] = "no such File";
+				setChanged();
 				notifyObservers(str);
 				return 0;
 			}
@@ -385,6 +410,7 @@ public class MyModel extends Observable implements Model {
 						if (args.length < 3) 
 						{
 							str[1] = "not enough data";
+							setChanged();
 							notifyObservers(str);
 						}
 						else if(mazes.containsKey(args[1]))
@@ -395,6 +421,7 @@ public class MyModel extends Observable implements Model {
 								Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 								solutions.put(args[1], s);
 								str[1] = "solution for "+ args[1]+ " is ready";
+								setChanged();
 								notifyObservers(str);
 							}
 							else if(args[2].equalsIgnoreCase("A* manhatten"))
@@ -403,6 +430,7 @@ public class MyModel extends Observable implements Model {
 								Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 								solutions.put(args[1], s);
 								str[1] = "solution for "+ args[1]+ " is ready";
+								setChanged();
 								notifyObservers(str);
 							}
 							else if(args[2].equalsIgnoreCase("A* air"))
@@ -410,17 +438,20 @@ public class MyModel extends Observable implements Model {
 								Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 								solutions.put(args[1], s);
 								str[1] = "solution for "+ args[1]+ " is ready";
+								setChanged();
 								notifyObservers(str);
 							}
 							else
 							{
 								str[1] = "no algorithm was chosen";
+								setChanged();
 								notifyObservers(str);
 							}
 						}
 						else
 						{
 							str[1] = "no such maze exist";
+							setChanged();
 							notifyObservers(str);
 						}
 						
@@ -437,6 +468,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length<2) 
 		{
 			str[1] = "not enough data";
+			setChanged();
 			notifyObservers(str);
 			return null;
 		} 
@@ -448,6 +480,7 @@ public class MyModel extends Observable implements Model {
 		else
 		{
 			str[1] = "solution wasn't created";
+			setChanged();
 			notifyObservers(str);
 			return null;
 		}
@@ -465,9 +498,11 @@ public class MyModel extends Observable implements Model {
 		catch (InterruptedException e)
 		{
 			str[1] = e.getMessage();
+			setChanged();
 			notifyObservers(str);
 		}
 		str[1] = "Goodbye and good Java to you";
+		setChanged();
 		notifyObservers(str);
 		
 	}

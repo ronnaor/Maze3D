@@ -86,6 +86,7 @@ public class ViewCLI extends Observable implements View {
 							cnt++;
 						}
 						//send the command and values to the presenter
+						setChanged();
 						notifyObservers(args);					
 						//printing the first user request menu
 						printOutput("\nPlease enter the command you want to perform:");
@@ -93,6 +94,7 @@ public class ViewCLI extends Observable implements View {
 					//send command exit to presenter
 					args = new String[1];
 					args[0] = "exit";
+					setChanged();
 					notifyObservers(args);	
 				} catch (IOException e) {
 					printOutput(e.getMessage());
