@@ -128,11 +128,9 @@ public class ViewCLI extends Observable implements View {
 	@Override
 	public void printDir(String[] arr) {
 		out.println("The files and directories in the path are: ");
-		int cnt =1;
-		for (String s : arr)
+		for (int i=0; i<arr.length; i++)
 		{
-			out.println(arr[cnt]);
-			cnt++;
+			out.println(arr[i]);
 		}
 		out.flush();
 	}
