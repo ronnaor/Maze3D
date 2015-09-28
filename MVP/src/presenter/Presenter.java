@@ -15,8 +15,8 @@ import view.View;
  */
 public class Presenter implements Observer {
 
-	protected Model model;
-	protected View view;
+	private Model model;
+	private View view;
 	
 	/**
 	 * Ctor for Presenter
@@ -84,7 +84,7 @@ public class Presenter implements Observer {
 			switch(args[0])
 			{
 			case "dir": 
-				view.printDir(args);
+				model.getDir(args);
 				break;
 			case "generate 3d maze":
 				model.generate3DMaze(args);
@@ -93,22 +93,14 @@ public class Presenter implements Observer {
 				Maze3d maze = model.getMaze(args);
 				if (maze !=null)
 				{
-					view.display(maze);
-				}
-				else
-				{
-					view.printOutput("the maze does not exists");
+					view.displayMaze(maze);
 				}
 				break;
 			case "display cross section by":
 				int[][] arr = model.getCrossSectionBy(args);
 				if (arr!=null)
 				{
-					view.displayCrossSectionBy(arr, args[1], args[2]);
-				}
-				else
-				{
-					view.printOutput("error in display cross section");
+					view.displayCrossSectionBy(arr, args[2], args[3]);
 				}
 				break;
 			case "save maze":
@@ -118,18 +110,18 @@ public class Presenter implements Observer {
 				model.loadMaze(args);
 				break;
 			case "maze size":
-				int size= model.mazeSize(args);
+				int size= model.getMazeSize(args);
 				if (size!=0)
 				{
-					view.mazeSize(size,args[1]);
-				}
-				else
-				{
-					view.printOutput("error in display maze size");
+					view.displayMazeSize(size,args[1]);
 				}
 				break;
 			case "file size":
-				view.fileSize(args);
+				long l = model.getFileSize(args);
+				if (l!=0)
+				{
+					view.displayFileSize(l, args[1]);
+				}
 				break;
 			case "solve":
 				model.solve(args);
@@ -139,10 +131,6 @@ public class Presenter implements Observer {
 				if (sol != null)
 				{
 					view.displaySolution(sol);
-				}
-				else
-				{
-					view.printOutput("solution not found");
 				}
 				break;
 			case "exit":
@@ -170,8 +158,5 @@ public class Presenter implements Observer {
 		      return null;
 		   }
 		}
-	public void outPut(String string) {
-		view.printOutput(string);		
-	}
 	
 }
