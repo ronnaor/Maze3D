@@ -8,8 +8,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import algorithms.mazeGenarators.Maze3d;
@@ -135,51 +138,82 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void generate3DMaze(String[] args) {
-		//open new thread
-				exe.execute(new Runnable() {
-					
-					@Override
-					public void run() {
-						
-					String[] str = new String[2];
-					str[0] = "printUpdate";
-					//checking if we have all the data we need
-					Integer x,y,z;
-					if (args.length < 5) 
+		String[] str = new String[2];
+		str[0] = "printUpdate";
+		//checking if we have all the data we need
+		Integer x,y,z;
+		if (args.length < 5) 
+		{
+			str[1] = "not enough data";
+			setChanged();
+			notifyObservers(str);
+		}		
+		//Checking if the the 3 other variables are int type
+		else if (((x=Presenter.tryParseInt(args[2]))==null)|| ((y=Presenter.tryParseInt(args[3]))==null)||
+				((z=Presenter.tryParseInt(args[4]))==null))
+		{
+			str[1] = "data input does not match the command requiremnts";
+			setChanged();
+			notifyObservers(str);
+		}
+		//checking that there is no other maze with that name
+		else if (mazes.containsKey(args[1]))
+		{
+			str[1] = "maze already exists";
+			setChanged();
+			notifyObservers(str);
+		}
+		else
+		{
+			Future<String> future=exe.submit(new Callable<String>() 
+					//open new thread
 					{
-						str[1] = "not enough data";
-						setChanged();
-						notifyObservers(str);
-					}		
-					//Checking if the the 3 other variables are int type
-					else if (((x=Presenter.tryParseInt(args[2]))!=null)&& ((y=Presenter.tryParseInt(args[3]))!=null)&&
-						((z=Presenter.tryParseInt(args[4]))!=null))
-					{
-					//creating the maze and adding it to the hashmap
-						Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
-						if (maze != null)
-						{
-							mazes.put(args[1], maze);
-							str[1] = "maze "+args[1]+" is ready";
-							setChanged();
-							notifyObservers(str);
-						}
-						else
-						{
-							str[1] = "data input does not match the command requiremnts";
-							setChanged();
-							notifyObservers(str);
-						}
-					}
-					else
-					{
-						str[1] = "data input does not match the command requiremnts";
-						setChanged();
-						notifyObservers(str);
-					}
-						}
-				});	
-		
+						@Override
+						public String call() throws Exception {
+							Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
+							//creating the maze and adding it to the hashmap
+							if (maze != null)
+							{
+								mazes.put(args[1], maze);
+								return "maze "+args[1]+" is ready";
+							}
+							else
+							{
+								return "data input does not match the command requiremnts";
+							}
+
+						}});
+							exe.execute(new Runnable() {
+								
+								@Override
+								public void run() {
+										try {
+											String s = future.get();
+											if (s.equals("maze "+args[1]+" is ready"))
+											{
+												str[1] = "maze "+args[1]+" is ready";
+												setChanged();
+												notifyObservers(str);
+												return;
+											}
+											else
+											{
+												str[1] = "data input does not match the command requiremnts";
+												setChanged();
+												notifyObservers(str);
+												return;
+											}
+												
+										} catch (InterruptedException | ExecutionException e) {
+											str[1] = e.getMessage();
+											setChanged();
+											notifyObservers(str);
+											return;
+										}		
+								}
+							});	
+		}
+	
 	}
 
 	@Override
@@ -399,64 +433,112 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void solve(String[] args) {
+		String[] str = new String[2];
+		str[0] = "printUpdate";
+		//checking if we have all the data we need
+		if (args.length < 3) 
+		{
+			str[1] = "not enough data";
+			setChanged();
+			notifyObservers(str);
+		}
+		else if(solutions.containsKey(args[1]))
+		{
+			str[1] = "solution for "+ args[1]+ " is ready";
+			setChanged();
+			notifyObservers(str);
+		}
+		else if ((!(args[2].equalsIgnoreCase("BFS"))&& !(args[2].equalsIgnoreCase("A* manhatten")) )&& !(args[2].equalsIgnoreCase("A* air")))
+		{
+			str[1] = "no such algorithem exist";
+			setChanged();
+			notifyObservers(str);
+		}
+		else if (!mazes.containsKey(args[1]))
+		{
+			str[1] = "no such maze exist";
+			setChanged();
+			notifyObservers(str);
+		}
+		else
+		{
+			Future<String> future=exe.submit(new Callable<String>() 
+			{
+	
+				@Override
+				public String call() throws Exception {
+					//Checking which algorithm was chosen and if a solution was already existing for the maze, it overwrites it.
+					if(args[2].equalsIgnoreCase("BFS"))
+					{
+						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						if (s!=null)
+						{
+							solutions.put(args[1], s);
+							return "solution for "+ args[1]+ " is ready";
+						}
+						else
+						{
+							return "no solution was found";
+						}
+						
+					}
+					else if(args[2].equalsIgnoreCase("A* manhatten"))					
+					{
+						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						if (s!=null)
+						{
+							solutions.put(args[1], s);
+							return "solution for "+ args[1]+ " is ready";
+						}
+						else
+						{
+							return "no solution was found";
+						}
+					}
+					else if(args[2].equalsIgnoreCase("A* air"))
+					{
+						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						if (s!=null)
+						{
+							solutions.put(args[1], s);
+							return "solution for "+ args[1]+ " is ready";
+						}
+						else
+						{
+							return "no solution was found";
+						}
+					}
+					return null;
+				}});
 		//open new thread
 				exe.execute(new Runnable() {
 					
 					@Override
 					public void run() {
-						String[] str = new String[2];
-						str[0] = "printUpdate";
-						//checking if we have all the data we need
-						if (args.length < 3) 
-						{
-							str[1] = "not enough data";
-							setChanged();
-							notifyObservers(str);
-						}
-						else if(mazes.containsKey(args[1]))
-						{
-							//Checking which algorithm was chosen and if a solution was already existing for the maze, it overwrites it.
-							if(args[2].equalsIgnoreCase("BFS"))
+						
+						try {
+							String s = future.get();
+							if (s.equals("solution for "+ args[1]+ " is ready"))
 							{
-								Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
-								solutions.put(args[1], s);
-								str[1] = "solution for "+ args[1]+ " is ready";
-								setChanged();
-								notifyObservers(str);
-							}
-							else if(args[2].equalsIgnoreCase("A* manhatten"))
-								
-							{
-								Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
-								solutions.put(args[1], s);
-								str[1] = "solution for "+ args[1]+ " is ready";
-								setChanged();
-								notifyObservers(str);
-							}
-							else if(args[2].equalsIgnoreCase("A* air"))
-							{
-								Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
-								solutions.put(args[1], s);
 								str[1] = "solution for "+ args[1]+ " is ready";
 								setChanged();
 								notifyObservers(str);
 							}
 							else
 							{
-								str[1] = "no algorithm was chosen";
+								str[1] = "no solution was found";
 								setChanged();
-								notifyObservers(str);
+								notifyObservers(str);							
 							}
-						}
-						else
-						{
-							str[1] = "no such maze exist";
+								
+						} catch (InterruptedException | ExecutionException e) {
+							str[1] = e.getMessage();
 							setChanged();
 							notifyObservers(str);
-						}
+						}		
 						
 					}
-				});		
+				});}		
 		
 	}
 
