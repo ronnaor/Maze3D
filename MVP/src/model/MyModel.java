@@ -59,8 +59,8 @@ public class MyModel extends Observable implements Model {
 		} catch (FileNotFoundException e1) {
 
 			this.exe = Executors.newFixedThreadPool(13);
-			this.generateAlg = null;
-			this.solveAlg = null;
+			this.generateAlg = "my";
+			this.solveAlg = "bfs";
 		}
 		this.mazes = new HashMap<String, Maze3d>();
 		this.solutions = new HashMap<String, Solution<Position>>();
