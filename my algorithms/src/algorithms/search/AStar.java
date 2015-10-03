@@ -17,14 +17,7 @@ public class AStar<T> extends CommonSearcher<T> {
 	public AStar(Heuristic<T> h) { //CTOR
 		this.heuristic = h;
 	}
-	/**
-	 * copy CTOR
-	 * @param aS AStar<T> we copy 
-	 */
-	 public AStar(AStar<T> aS) { // copy CTOR
-		 super((CommonSearcher<T>)aS);
-		 this.heuristic = aS.getHeuristic();
-	}
+	
 	 
 	/**
 	 * getter for heuristic
@@ -48,6 +41,10 @@ public class AStar<T> extends CommonSearcher<T> {
 	@Override
 	public Solution<T> search(Searchable<T> s)
 	{
+		if ((heuristic == null) || (s == null) || (s.getStartState() == null))
+		{
+			return null;
+		}
 		double temp;
 		addToOpenList(s.getStartState());
 		HashSet<State <T>> closedSet=new HashSet<State<T>>();

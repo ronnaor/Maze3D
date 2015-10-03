@@ -1,7 +1,9 @@
 package model;
 
+import java.beans.XMLDecoder;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,6 +21,7 @@ import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Maze3dByteArr;
 import algorithms.mazeGenarators.MyMaze3dGenerator;
 import algorithms.mazeGenarators.Position;
+import algorithms.mazeGenarators.SimpleMaze3dGenerator;
 import algorithms.search.AStar;
 import algorithms.search.BFS;
 import algorithms.search.MazeAirDistance;
@@ -28,6 +31,7 @@ import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.Presenter;
+import presenter.Properties;
 /**
  * class MyModel that extends Observable and implements Model will be defining the data to be displayed
  *
@@ -38,14 +42,29 @@ public class MyModel extends Observable implements Model {
 	private HashMap<String, Maze3d> mazes;
 	private HashMap<String, Solution<Position>> solutions;
 	ExecutorService exe;
+	String generateAlg;
+	String solveAlg;
 	
 	/**
 	 * Ctor of MyModel
 	 */
 	public MyModel() {
+		try {
+			XMLDecoder xml=new XMLDecoder(new FileInputStream("prop.xml"));
+			Properties properties=(Properties)xml.readObject();
+			this.exe = Executors.newFixedThreadPool(properties.getNumThreads());
+			this.generateAlg = properties.getGenerateAlgorithm();
+			this.solveAlg = properties.getSolveAlgorithm();
+			xml.close();
+		} catch (FileNotFoundException e1) {
+
+			this.exe = Executors.newFixedThreadPool(13);
+			this.generateAlg = null;
+			this.solveAlg = null;
+		}
 		this.mazes = new HashMap<String, Maze3d>();
 		this.solutions = new HashMap<String, Solution<Position>>();
-		exe = Executors.newFixedThreadPool(13);
+		
 	}
 	/**
 	 * get the model presenter
@@ -90,7 +109,34 @@ public class MyModel extends Observable implements Model {
 	public void setSolutions(HashMap<String, Solution<Position>> solutions) {
 		this.solutions = solutions;
 	}
-	
+	/**
+	 * get the Generate Algorithm we will use
+	 * @return String the Algorithm
+	 */
+	public String getGenerateAlg() {
+		return generateAlg;
+	}
+	/**
+	 * set the Generate Algorithm we will use
+	 * @param generateAlg String the Algorithm
+	 */
+	public void setGenerateAlg(String generateAlg) {
+		this.generateAlg = generateAlg;
+	}
+	/**
+	 * get the solve Algorithm we will use
+	 * @return String the Algorithm
+	 */
+	public String getSolveAlg() {
+		return solveAlg;
+	}
+	/**
+	 * set the solve Algorithm we will use
+	 * @param solveAlg String the Algorithm
+	 */
+	public void setSolveAlg(String solveAlg) {
+		this.solveAlg = solveAlg;
+	}
 	@Override
 	public void getDir(String[] args) {
 		ArrayList<String> list = new ArrayList<String>();
@@ -147,8 +193,8 @@ public class MyModel extends Observable implements Model {
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
-		}		
-		//Checking if the the 3 other variables are int type
+		}	
+		//Checking if the the 3 variables are int type (for the maze size)
 		else if (((x=Presenter.tryParseInt(args[2]))==null)|| ((y=Presenter.tryParseInt(args[3]))==null)||
 				((z=Presenter.tryParseInt(args[4]))==null))
 		{
@@ -170,17 +216,65 @@ public class MyModel extends Observable implements Model {
 					{
 						@Override
 						public String call() throws Exception {
-							Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
-							//creating the maze and adding it to the hashmap
-							if (maze != null)
+							//check if the generate algorithm is valid else using generateAlg
+							if ((args.length>5) && (args[5].equalsIgnoreCase("my")))
 							{
-								mazes.put(args[1], maze);
-								return "maze "+args[1]+" is ready";
+								Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
+								//creating the maze and adding it to the hashmap
+								if (maze != null)
+								{
+									mazes.put(args[1], maze);
+									return "maze "+args[1]+" is ready";
+								}
+								else
+								{
+									return "data input does not match the command requiremnts";
+								}
 							}
-							else
+							if ((args.length>5) && (args[5].equalsIgnoreCase("simple")))
 							{
-								return "data input does not match the command requiremnts";
+								Maze3d maze = new SimpleMaze3dGenerator().generate((int)x, (int)y, (int)z);
+								//creating the maze and adding it to the hashmap
+								if (maze != null)
+								{
+									mazes.put(args[1], maze);
+									return "maze "+args[1]+" is ready";
+								}
+								else
+								{
+									return "data input does not match the command requiremnts";
+								}
 							}
+							if (generateAlg.equalsIgnoreCase("simple"))
+							{
+								Maze3d maze = new SimpleMaze3dGenerator().generate((int)x, (int)y, (int)z);
+								//creating the maze and adding it to the hashmap
+								if (maze != null)
+								{
+									mazes.put(args[1], maze);
+									return "maze "+args[1]+" is ready";
+								}
+								else
+								{
+									return "data input does not match the command requiremnts";
+								}
+							}
+							if (generateAlg.equalsIgnoreCase("my"))
+							{
+								Maze3d maze = new MyMaze3dGenerator().generate((int)x, (int)y, (int)z);
+								//creating the maze and adding it to the hashmap
+								if (maze != null)
+								{
+									mazes.put(args[1], maze);
+									return "maze "+args[1]+" is ready";
+								}
+								else
+								{
+									return "data input does not match the command requiremnts";
+								}
+							}
+							return "data input does not match the command requiremnts";
+							
 
 						}});
 							exe.execute(new Runnable() {
@@ -212,7 +306,9 @@ public class MyModel extends Observable implements Model {
 										}		
 								}
 							});	
+		
 		}
+			
 	
 	}
 
@@ -436,7 +532,7 @@ public class MyModel extends Observable implements Model {
 		String[] str = new String[2];
 		str[0] = "printUpdate";
 		//checking if we have all the data we need
-		if (args.length < 3) 
+		if (args.length < 2) 
 		{
 			str[1] = "not enough data";
 			setChanged();
@@ -445,12 +541,6 @@ public class MyModel extends Observable implements Model {
 		else if(solutions.containsKey(args[1]))
 		{
 			str[1] = "solution for "+ args[1]+ " is ready";
-			setChanged();
-			notifyObservers(str);
-		}
-		else if ((!(args[2].equalsIgnoreCase("BFS"))&& !(args[2].equalsIgnoreCase("A* manhatten")) )&& !(args[2].equalsIgnoreCase("A* air")))
-		{
-			str[1] = "no such algorithem exist";
 			setChanged();
 			notifyObservers(str);
 		}
@@ -467,8 +557,47 @@ public class MyModel extends Observable implements Model {
 	
 				@Override
 				public String call() throws Exception {
-					//Checking which algorithm was chosen and if a solution was already existing for the maze, it overwrites it.
-					if(args[2].equalsIgnoreCase("BFS"))
+					//check if the generate algorithm is valid else using solveAlg
+					if ((args.length>2) && (args[2].equalsIgnoreCase("BFS")))
+					{
+						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						if (s!=null)
+						{
+							solutions.put(args[1], s);
+							return "solution for "+ args[1]+ " is ready";
+						}
+						else
+						{
+							return "no solution was found";
+						}		
+					}
+					if ((args.length>2) && (args[2].equalsIgnoreCase("A* manhatten")))
+					{
+						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						if (s!=null)
+						{
+							solutions.put(args[1], s);
+							return "solution for "+ args[1]+ " is ready";
+						}
+						else
+						{
+							return "no solution was found";
+						}
+					}
+					if ((args.length>2) && (args[2].equalsIgnoreCase("A* air")))
+					{
+						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						if (s!=null)
+						{
+							solutions.put(args[1], s);
+							return "solution for "+ args[1]+ " is ready";
+						}
+						else
+						{
+							return "no solution was found";
+						}
+					}
+					if(solveAlg.equalsIgnoreCase("BFS"))
 					{
 						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 						if (s!=null)
@@ -482,7 +611,7 @@ public class MyModel extends Observable implements Model {
 						}
 						
 					}
-					else if(args[2].equalsIgnoreCase("A* manhatten"))					
+					if(solveAlg.equalsIgnoreCase("A* manhatten"))					
 					{
 						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 						if (s!=null)
@@ -495,7 +624,7 @@ public class MyModel extends Observable implements Model {
 							return "no solution was found";
 						}
 					}
-					else if(args[2].equalsIgnoreCase("A* air"))
+					if(solveAlg.equalsIgnoreCase("A* air"))
 					{
 						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 						if (s!=null)

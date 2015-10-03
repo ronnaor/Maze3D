@@ -17,12 +17,20 @@ public class Maze3DSearchable implements Searchable<Position> {
 	
 	@Override
 	public State<Position> getStartState() {
+		if (maze == null)
+		{
+			return null;
+		}
 		State<Position>start = new State<Position>(maze.getStartPosition(),cost);
 		return start;
 	}
 
 	@Override
 	public State<Position> getGoalState() {
+		if (maze == null)
+		{
+			return null;
+		}
 		State<Position>goal = new State<Position>(maze.getGoalPosition(),cost);
 		return goal;
 	}
