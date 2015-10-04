@@ -1,6 +1,8 @@
 package model;
 
 import java.beans.XMLDecoder;
+import org.hibernate.Session;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +12,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +31,9 @@ import algorithms.search.MazeAirDistance;
 import algorithms.search.MazeManhattenDistance;
 import algorithms.search.MazeSearchable;
 import algorithms.search.Solution;
+import db.DBObject;
+import db.SaveToDB;
+import db.SimpelingMaze;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.Presenter;
@@ -564,6 +570,8 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+							save2DB(obj);
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -577,6 +585,8 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+							save2DB(obj);
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -590,6 +600,8 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+							save2DB(obj);
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -603,6 +615,8 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);;
+							save2DB(obj);
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -617,6 +631,8 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+							save2DB(obj);
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -630,6 +646,8 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+							save2DB(obj);
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -719,4 +737,37 @@ public class MyModel extends Observable implements Model {
 	}
 
 	
+	@SuppressWarnings("null")
+	@Override
+	public HashMap<String, HashMap<Maze3d, Solution<Position>>> getMazesNSolutions() {
+		HashMap<Maze3d, Solution<Position>> combine = null;
+		HashMap<String, HashMap<Maze3d, Solution<Position>>> obj = null;
+		Set<String> namesMazes = getMazes().keySet();
+		Set<String> namesSoultions = getSolutions().keySet();
+		//merging mazes and solutions hashmaps by the same name
+		for (String nameMaze : namesMazes)
+		{
+			for(String nameSoultion : namesSoultions)
+			{
+				if(nameMaze.equals(nameSoultion))
+				{				
+					combine.put(getMazes().get(nameMaze), getSolutions().get(nameSoultion));				
+					obj.put(nameSoultion, combine);
+				}
+			}
+		}
+		return obj;
+	}
+	@Override
+	public void save2DB(DBObject obj) {
+		org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
+		 Session session = sessionFactory.openSession();
+		 SaveToDB manager = new SaveToDB(session);
+	
+		 manager.saveObj(obj);
+		 session.flush();	
+	}
 }
+
+
+

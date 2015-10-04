@@ -1,8 +1,11 @@
 package model;
 
+import java.util.HashMap;
+
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Position;
 import algorithms.search.Solution;
+import db.DBObject;
 
 /**
  * interface Model
@@ -15,6 +18,17 @@ public interface Model {
 	 * @param args array of strings that contains the path
 	 */
 	void getDir(String[] args);
+	
+	 /**
+	 * saving the data to the DB
+	 * @param obj the object we will save to the db
+	 */
+	void save2DB(DBObject obj);
+	/**
+	 * merging the mazes and solutions hasmpas into one hashmap
+	 * @return one hashmap all the mazes, solutions and names of this maze 
+	 */
+	HashMap<String, HashMap<Maze3d, Solution<Position>>> getMazesNSolutions();
 
 	/**
 	 * Generating maze in new thread
@@ -81,5 +95,6 @@ public interface Model {
 	 * @param args  
 	 */
 	void exit(String[] args);
+	
 
 }
