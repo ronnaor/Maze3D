@@ -72,6 +72,9 @@ public class Presenter implements Observer {
 			case "printUpdate":
 				view.printOutput(args[1]);
 				break;
+			case "error":
+				view.error(args[1]);
+				break;
 			default:
 				view.printOutput("no such command");
 				break;

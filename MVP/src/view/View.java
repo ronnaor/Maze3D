@@ -56,6 +56,11 @@ public interface View {
 	 * @param sol the Solution of the maze
 	 */
 	void displaySolution(Solution<Position> sol);
+	/**
+	 * Handling errors
+	 * @param string the error message
+	 */
+	void error(String string);
 
 	
 	

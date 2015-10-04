@@ -151,7 +151,7 @@ public class MyModel extends Observable implements Model {
 		if (args.length<2)
 		{
 			str = new String[2];
-			str[0] = "printUpdate";
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -179,7 +179,7 @@ public class MyModel extends Observable implements Model {
 			}
 			catch (Exception e) {
 				str = new String[2];
-				str[0] = "printUpdate";
+				str[0] = "error";
 				str[1] = "path does not exist";
 				setChanged();
 				notifyObservers(str);
@@ -191,11 +191,11 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void generate3DMaze(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		//checking if we have all the data we need
 		Integer x,y,z;
 		if (args.length < 5) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -204,6 +204,7 @@ public class MyModel extends Observable implements Model {
 		else if (((x=Presenter.tryParseInt(args[2]))==null)|| ((y=Presenter.tryParseInt(args[3]))==null)||
 				((z=Presenter.tryParseInt(args[4]))==null))
 		{
+			str[0] = "error";
 			str[1] = "data input does not match the command requiremnts";
 			setChanged();
 			notifyObservers(str);
@@ -211,6 +212,7 @@ public class MyModel extends Observable implements Model {
 		//checking that there is no other maze with that name
 		else if (mazes.containsKey(args[1]))
 		{
+			str[0] = "error";
 			str[1] = "maze already exists";
 			setChanged();
 			notifyObservers(str);
@@ -291,6 +293,7 @@ public class MyModel extends Observable implements Model {
 											String s = future.get();
 											if (s.equals("maze "+args[1]+" is ready"))
 											{
+												str[0] = "printUpdate";
 												str[1] = "maze "+args[1]+" is ready";
 												setChanged();
 												notifyObservers(str);
@@ -298,6 +301,7 @@ public class MyModel extends Observable implements Model {
 											}
 											else
 											{
+												str[0] = "error";
 												str[1] = "data input does not match the command requiremnts";
 												setChanged();
 												notifyObservers(str);
@@ -305,6 +309,7 @@ public class MyModel extends Observable implements Model {
 											}
 												
 										} catch (InterruptedException | ExecutionException e) {
+											str[0] = "error";
 											str[1] = e.getMessage();
 											setChanged();
 											notifyObservers(str);
@@ -321,9 +326,9 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public Maze3d getMaze(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		if (args.length<2) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -337,6 +342,7 @@ public class MyModel extends Observable implements Model {
 		}
 		else
 		{
+			str[0] = "error";
 			str[1] = "maze does not exist";
 			setChanged();
 			notifyObservers(str);
@@ -347,11 +353,11 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public int[][] getCrossSectionBy(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		Integer y;
 		//checking if we have all the data we need
 		if (args.length < 4) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -378,6 +384,7 @@ public class MyModel extends Observable implements Model {
 				}
 				else
 				{
+					str[0] = "error";
 					str[1] = "values is not as expected";
 					setChanged();
 					notifyObservers(str);
@@ -386,6 +393,7 @@ public class MyModel extends Observable implements Model {
 			}
 			catch (Exception e)
 			{
+				str[0] = "error";
 				str[1] = "values is not as expected";
 				setChanged();
 				notifyObservers(str);
@@ -394,6 +402,7 @@ public class MyModel extends Observable implements Model {
 		}
 		else
 		{
+			str[0] = "error";
 			str[1] = "values is not as expected";
 			setChanged();
 			notifyObservers(str);
@@ -404,10 +413,10 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void saveMaze(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		//checking if we have all the data we need
 		if (args.length < 3) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -419,11 +428,13 @@ public class MyModel extends Observable implements Model {
 			out.write(mazes.get(args[1]).toByteArray());			
 			out.flush();
 			out.close();
+			str[0] = "printUpdate";
 			str[1] = "Maze "+ args[1]+" was saved";
 			setChanged();
 			notifyObservers(str);
 			}
 			catch (Exception e) {
+				str[0] = "error";
 				str[1] = "Couldn't save the maze - fatal error";
 				setChanged();
 				notifyObservers(str);
@@ -431,6 +442,7 @@ public class MyModel extends Observable implements Model {
 		}
 		else
 		{
+			str[0] = "error";
 			str[1] = "Maze does not exist";
 			setChanged();
 			notifyObservers(str);
@@ -441,10 +453,10 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void loadMaze(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		//checking if we have all the data we need
 		if (args.length < 3) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -458,11 +470,13 @@ public class MyModel extends Observable implements Model {
 				in.close();
 				Maze3d loaded=new Maze3dByteArr(b);
 				mazes.put(args[2], loaded);
+				str[0] = "printUpdate";
 				str[1] = "Maze was loaded succesfully";
 				setChanged();
 				notifyObservers(str);
 			}
 			catch (Exception e) {
+				str[0] = "error";
 				str[1] = "Error in loading file";
 				setChanged();
 				notifyObservers(str);
@@ -470,6 +484,7 @@ public class MyModel extends Observable implements Model {
 		}
 		else
 		{
+			str[0] = "error";
 			str[1] = "Maze already exist";
 			setChanged();
 			notifyObservers(str);
@@ -480,10 +495,10 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public int getMazeSize(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		//checking if we have all the data we need
 		if (args.length<2) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -498,6 +513,7 @@ public class MyModel extends Observable implements Model {
 		}	
 		else
 		{
+			str[0] = "error";
 			str[1] = "no such maze";
 			setChanged();
 			notifyObservers(str);
@@ -508,9 +524,9 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public long getFileSize(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		if (args.length < 2) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -521,6 +537,7 @@ public class MyModel extends Observable implements Model {
 			long l = new File(args[1]+".maz").length();
 			if (l==0)
 			{
+				str[0] = "error";
 				str[1] = "no such File";
 				setChanged();
 				notifyObservers(str);
@@ -536,22 +553,24 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void solve(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		//checking if we have all the data we need
 		if (args.length < 2) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
 		}
 		else if(solutions.containsKey(args[1]))
 		{
+			str[0] = "printUpdate";
 			str[1] = "solution for "+ args[1]+ " is ready";
 			setChanged();
 			notifyObservers(str);
 		}
 		else if (!mazes.containsKey(args[1]))
 		{
+			str[0] = "error";
 			str[1] = "no such maze exist";
 			setChanged();
 			notifyObservers(str);
@@ -575,7 +594,7 @@ public class MyModel extends Observable implements Model {
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
-								err[0] = "printUpdate";
+								err[0] = "error";
 								err[1] = "no DB conection";
 								setChanged();
 								notifyObservers(err);
@@ -599,7 +618,7 @@ public class MyModel extends Observable implements Model {
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
-								err[0] = "printUpdate";
+								err[0] = "error";
 								err[1] = "no DB conection";
 								setChanged();
 								notifyObservers(err);
@@ -622,7 +641,7 @@ public class MyModel extends Observable implements Model {
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
-								err[0] = "printUpdate";
+								err[0] = "error";
 								err[1] = "no DB conection";
 								setChanged();
 								notifyObservers(err);
@@ -645,7 +664,7 @@ public class MyModel extends Observable implements Model {
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
-								err[0] = "printUpdate";
+								err[0] = "error";
 								err[1] = "no DB conection";
 								setChanged();
 								notifyObservers(err);
@@ -669,7 +688,7 @@ public class MyModel extends Observable implements Model {
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
-								err[0] = "printUpdate";
+								err[0] = "error";
 								err[1] = "no DB conection";
 								setChanged();
 								notifyObservers(err);
@@ -692,7 +711,7 @@ public class MyModel extends Observable implements Model {
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
-								err[0] = "printUpdate";
+								err[0] = "error";
 								err[1] = "no DB conection";
 								setChanged();
 								notifyObservers(err);
@@ -716,18 +735,21 @@ public class MyModel extends Observable implements Model {
 							String s = future.get();
 							if (s.equals("solution for "+ args[1]+ " is ready"))
 							{
+								str[0] = "printUpdate";
 								str[1] = "solution for "+ args[1]+ " is ready";
 								setChanged();
 								notifyObservers(str);
 							}
 							else
 							{
+								str[0] = "error";
 								str[1] = "no solution was found";
 								setChanged();
 								notifyObservers(str);							
 							}
 								
 						} catch (InterruptedException | ExecutionException e) {
+							str[0] = "error";
 							str[1] = e.getMessage();
 							setChanged();
 							notifyObservers(str);
@@ -741,10 +763,10 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public Solution<Position> getSoultion(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		//checking if we have all the data we need
 		if (args.length<2) 
 		{
+			str[0] = "error";
 			str[1] = "not enough data";
 			setChanged();
 			notifyObservers(str);
@@ -757,6 +779,7 @@ public class MyModel extends Observable implements Model {
 		}
 		else
 		{
+			str[0] = "error";
 			str[1] = "solution wasn't created";
 			setChanged();
 			notifyObservers(str);
@@ -767,7 +790,6 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void exit(String[] args) {
 		String[] str = new String[2];
-		str[0] = "printUpdate";
 		exe.shutdown();
 		try 
 		{
@@ -775,10 +797,12 @@ public class MyModel extends Observable implements Model {
 		} 
 		catch (InterruptedException e)
 		{
+			str[0] = "error";
 			str[1] = e.getMessage();
 			setChanged();
 			notifyObservers(str);
 		}
+		str[0] = "printUpdate";
 		str[1] = "Goodbye and good Java to you";
 		setChanged();
 		notifyObservers(str);
