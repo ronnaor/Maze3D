@@ -570,9 +570,18 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
-							save2DB(obj);
+							try {
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								save2DB(obj);
+							} catch (Exception e) {
+								String[] err = new String[2];
+								err[0] = "printUpdate";
+								err[1] = "no DB conection";
+								setChanged();
+								notifyObservers(err);
+							}
 							return "solution for "+ args[1]+ " is ready";
+							
 						}
 						else
 						{
@@ -585,8 +594,16 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
-							save2DB(obj);
+							try {
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								save2DB(obj);
+							} catch (Exception e) {
+								String[] err = new String[2];
+								err[0] = "printUpdate";
+								err[1] = "no DB conection";
+								setChanged();
+								notifyObservers(err);
+							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -600,8 +617,16 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
-							save2DB(obj);
+							try {
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								save2DB(obj);
+							} catch (Exception e) {
+								String[] err = new String[2];
+								err[0] = "printUpdate";
+								err[1] = "no DB conection";
+								setChanged();
+								notifyObservers(err);
+							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -615,8 +640,16 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);;
-							save2DB(obj);
+							try {
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								save2DB(obj);
+							} catch (Exception e) {
+								String[] err = new String[2];
+								err[0] = "printUpdate";
+								err[1] = "no DB conection";
+								setChanged();
+								notifyObservers(err);
+							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -631,8 +664,16 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
-							save2DB(obj);
+							try {
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								save2DB(obj);
+							} catch (Exception e) {
+								String[] err = new String[2];
+								err[0] = "printUpdate";
+								err[1] = "no DB conection";
+								setChanged();
+								notifyObservers(err);
+							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -646,8 +687,16 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
-							save2DB(obj);
+							try {
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								save2DB(obj);
+							} catch (Exception e) {
+								String[] err = new String[2];
+								err[0] = "printUpdate";
+								err[1] = "no DB conection";
+								setChanged();
+								notifyObservers(err);
+							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
