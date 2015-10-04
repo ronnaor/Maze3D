@@ -9,7 +9,11 @@ import algorithms.search.Solution;
  * interface View
  *
  */
-public interface View {
+public interface View  {
+	/**
+	 * start the program
+	 */
+	void start();
 	
 	/**
 	 * print the output we get

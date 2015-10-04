@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Observable;
 
 
 import algorithms.mazeGenarators.Maze3d;
@@ -17,7 +16,7 @@ import presenter.Presenter;
  * displays data and user commands to the presenter to act upon that data.
  *
  */
-public class ViewCLI extends Observable implements View {
+public class ViewCLI extends CommonView {
 	
 	private BufferedReader in;
 	private PrintWriter out; 
@@ -62,6 +61,7 @@ public class ViewCLI extends Observable implements View {
 		this.presenter = presenter;
 	}
 
+	@Override
 	public void start()
 	{		 
 		new Thread(new Runnable() {
