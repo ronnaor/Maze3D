@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+  <!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+  
+  <hibernate-mapping package="db">
+  
+  <class name="simpleMaze" table="mazes">
+        <id name="mazeID" type="java.lang.Long" column="maze_id">
+         <generator class="native"/>
+      </id>
+      <list name="simpleMaze" cascade="all">
+         <key column="maze"/>
+         <list-index column="idx"/>
+      <element type="binary" length="1024" column="BYTES_" />
+    </list>
+   </class>
+     </hibernate-mapping>

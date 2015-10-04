@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+  <!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+  
+  <hibernate-mapping package="db">
+
+       <class name="Solutions" table="solutions">
+        <id name="mazeID" type="java.lang.Long" column="maze_id">
+         <generator class="native"/>
+      </id>
+      <property name="numMoves" column="nummoves" type="int"/>
+      <list name="path" cascade="all">
+         <key column="num"/>
+         <list-index column="idx"/>
+         <one-to-many class="Positions"/>
+      </list>
+   </class>
+     </hibernate-mapping>

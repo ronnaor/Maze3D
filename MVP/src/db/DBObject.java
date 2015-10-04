@@ -1,14 +1,12 @@
 package db;
 
 import java.io.Serializable;
-import algorithms.mazeGenarators.Position;
-import algorithms.search.Solution;
 
 @SuppressWarnings("serial")
 public class DBObject implements Serializable {
 	
 	public SimpelingMaze maze;
-	public Solution<Position> solution;
+	public Solutions<Positions> solution;
 	public String name;
 	public long mazeID;
 	
@@ -20,11 +18,11 @@ public class DBObject implements Serializable {
 		this.mazeID = mazeID;
 	}
 
-	public Solution<Position> getSolution() {
+	public Solutions<Positions> getSolution() {
 		return solution;
 	}
 
-	public void setSolution(Solution<Position> solution) {
+	public void setSolution(Solutions<Positions> solution) {
 		this.solution = solution;
 	}
 
@@ -40,9 +38,9 @@ public class DBObject implements Serializable {
  * Ctor getting row data	
  * @param name1 the name of the maze
  * @param maze1 the maze itself
- * @param solution1 the soultion for the maze
+ * @param solution1 the solution for the maze
  */
-	public DBObject(String name1, SimpelingMaze maze1, Solution<Position> solution1)
+	public DBObject(String name1, SimpelingMaze maze1, Solutions<Positions> solution1)
 	{
 		this.name = name1;
 		this.maze = maze1;

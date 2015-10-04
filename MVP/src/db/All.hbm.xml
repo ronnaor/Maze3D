@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+  <!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+  
+  <hibernate-mapping package="db">
+      <class name="DBObject" table="All" >
+          <id name="mazeID" type="java.lang.Long" column="maze_id" >
+                <generator class="native" />
+          </id>
+          <many-to-one name="solutions" class="db.Solutions" fetch="select">
+            <column name="mazeID" not-null="true" />
+       	 </many-to-one>
+			<many-to-one name="mazes" class="db.Mazes" fetch="select">
+            <column name="mazeID" not-null="true" />
+       	 </many-to-one>
+       	 <property name="name" type="string">
+            <column name="MAZE_NAME" length="20" not-null="true" unique="true" />
+        </property>
+      </class>    
+  </hibernate-mapping>
+
+  

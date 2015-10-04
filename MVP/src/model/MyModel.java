@@ -34,6 +34,8 @@ import algorithms.search.Solution;
 import db.DBObject;
 import db.SaveToDB;
 import db.SimpelingMaze;
+import db.Positions;
+import db.Solutions;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.Presenter;
@@ -838,7 +840,8 @@ public class MyModel extends Observable implements Model {
 		 SaveToDB manager = new SaveToDB(session);
 	
 		 manager.saveObj(obj);
-		 session.flush();	
+		 session.flush();
+		 session.close();
 	}
 }
 
