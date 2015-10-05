@@ -96,5 +96,10 @@ public interface Model {
 	 */
 	void exit(String[] args);
 	
+	/**
+	 *method that creates db and it's tables only if they don't exist
+	 *if they do exist, it loads the data from this tables 
+	 */
+	void startDB();
 
 }

@@ -8,11 +8,15 @@ import algorithms.search.Solution;
 import db.Positions;
 
 
-@SuppressWarnings({ "serial", "hiding" })
-public class Solutions<Positions> implements Serializable {
+
+public class Solutions implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	//for the HQL DB
+	private DBObject obj;
 	
-	ArrayList<Positions> path;
-	int numMoves;
+	private ArrayList<Positions> path;
+	private int numMoves;
 	
 	public ArrayList<Positions> getPath() {
 		return path;
@@ -30,9 +34,10 @@ public class Solutions<Positions> implements Serializable {
 		this.numMoves = numMoves;
 	}
 
-	Solutions(Solution<Position> sol) {
-		this.path = sol.getPath();
-		for(Position t: sol.getPath())
+	public Solutions(Solution<Position> sol) {
+		ArrayList<Position> temp = sol.getPath();
+		path = new ArrayList<Positions>();
+		for(Position t: temp)
 		{
 			Positions p = new Positions(t);
 			this.path.add(p);
@@ -40,5 +45,23 @@ public class Solutions<Positions> implements Serializable {
 		numMoves = this.path.size();
 	}
 
+	public DBObject getObj() {
+		return obj;
+	}
+
+	public void setObj(DBObject obj) {
+		this.obj = obj;
+	}
+
+	public Solution<Position> getSolution() {
+		ArrayList<Position> p = new ArrayList<Position>();
+		for(Positions t: this.path)
+		{
+			Position temp = new Position(t.getX(),t.getY(),t.getZ());
+			p.add(temp);
+		}
+		Solution<Position> fix = new Solution<Position>(p);
+		return fix;
+	}
 
 }

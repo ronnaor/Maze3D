@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import org.hibernate.Session;
+
 import model.MyModel;
 import presenter.Presenter;
 import presenter.Properties;
@@ -38,12 +40,13 @@ public class Run {
 			System.out.println("no view type in the file, will use GUI as view");
 			view = new ViewGUI();
 		}
-
-		MyModel model = new MyModel();
+		org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
+		/*Session session = sessionFactory.openSession();*/
+		/*MyModel model = new MyModel();
 		Presenter presenter = new Presenter(model, view);
 		model.addObserver(presenter);
 		view.addObserver(presenter);
-		view.start();
+		view.start();*/
 	}
 
 }

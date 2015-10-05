@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_60" class="java.beans.XMLDecoder">
+<java version="1.8.0_51" class="java.beans.XMLDecoder">
  <object class="presenter.Properties">
   <void property="generateAlgorithm">
    <string>my</string>
@@ -8,10 +8,10 @@
    <int>13</int>
   </void>
   <void property="solveAlgorithm">
-   <string>A* air</string>
+   <string>bfs</string>
   </void>
   <void property="viewStyle">
-   <string>GUI</string>
+   <string>CLI</string>
   </void>
  </object>
 </java>

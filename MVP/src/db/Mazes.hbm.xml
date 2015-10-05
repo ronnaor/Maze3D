@@ -6,13 +6,11 @@
   <hibernate-mapping package="db">
   
   <class name="simpleMaze" table="mazes">
-        <id name="mazeID" type="java.lang.Long" column="maze_id">
+        <id name="mazeID" type="int" column="maze_id">
          <generator class="native"/>
       </id>
-      <list name="simpleMaze" cascade="all">
-         <key column="maze"/>
-         <list-index column="idx"/>
-      <element type="binary" length="1024" column="BYTES_" />
-    </list>
+    <property name="simpleMaze" type="blob" length="1000000000" column="maze" />
+       <one-to-one name="DBObject" class="db.DBObject" constrained="true">
+     </one-to-one>
    </class>
      </hibernate-mapping>

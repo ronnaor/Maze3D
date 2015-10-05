@@ -1,21 +1,33 @@
 package db;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import algorithms.mazeGenarators.Maze3d;
 
-@SuppressWarnings("serial")
 public class SimpelingMaze implements Serializable{
 	
-	public List<Byte> simpleMaze;
+
+	private static final long serialVersionUID = 1L;
+	
+	//for the HQL DB
+	private DBObject db;
+	
+	private List<Byte> simpleMaze;
 /**
  * converting normal maze to light maze	
  * @param maze Maze3d normal maze
  */
 	public SimpelingMaze(Maze3d maze) {
-		for (Byte b : maze.toByteArray())
-		this.simpleMaze.add(b);
+		simpleMaze = new ArrayList<Byte>();
+		byte[] e = maze.toByteArray();
+		
+		for (int i=0; i<e.length; i++)
+		{
+			this.simpleMaze.add(e[i]);
+		}
+		
 	}
 
 	public List<Byte> getSimpleMaze() {
@@ -32,4 +44,23 @@ public class SimpelingMaze implements Serializable{
 	public SimpelingMaze(SimpelingMaze maze) {
 		this.simpleMaze=maze.getSimpleMaze();
 	}
+
+public DBObject getDb() {
+	return db;
+}
+
+public void setDb(DBObject db) {
+	this.db = db;
+}
+
+public byte[] getSimpleMazeArray() {
+	byte[] arr = new byte [this.simpleMaze.size()];
+	int cnt =0;
+	for (byte b : simpleMaze)
+	{
+		arr[cnt] = b;
+		cnt++;
+	}
+	return arr;
+}
 }

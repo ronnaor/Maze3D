@@ -1,14 +1,21 @@
 package db;
 
 import java.io.Serializable;
+import algorithms.mazeGenarators.Maze3d;
+import algorithms.mazeGenarators.Maze3dByteArr;
+import algorithms.mazeGenarators.Position;
+import algorithms.search.Solution;
 
-@SuppressWarnings("serial")
+
 public class DBObject implements Serializable {
 	
-	public SimpelingMaze maze;
-	public Solutions<Positions> solution;
-	public String name;
-	public long mazeID;
+
+	private static final long serialVersionUID = 1L;
+	
+	private SimpelingMaze maze;
+	private Solutions solution;
+	private String name;
+	private long mazeID;
 	
 	public long getMazeID() {
 		return mazeID;
@@ -16,14 +23,6 @@ public class DBObject implements Serializable {
 
 	public void setMazeID(long mazeID) {
 		this.mazeID = mazeID;
-	}
-
-	public Solutions<Positions> getSolution() {
-		return solution;
-	}
-
-	public void setSolution(Solutions<Positions> solution) {
-		this.solution = solution;
 	}
 
 	public String getName() {
@@ -40,11 +39,12 @@ public class DBObject implements Serializable {
  * @param maze1 the maze itself
  * @param solution1 the solution for the maze
  */
-	public DBObject(String name1, SimpelingMaze maze1, Solutions<Positions> solution1)
+	public DBObject(String name1, SimpelingMaze maze1, Solutions solution1)
 	{
 		this.name = name1;
-		this.maze = maze1;
-		this.solution =solution1;
+		this.maze=maze1;
+		this.solution=solution1;
+		
 	}
 /**
  * copy Ctor	
@@ -57,6 +57,17 @@ public class DBObject implements Serializable {
 		this.mazeID =obj.getMazeID();
 	}
 
+
+public Maze3d getFixMaze(){
+	Maze3d fix=new Maze3dByteArr(this.maze.getSimpleMazeArray());
+	return fix;
+}
+
+public Solution<Position> getFixSolution(){
+	Solution<Position> fix = new Solution<Position>(this.solution.getSolution());
+	return fix;
+}
+
 public SimpelingMaze getMaze() {
 	return maze;
 }
@@ -64,4 +75,13 @@ public SimpelingMaze getMaze() {
 public void setMaze(SimpelingMaze maze) {
 	this.maze = maze;
 }
+
+public Solutions getSolution() {
+	return solution;
+}
+
+public void setSolution(Solutions solution) {
+	this.solution = solution;
+}
+
 }

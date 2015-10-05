@@ -1,7 +1,6 @@
 package model;
 
 import java.beans.XMLDecoder;
-import org.hibernate.Session;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,8 +8,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -19,6 +24,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Maze3dByteArr;
@@ -34,7 +43,6 @@ import algorithms.search.Solution;
 import db.DBObject;
 import db.SaveToDB;
 import db.SimpelingMaze;
-import db.Positions;
 import db.Solutions;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
@@ -57,7 +65,9 @@ public class MyModel extends Observable implements Model {
 	 * Ctor of MyModel
 	 */
 	public MyModel() {
-		try {
+		this.mazes = new HashMap<String, Maze3d>();
+		this.solutions = new HashMap<String, Solution<Position>>();
+		try {// get properties
 			XMLDecoder xml=new XMLDecoder(new FileInputStream("prop.xml"));
 			Properties properties=(Properties)xml.readObject();
 			this.exe = Executors.newFixedThreadPool(properties.getNumThreads());
@@ -70,9 +80,8 @@ public class MyModel extends Observable implements Model {
 			this.generateAlg = "my";
 			this.solveAlg = "bfs";
 		}
-		this.mazes = new HashMap<String, Maze3d>();
-		this.solutions = new HashMap<String, Solution<Position>>();
-		
+			startDB();
+	
 	}
 	/**
 	 * get the model presenter
@@ -592,7 +601,7 @@ public class MyModel extends Observable implements Model {
 						{
 							solutions.put(args[1], s);
 							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
@@ -616,7 +625,7 @@ public class MyModel extends Observable implements Model {
 						{
 							solutions.put(args[1], s);
 							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
@@ -639,7 +648,7 @@ public class MyModel extends Observable implements Model {
 						{
 							solutions.put(args[1], s);
 							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
@@ -661,10 +670,14 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
+		
 							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								SimpelingMaze d =new SimpelingMaze(mazes.get(args[1]));
+								Solutions b =new Solutions(s);
+								DBObject obj = new DBObject(args[1],d ,b);
 								save2DB(obj);
 							} catch (Exception e) {
+								System.out.println(e.getMessage());
 								String[] err = new String[2];
 								err[0] = "error";
 								err[1] = "no DB conection";
@@ -686,7 +699,7 @@ public class MyModel extends Observable implements Model {
 						{
 							solutions.put(args[1], s);
 							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
@@ -709,7 +722,7 @@ public class MyModel extends Observable implements Model {
 						{
 							solutions.put(args[1], s);
 							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,s);
+								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
 								save2DB(obj);
 							} catch (Exception e) {
 								String[] err = new String[2];
@@ -842,6 +855,132 @@ public class MyModel extends Observable implements Model {
 		 manager.saveObj(obj);
 		 session.flush();
 		 session.close();
+	}
+	@Override
+	public void startDB() {
+		try {
+			
+			//creating db
+			Connection conn = null;
+			   Statement stmt = null;
+			   try{
+			      //STEP 2: Register JDBC driver
+			      Class.forName("com.mysql.jdbc.Driver");
+
+			      //STEP 3: Open a connection
+			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/", "root", "Aa123456!");
+
+			      //STEP 4: Execute a query
+			      stmt = conn.createStatement();
+			      //creating the DB
+			      String sql = "CREATE DATABASE IF NOT EXISTS `DB`;";
+			      stmt.executeUpdate(sql);
+			      try{
+				         if(stmt!=null)
+				            stmt.close();
+				      }catch(SQLException se2){
+				      }
+				      try{
+				         if(conn!=null)
+				            conn.close();
+				      }catch(SQLException se){
+				    	  String[] err = new String[2];
+							err[0] = "error";
+							err[1] = "couldn't close db";
+							setChanged();
+							notifyObservers(err);
+				      }//end finally try
+			      //Creating the father table
+			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/DB", "root", "Aa123456!");
+			      stmt = conn.createStatement();
+			      sql = "CREATE TABLE IF NOT EXISTS `All` " +
+		                   "(`maze_id` int(255) not NULL, " +
+		                   " `MAZE_NAME` VARCHAR(255),"+
+		                   " PRIMARY KEY (`maze_id`) USING BTREE"+
+						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			      stmt.executeUpdate(sql);			      
+			      //creating the childs tables
+			      //MAZE TABLE
+			      sql = "CREATE TABLE IF NOT EXISTS `mazes` " +
+		                   "(`maze_id` int(255) not NULL, " +
+		                   " `simpleMaze` BLOB,"+
+		                   " PRIMARY KEY (`maze_id`) USING BTREE,"+
+		                   " CONSTRAINT `FK_MAZE_ID` FOREIGN KEY (`maze_id`) REFERENCES `All` (`maze_id`)"+
+						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			      stmt.executeUpdate(sql);
+			      //SOLUTION TaBLE
+			      sql = "CREATE TABLE IF NOT EXISTS `Solutions` " +
+		                   "(`maze_id` int(255) not NULL, " +
+		                   " `numMoves` int(255),"+			                   
+		                   " PRIMARY KEY (`maze_id`) USING BTREE,"+
+		                   " CONSTRAINT `FK_SOLUTION_ID` FOREIGN KEY (`maze_id`) REFERENCES `All` (`maze_id`)"+
+						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";			
+			      stmt.executeUpdate(sql);
+			      //POSITION TABLE
+			      sql = "CREATE TABLE IF NOT EXISTS `Positions` " +
+		                   "(`maze_id` int(255) not NULL, " +
+		                   " `x` int(255),"+
+		                   " `y` int(255),"+			                   
+		                   " `z` int(255),"+			                   
+		                   " PRIMARY KEY (`maze_id`) USING BTREE,"+
+		                   "KEY `FK_MAZE_TRANSACTION_MAZE_ID` (`maze_id`),"+
+		                   "CONSTRAINT `FK_MAZE_TRANSACTION_MAZE_ID` FOREIGN KEY (`maze_id`) "+ 
+		                   "REFERENCES `Solutions` (`maze_id`) ON DELETE CASCADE ON UPDATE CASCADE"+
+						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			      stmt.executeUpdate(sql);
+			      
+			   }catch(Exception se1){
+				   String[] err = new String[2];
+					err[0] = "error";
+					err[1] = "couldn't create db";
+					setChanged();
+					notifyObservers(err);
+			   }finally{
+			      //finally block used to close resources
+			      try{
+			         if(stmt!=null)
+			            stmt.close();
+			      }catch(SQLException se2){
+			      }
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			    	  String[] err = new String[2];
+						err[0] = "error";
+						err[1] = "couldn't close db";
+						setChanged();
+						notifyObservers(err);
+			      }//end finally try
+			   }//end try
+			   
+			 //creating session
+			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
+			Session session = sessionFactory.openSession();
+			//org.hibernate.SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+			//Session session = sessionFactory.openSession();
+
+			org.hibernate.Query query = session.createQuery("from DBObject");
+
+			@SuppressWarnings("unchecked")
+			List <DBObject>list = query.list();
+			Iterator<DBObject> it=list.iterator();
+			
+			DBObject object;
+			
+			while (it.hasNext()){
+				object=it.next();
+				this.mazes.put(object.getName(), object.getFixMaze());
+				this.solutions.put(object.getName(), object.getFixSolution());			
+			}
+			
+		} catch (Exception e) {
+			String[] err = new String[2];
+			err[0] = "error";
+			err[1] = "eeeeeeeeeeeeee";
+			setChanged();
+			notifyObservers(err);
+		}
 	}
 }
 
