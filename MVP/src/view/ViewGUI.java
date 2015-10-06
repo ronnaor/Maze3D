@@ -1,5 +1,9 @@
 package view;
 
+import java.util.HashMap;
+
+import org.eclipse.swt.widgets.Listener;
+
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Position;
 import algorithms.search.Solution;
@@ -7,9 +11,10 @@ import algorithms.search.Solution;
 public class ViewGUI extends CommonView {
 
 	MazeWindow window;
+	HashMap<String, Listener> listeners;
 	
 	public ViewGUI() {
-		window =  new MazeWindow("maze window", 300, 500);
+		this.window =  new StartWindow("maze window", 300, 500,listeners);
 	}
 	
 	@Override
@@ -32,13 +37,14 @@ public class ViewGUI extends CommonView {
 
 	@Override
 	public void displayMaze(Maze3d maze) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void displayCrossSectionBy(int[][] arr, String axis, String index) {
-		// TODO Auto-generated method stub
+		MazeWindow mW = new MazeWindow("maze", 500, 500, listeners);
+		mW.setMazeData(arr);
+		mW.run();
 
 	}
 

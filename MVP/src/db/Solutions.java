@@ -14,17 +14,18 @@ public class Solutions implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//for the HQL DB
 	private DBObject obj;
+	private int mazeID;
 	
 	private ArrayList<Positions> path;
 	private int numMoves;
 	
-	public ArrayList<Positions> getPath() {
+	/*public ArrayList<Positions> getPath() {
 		return path;
 	}
 
 	public void setPath(ArrayList<Positions> path) {
 		this.path = path;
-	}
+	}*/
 
 	public int getNumMoves() {
 		return numMoves;
@@ -45,13 +46,13 @@ public class Solutions implements Serializable {
 		numMoves = this.path.size();
 	}
 
-	public DBObject getObj() {
+/*	public DBObject getObj() {
 		return obj;
 	}
 
 	public void setObj(DBObject obj) {
 		this.obj = obj;
-	}
+	}*/
 
 	public Solution<Position> getSolution() {
 		ArrayList<Position> p = new ArrayList<Position>();
@@ -62,6 +63,14 @@ public class Solutions implements Serializable {
 		}
 		Solution<Position> fix = new Solution<Position>(p);
 		return fix;
+	}
+
+	public int getMazeID() {
+		return mazeID;
+	}
+
+	public void setMazeID(int mazeID) {
+		this.mazeID = mazeID;
 	}
 
 }

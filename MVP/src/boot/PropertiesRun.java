@@ -13,12 +13,12 @@ public class PropertiesRun {
 		XMLEncoder xml;
 		
 		try {
-			xml = new XMLEncoder(new FileOutputStream("prop.xml"));
-			xml.writeObject(new Properties(13, "my", "bfs", "CLI"));
-			xml.close();
 			/*xml = new XMLEncoder(new FileOutputStream("prop.xml"));
-			xml.writeObject(new Properties(13, "my", "A* air", "GUI"));
+			xml.writeObject(new Properties(13, "my", "bfs", "CLI"));
 			xml.close();*/
+			xml = new XMLEncoder(new FileOutputStream("prop.xml"));
+			xml.writeObject(new Properties(13, "my", "A* air", "GUI"));
+			xml.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}

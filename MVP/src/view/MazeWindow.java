@@ -1,5 +1,6 @@
 package view;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,14 +11,17 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Listener;
+
 
 public class MazeWindow extends BasicWindow{
 
 	Timer timer;
 	TimerTask task;
+	int[][] mazeData;
 	
-	public MazeWindow(String title, int width, int height) {
-		super(title, width, height);
+	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners) {
+		super(title, width, height, listeners);
 	}
 
 	private void randomWalk(MazeDisplayer maze){
@@ -47,6 +51,7 @@ public class MazeWindow extends BasicWindow{
 				
 		
 		MazeDisplayer maze=new Maze3D(shell, SWT.BORDER);
+		maze.setMaze(mazeData);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true,1,2));
 		
 		Button stopButton=new Button(shell, SWT.PUSH);
@@ -95,10 +100,21 @@ public class MazeWindow extends BasicWindow{
 		});
 		
 	}
-	
-	public static void main(String[] args) {
-		MazeWindow win=new MazeWindow("maze example", 500, 300);
-		win.run();
+
+	@Override
+	void close() {
+		// TODO Auto-generated method stub
+		
 	}
+
+	public int[][] getMazeData() {
+		return mazeData;
+	}
+
+	public void setMazeData(int[][] mazeData) {
+		this.mazeData = mazeData;
+	}
+
+
 
 }

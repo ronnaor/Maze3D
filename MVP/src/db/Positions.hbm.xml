@@ -3,13 +3,13 @@
   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
   
-  <hibernate-mapping package="algorithms.mazeGenarators">
+  <hibernate-mapping package="db">
 
 <class name="Positions" table="Positions">
       <id name="mazeID" type="int" column="num">
          <generator class="native"/>
       </id>
-      <many-to-one name="Solutions" class="algorithms.search.Solutions" fetch="select">
+      <many-to-one name="Solutions" class="db.Solutions" fetch="select">
             <column name="mazeID" not-null="true" />
         </many-to-one>
       <property name="x" column="x" type="int"/>

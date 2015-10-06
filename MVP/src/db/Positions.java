@@ -12,6 +12,7 @@ public class Positions implements Serializable {
 	private int z;
 	//for the HQL DB
 	private Solutions s;
+	private int mazeID;
 		
 	private static final long serialVersionUID = 1L;
 
@@ -47,12 +48,20 @@ public class Positions implements Serializable {
 		this.z = z;
 	}
 
-	public Solutions getS() {
+/*	public Solutions getS() {
 		return s;
 	}
 
 	public void setS(Solutions s) {
 		this.s = s;
+	}*/
+
+	public int getMazeID() {
+		return mazeID;
+	}
+
+	public void setMazeID(int mazeID) {
+		this.mazeID = mazeID;
 	}
 	
 }

@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -80,8 +81,8 @@ public class MyModel extends Observable implements Model {
 			this.generateAlg = "my";
 			this.solveAlg = "bfs";
 		}
-			startDB();
-	
+/*			startDB();
+*/	
 	}
 	/**
 	 * get the model presenter
@@ -848,13 +849,13 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public void save2DB(DBObject obj) {
-		org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
+		/*org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
 		 Session session = sessionFactory.openSession();
 		 SaveToDB manager = new SaveToDB(session);
 	
 		 manager.saveObj(obj);
 		 session.flush();
-		 session.close();
+		 session.close();*/
 	}
 	@Override
 	public void startDB() {
@@ -895,7 +896,7 @@ public class MyModel extends Observable implements Model {
 			      stmt = conn.createStatement();
 			      sql = "CREATE TABLE IF NOT EXISTS `All` " +
 		                   "(`maze_id` int(255) not NULL, " +
-		                   " `MAZE_NAME` VARCHAR(255),"+
+		                   " `name` VARCHAR(255),"+
 		                   " PRIMARY KEY (`maze_id`) USING BTREE"+
 						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 			      stmt.executeUpdate(sql);			      
@@ -957,11 +958,9 @@ public class MyModel extends Observable implements Model {
 			 //creating session
 			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
 			Session session = sessionFactory.openSession();
-			//org.hibernate.SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-			//Session session = sessionFactory.openSession();
 
-			org.hibernate.Query query = session.createQuery("from DBObject");
-
+			Query query = session.createQuery("from DBObject");
+			session.close();
 			@SuppressWarnings("unchecked")
 			List <DBObject>list = query.list();
 			Iterator<DBObject> it=list.iterator();
@@ -978,6 +977,7 @@ public class MyModel extends Observable implements Model {
 			String[] err = new String[2];
 			err[0] = "error";
 			err[1] = "eeeeeeeeeeeeee";
+			System.out.println(e.getMessage());
 			setChanged();
 			notifyObservers(err);
 		}

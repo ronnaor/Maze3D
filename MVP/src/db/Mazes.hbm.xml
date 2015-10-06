@@ -5,7 +5,7 @@
   
   <hibernate-mapping package="db">
   
-  <class name="simpleMaze" table="mazes">
+  <class name="SimpelingMaze" table="mazes">
         <id name="mazeID" type="int" column="maze_id">
          <generator class="native"/>
       </id>

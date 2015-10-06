@@ -15,15 +15,10 @@ public class DBObject implements Serializable {
 	private SimpelingMaze maze;
 	private Solutions solution;
 	private String name;
-	private long mazeID;
+	private int mazeID;
 	
-	public long getMazeID() {
-		return mazeID;
-	}
 
-	public void setMazeID(long mazeID) {
-		this.mazeID = mazeID;
-	}
+
 
 	public String getName() {
 		return name;
@@ -54,7 +49,7 @@ public class DBObject implements Serializable {
 		this.name = obj.getName();
 		this.maze = obj.getMaze();
 		this.solution = obj.getSolution();
-		this.mazeID =obj.getMazeID();
+		this.setMazeID(obj.getMazeID());
 	}
 
 
@@ -82,6 +77,14 @@ public Solutions getSolution() {
 
 public void setSolution(Solutions solution) {
 	this.solution = solution;
+}
+
+public int getMazeID() {
+	return mazeID;
+}
+
+public void setMazeID(int mazeID) {
+	this.mazeID = mazeID;
 }
 
 }

@@ -13,7 +13,7 @@
             <one-to-one name="solutions" class="db.Solutions" cascade="save-update">
             </one-to-one>       	 
        	 <property name="name" type="string">
-            <column name="MAZE_NAME" length="20" not-null="true" unique="true" />
+            <column name="name" length="20" not-null="true" unique="true" />
         </property>
       </class>    
   </hibernate-mapping>

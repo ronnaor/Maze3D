@@ -1,6 +1,9 @@
 package view;
 
+import java.util.HashMap;
+
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -8,15 +11,22 @@ public abstract class BasicWindow implements Runnable{
 	
 	Display display;
 	Shell shell;
+	HashMap<String, Listener> listeners;
 	
- 	public BasicWindow(String title, int width,int height) {
- 		display=new Display();
- 		shell  = new Shell(display);
- 		shell.setSize(width,height);
- 		shell.setText(title);
+ 	public BasicWindow(String title, int width,int height,HashMap<String, Listener> inListeners) {
+ 		this.display=new Display();
+ 		this.shell  = new Shell(display);
+ 		this.shell.setSize(width,height);
+ 		this.shell.setText(title);
+ 		this.listeners=inListeners;
 	}
  	
  	abstract void initWidgets();
+ 	/**
+ 	 * closing the window
+ 	 */
+ 	abstract void close();
+
 
 	@Override
 	public void run() {
