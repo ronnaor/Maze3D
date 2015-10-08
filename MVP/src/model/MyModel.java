@@ -81,8 +81,15 @@ public class MyModel extends Observable implements Model {
 			this.generateAlg = "my";
 			this.solveAlg = "bfs";
 		}
-/*			startDB();
-*/	
+		try {
+			startDB();
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+			
+	
 	}
 	/**
 	 * get the model presenter
@@ -849,13 +856,13 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public void save2DB(DBObject obj) {
-		/*org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
+		org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
 		 Session session = sessionFactory.openSession();
 		 SaveToDB manager = new SaveToDB(session);
 	
 		 manager.saveObj(obj);
 		 session.flush();
-		 session.close();*/
+		 session.close();
 	}
 	@Override
 	public void startDB() {
@@ -895,38 +902,38 @@ public class MyModel extends Observable implements Model {
 			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/DB", "root", "Aa123456!");
 			      stmt = conn.createStatement();
 			      sql = "CREATE TABLE IF NOT EXISTS `All` " +
-		                   "(`maze_id` int(255) not NULL, " +
-		                   " `name` VARCHAR(255),"+
-		                   " PRIMARY KEY (`maze_id`) USING BTREE"+
+		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT," +
+		                   " `NAME` VARCHAR(255),"+
+		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE"+
 						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 			      stmt.executeUpdate(sql);			      
 			      //creating the childs tables
 			      //MAZE TABLE
 			      sql = "CREATE TABLE IF NOT EXISTS `mazes` " +
-		                   "(`maze_id` int(255) not NULL, " +
-		                   " `simpleMaze` BLOB,"+
-		                   " PRIMARY KEY (`maze_id`) USING BTREE,"+
-		                   " CONSTRAINT `FK_MAZE_ID` FOREIGN KEY (`maze_id`) REFERENCES `All` (`maze_id`)"+
+		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT," +
+		                   " `SIMPLEMAZE` BLOB,"+
+		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE,"+
+		                   " CONSTRAINT `FK_MAZE_ID` FOREIGN KEY (`MAZE_ID`) REFERENCES `All` (`MAZE_ID`)"+
 						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 			      stmt.executeUpdate(sql);
 			      //SOLUTION TaBLE
 			      sql = "CREATE TABLE IF NOT EXISTS `Solutions` " +
-		                   "(`maze_id` int(255) not NULL, " +
-		                   " `numMoves` int(255),"+			                   
-		                   " PRIMARY KEY (`maze_id`) USING BTREE,"+
-		                   " CONSTRAINT `FK_SOLUTION_ID` FOREIGN KEY (`maze_id`) REFERENCES `All` (`maze_id`)"+
+		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT, " +
+		                   " `NUMMOVES` int(255),"+			                   
+		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE,"+
+		                   " CONSTRAINT `FK_SOLUTION_ID` FOREIGN KEY (`MAZE_ID`) REFERENCES `All` (`MAZE_ID`)"+
 						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";			
 			      stmt.executeUpdate(sql);
 			      //POSITION TABLE
 			      sql = "CREATE TABLE IF NOT EXISTS `Positions` " +
-		                   "(`maze_id` int(255) not NULL, " +
-		                   " `x` int(255),"+
-		                   " `y` int(255),"+			                   
-		                   " `z` int(255),"+			                   
-		                   " PRIMARY KEY (`maze_id`) USING BTREE,"+
-		                   "KEY `FK_MAZE_TRANSACTION_MAZE_ID` (`maze_id`),"+
-		                   "CONSTRAINT `FK_MAZE_TRANSACTION_MAZE_ID` FOREIGN KEY (`maze_id`) "+ 
-		                   "REFERENCES `Solutions` (`maze_id`) ON DELETE CASCADE ON UPDATE CASCADE"+
+		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT, " +
+		                   " `X` int(255),"+
+		                   " `Y` int(255),"+			                   
+		                   " `Z` int(255),"+			                   
+		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE,"+
+		                   "KEY `FK_MAZE_TRANSACTION_MAZE_ID` (`MAZE_ID`),"+
+		                   "CONSTRAINT `FK_MAZE_TRANSACTION_MAZE_ID` FOREIGN KEY (`MAZE_ID`) "+ 
+		                   "REFERENCES `Solutions` (`MAZE_ID`) ON DELETE CASCADE ON UPDATE CASCADE"+
 						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 			      stmt.executeUpdate(sql);
 			      
@@ -976,8 +983,9 @@ public class MyModel extends Observable implements Model {
 		} catch (Exception e) {
 			String[] err = new String[2];
 			err[0] = "error";
-			err[1] = "eeeeeeeeeeeeee";
-			System.out.println(e.getMessage());
+			err[1] = "error";
+			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			setChanged();
 			notifyObservers(err);
 		}

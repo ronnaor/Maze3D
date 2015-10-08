@@ -3,19 +3,21 @@
   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
   
-  <hibernate-mapping package="db">
-
-       <class name="Solutions" table="Solutions">
-        <id name="mazeID" type="int" column="maze_id">
-         <generator class="native"/>
-      </id>
+    <hibernate-mapping >
+  <class name="Solutions" table="Solutions" catalog="DB">
+        <id name="mazeID" type="int">
+			<column name="maze_id" />
+			<generator class="foreign">
+				<param name="property">All</param>
+			</generator>
+		</id>
       <property name="numMoves" column="numMoves" type="int"/>
       <list name="path" cascade="all">
          <key column="mazeID"/>
          <list-index column="idx"/>
          <one-to-many class="Positions"/>
       </list>
-      <one-to-one name="DBObject" class="db.DBObject" constrained="true">
+      <one-to-one name="DBObject" class="DBObject" constrained="true">
         </one-to-one>
    </class>
      </hibernate-mapping>

@@ -13,7 +13,7 @@ public class SimpelingMaze implements Serializable{
 	
 	//for the HQL DB
 	private DBObject db;
-	private int mazeID;
+	private int mazeID = 0;
 	
 	private List<Byte> simpleMaze;
 /**
@@ -71,5 +71,13 @@ public int getMazeID() {
 
 public void setMazeID(int mazeID) {
 	this.mazeID = mazeID;
+}
+
+public DBObject getDb() {
+	return db;
+}
+
+public void setDb(DBObject db) {
+	this.db = db;
 }
 }

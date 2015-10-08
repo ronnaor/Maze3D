@@ -19,13 +19,6 @@ public class Solutions implements Serializable {
 	private ArrayList<Positions> path;
 	private int numMoves;
 	
-	/*public ArrayList<Positions> getPath() {
-		return path;
-	}
-
-	public void setPath(ArrayList<Positions> path) {
-		this.path = path;
-	}*/
 
 	public int getNumMoves() {
 		return numMoves;
@@ -71,6 +64,14 @@ public class Solutions implements Serializable {
 
 	public void setMazeID(int mazeID) {
 		this.mazeID = mazeID;
+	}
+
+	public DBObject getObj() {
+		return obj;
+	}
+
+	public void setObj(DBObject obj) {
+		this.obj = obj;
 	}
 
 }

@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
-  <!DOCTYPE hibernate-mapping PUBLIC
-  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
   
-  <hibernate-mapping package="db">
-
-<class name="Positions" table="Positions">
-      <id name="mazeID" type="int" column="num">
-         <generator class="native"/>
-      </id>
-      <many-to-one name="Solutions" class="db.Solutions" fetch="select">
+<class name="Positions" table="Positions" 
+		catalog="DB">
+        <id name="mazeID" type="int">
+            <column name="num" />
+            <generator class="identity" />
+        </id>
+      <many-to-one name="Solutions" class="Solutions" fetch="select">
             <column name="mazeID" not-null="true" />
         </many-to-one>
       <property name="x" column="x" type="int"/>
       <property name="y" column="y" type="int"/>
       <property name="z" column="z" type="int"/>
-   </class>
-     </hibernate-mapping>
+    </class>
+</hibernate-mapping>

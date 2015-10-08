@@ -15,7 +15,7 @@ public class DBObject implements Serializable {
 	private SimpelingMaze maze;
 	private Solutions solution;
 	private String name;
-	private int mazeID;
+	private int mazeID = 0;
 	
 
 
