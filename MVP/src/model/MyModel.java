@@ -82,7 +82,7 @@ public class MyModel extends Observable implements Model {
 			this.solveAlg = "bfs";
 		}
 		try {
-			startDB();
+			//startDB();
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
 			System.out.println(e.getMessage());
