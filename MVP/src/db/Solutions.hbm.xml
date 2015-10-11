@@ -4,7 +4,7 @@
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
   
     <hibernate-mapping >
-  <class name="Solutions" table="Solutions" catalog="DB">
+  <class name="db.Solutions" table="Solutions" catalog="DB">
         <id name="mazeID" type="int">
 			<column name="maze_id" />
 			<generator class="foreign">
@@ -12,12 +12,12 @@
 			</generator>
 		</id>
       <property name="numMoves" column="numMoves" type="int"/>
-      <list name="path" cascade="all">
-         <key column="mazeID"/>
+      <list name="path"  cascade="all">
+         <key column="posID"/>
          <list-index column="idx"/>
-         <one-to-many class="Positions"/>
+         <one-to-many class="db.Positions"/>
       </list>
-      <one-to-one name="DBObject" class="DBObject" constrained="true">
+      <one-to-one name="obj" class="db.DBObject" constrained="true">
         </one-to-one>
    </class>
      </hibernate-mapping>

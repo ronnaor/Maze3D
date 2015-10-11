@@ -27,7 +27,11 @@ public class DBObject implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+public DBObject() {
+	this.name = "";
+	this.maze=null;
+	this.solution=null;
+	}
 /**
  * Ctor getting row data	
  * @param name1 the name of the maze

@@ -685,7 +685,7 @@ public class MyModel extends Observable implements Model {
 								DBObject obj = new DBObject(args[1],d ,b);
 								save2DB(obj);
 							} catch (Exception e) {
-								System.out.println(e.getMessage());
+								System.out.println(e.getStackTrace());
 								String[] err = new String[2];
 								err[0] = "error";
 								err[1] = "no DB conection";
@@ -926,11 +926,11 @@ public class MyModel extends Observable implements Model {
 			      stmt.executeUpdate(sql);
 			      //POSITION TABLE
 			      sql = "CREATE TABLE IF NOT EXISTS `Positions` " +
-		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT, " +
+		                   "(`posID` int(255) not NULL AUTO_INCREMENT, " +
 		                   " `X` int(255),"+
 		                   " `Y` int(255),"+			                   
 		                   " `Z` int(255),"+			                   
-		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE,"+
+		                   " PRIMARY KEY (`posID`) USING BTREE,"+
 		                   "KEY `FK_MAZE_TRANSACTION_MAZE_ID` (`MAZE_ID`),"+
 		                   "CONSTRAINT `FK_MAZE_TRANSACTION_MAZE_ID` FOREIGN KEY (`MAZE_ID`) "+ 
 		                   "REFERENCES `Solutions` (`MAZE_ID`) ON DELETE CASCADE ON UPDATE CASCADE"+
@@ -967,11 +967,11 @@ public class MyModel extends Observable implements Model {
 			Session session = sessionFactory.openSession();
 
 			Query query = session.createQuery("from DBObject");
-			session.close();
+
 			@SuppressWarnings("unchecked")
 			List <DBObject>list = query.list();
 			Iterator<DBObject> it=list.iterator();
-			
+
 			DBObject object;
 			
 			while (it.hasNext()){
@@ -979,7 +979,8 @@ public class MyModel extends Observable implements Model {
 				this.mazes.put(object.getName(), object.getFixMaze());
 				this.solutions.put(object.getName(), object.getFixSolution());			
 			}
-			
+			session.close();
+
 		} catch (Exception e) {
 			String[] err = new String[2];
 			err[0] = "error";

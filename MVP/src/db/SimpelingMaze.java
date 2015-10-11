@@ -16,6 +16,10 @@ public class SimpelingMaze implements Serializable{
 	private int mazeID = 0;
 	
 	private List<Byte> simpleMaze;
+	
+	public SimpelingMaze() {
+this.simpleMaze=null;
+}
 /**
  * converting normal maze to light maze	
  * @param maze Maze3d normal maze

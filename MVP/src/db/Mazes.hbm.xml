@@ -4,7 +4,7 @@
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
   
     <hibernate-mapping >
-  <class name="SimpelingMaze" table="mazes" catalog="DB">
+  <class name="db.SimpelingMaze" table="mazes" catalog="DB">
         <id name="mazeID" type="int">
 			<column name="maze_id" />
 			<generator class="foreign">
@@ -12,7 +12,7 @@
 			</generator>
 		</id>
     <property name="simpleMaze" type="blob" length="1000000000" column="maze" />
-       <one-to-one name="DBObject" class="DBObject" constrained="true">
+       <one-to-one name="db" class="db.DBObject" constrained="true">
      </one-to-one>
    </class>
      </hibernate-mapping>

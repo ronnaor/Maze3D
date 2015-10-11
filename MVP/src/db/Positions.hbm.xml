@@ -3,13 +3,13 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   
-<class name="Positions" table="Positions" 
+<class name="db.Positions" table="Positions" 
 		catalog="DB">
-        <id name="mazeID" type="int">
+        <id name="posID" type="int">
             <column name="num" />
             <generator class="identity" />
         </id>
-      <many-to-one name="Solutions" class="Solutions" fetch="select">
+      <many-to-one name="s" class="db.Solutions" fetch="select">
             <column name="mazeID" not-null="true" />
         </many-to-one>
       <property name="x" column="x" type="int"/>
