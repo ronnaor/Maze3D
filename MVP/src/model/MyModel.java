@@ -82,7 +82,7 @@ public class MyModel extends Observable implements Model {
 			this.solveAlg = "bfs";
 		}
 		try {
-			//startDB();
+			startDB();
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
 			System.out.println(e.getMessage());
@@ -901,7 +901,7 @@ public class MyModel extends Observable implements Model {
 			      //Creating the father table
 			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/DB", "root", "Aa123456!");
 			      stmt = conn.createStatement();
-			      sql = "CREATE TABLE IF NOT EXISTS `All` " +
+			     /* sql = "CREATE TABLE IF NOT EXISTS `All` " +
 		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT," +
 		                   " `NAME` VARCHAR(255),"+
 		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE"+
@@ -936,7 +936,7 @@ public class MyModel extends Observable implements Model {
 		                   "REFERENCES `Solutions` (`MAZE_ID`) ON DELETE CASCADE ON UPDATE CASCADE"+
 						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 			      stmt.executeUpdate(sql);
-			      
+			      */
 			   }catch(Exception se1){
 				   String[] err = new String[2];
 					err[0] = "error";
@@ -966,6 +966,7 @@ public class MyModel extends Observable implements Model {
 			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
 			Session session = sessionFactory.openSession();
 
+			
 			Query query = session.createQuery("from DBObject");
 
 			@SuppressWarnings("unchecked")

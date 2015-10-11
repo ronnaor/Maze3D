@@ -14,7 +14,7 @@
 
    <!-- Assume DB is the database name -->
    <property name="hibernate.connection.url">
-      jdbc:mysql://127.0.0.1:3306/DB
+      jdbc:mysql://127.0.0.1:3306/db
    </property>
    <property name="hibernate.connection.username">
       root
@@ -27,7 +27,9 @@
    </property>
    <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
-   
+        
+       <!-- Drop and re-create the database schema on startup -->
+         <property name="hbm2ddl.auto">create</property> 
 
 
    <!-- Mapping files -->
