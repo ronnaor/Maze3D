@@ -200,6 +200,10 @@ public class ViewGUI extends CommonView {
 			}
 			boot.Run.main(args);
 		}
+		else
+		{
+			startWindow.updateMessageBox("Properties file loaded");
+		}
 		
 	}
 

@@ -44,7 +44,7 @@ public class StartWindow extends BasicWindow {
 	     ArrayList<Text> argsList = new ArrayList<Text>();
 	    
 	     Label l1 =new Label(shell, SWT.NULL);
-	     l1.setText("Insert first argument:");
+	     l1.setText("Insert maze name if necessary:");
 	     Text first = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     first.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 	     first.setText("");
@@ -53,7 +53,7 @@ public class StartWindow extends BasicWindow {
 	     first.pack();
 	     
 	     Label l2 =new Label(shell, SWT.NULL);
-	     l2.setText("Insert seconed argument:");
+	     l2.setText("Insert x size for generate maze:");
 	     Text seconed = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     seconed.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     seconed.setText("");
@@ -62,7 +62,7 @@ public class StartWindow extends BasicWindow {
 	     seconed.pack();
 	     
 	     Label l3 =new Label(shell, SWT.NULL);
-	     l3.setText("Insert third argument:");
+	     l3.setText("Insert y size for generate maze:");
 	     Text third = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     third.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     third.setText("");
@@ -71,7 +71,7 @@ public class StartWindow extends BasicWindow {
 	     third.pack();
 	     
 	     Label l4 =new Label(shell, SWT.NULL);
-	     l4.setText("Insert fourth argument:");
+	     l4.setText("Insert z size for generate maze:");
 	     Text fourth = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     fourth.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     fourth.setText("");
@@ -80,7 +80,7 @@ public class StartWindow extends BasicWindow {
 	     fourth.pack();
 	     
 	     Label l5 =new Label(shell, SWT.NULL);
-	     l5.setText("Insert fifth argument:");
+	     l5.setText("Insert type of generate maze if necessary:");
 	     Text fifth = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     fifth.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     fifth.setText("");

@@ -879,10 +879,10 @@ public class MyModel extends Observable implements Model {
 			notifyObservers(str);
 			
 		} 
-		catch (FileNotFoundException e) 
+		catch (Exception e) 
 		{
 			str[0] = "error";
-			str[1] = "File  not exists";
+			str[1] = "File load error";
 			setChanged();
 			notifyObservers(str);
 			return;
