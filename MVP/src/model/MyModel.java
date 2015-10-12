@@ -61,6 +61,7 @@ public class MyModel extends Observable implements Model {
 	ExecutorService exe;
 	String generateAlg;
 	String solveAlg;
+	String viewStyle ;
 	
 	/**
 	 * Ctor of MyModel
@@ -74,15 +75,17 @@ public class MyModel extends Observable implements Model {
 			this.exe = Executors.newFixedThreadPool(properties.getNumThreads());
 			this.generateAlg = properties.getGenerateAlgorithm();
 			this.solveAlg = properties.getSolveAlgorithm();
+			this.viewStyle = properties.getViewStyle();
 			xml.close();
 		} catch (FileNotFoundException e1) {
 
 			this.exe = Executors.newFixedThreadPool(13);
 			this.generateAlg = "my";
 			this.solveAlg = "bfs";
+			this.viewStyle = "GUI";
 		}
 		try {
-			startDB();
+			//startDB();
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
 			System.out.println(e.getMessage());
@@ -161,6 +164,22 @@ public class MyModel extends Observable implements Model {
 	 */
 	public void setSolveAlg(String solveAlg) {
 		this.solveAlg = solveAlg;
+	}
+	
+	
+	
+	
+	public ExecutorService getExe() {
+		return exe;
+	}
+	public void setExe(ExecutorService exe) {
+		this.exe = exe;
+	}
+	public String getViewStyle() {
+		return viewStyle;
+	}
+	public void setViewStyle(String viewStyle) {
+		this.viewStyle = viewStyle;
 	}
 	@Override
 	public void getDir(String[] args) {
@@ -811,6 +830,68 @@ public class MyModel extends Observable implements Model {
 	}
 
 	@Override
+	public void changeProperties(String[] args) {
+		String path;
+		
+		String[] str = new String[2];
+		//checking if we have all the data we need
+		if (args.length<2) 
+		{
+			str[0] = "error";
+			str[1] = "not enough data";
+			setChanged();
+			notifyObservers(str);
+			return;
+		} 
+		
+		if(args[1]==null)
+		{
+			path = "./prop.xml";
+		}
+		
+		else
+		{
+			path = args[1];
+		}
+
+		try
+		{
+			File file=new File(path);
+			if(!file.exists())
+			{
+				str[0] = "error";
+				str[1] = "File  not exists";
+				setChanged();
+				notifyObservers(str);
+				return;
+			}
+			XMLDecoder xml= new XMLDecoder(new FileInputStream(path));
+			Properties properties=(Properties)xml.readObject();
+			this.exe = Executors.newFixedThreadPool(properties.getNumThreads());
+			this.generateAlg = properties.getGenerateAlgorithm();
+			this.solveAlg = properties.getSolveAlgorithm();
+			this.viewStyle = properties.getViewStyle();
+			xml.close();
+			
+			str[0] = "properties change";
+			str[1] = this.viewStyle;
+			setChanged();
+			notifyObservers(str);
+			
+		} 
+		catch (FileNotFoundException e) 
+		{
+			str[0] = "error";
+			str[1] = "File  not exists";
+			setChanged();
+			notifyObservers(str);
+			return;
+		}
+		
+		
+	}
+	
+	@Override
 	public void exit(String[] args) {
 		String[] str = new String[2];
 		exe.shutdown();
@@ -992,6 +1073,8 @@ public class MyModel extends Observable implements Model {
 			notifyObservers(err);
 		}
 	}
+	
+
 }
 
 

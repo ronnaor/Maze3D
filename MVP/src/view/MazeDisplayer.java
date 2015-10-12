@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 // (2) other programmers can use it naturally
 public abstract class MazeDisplayer extends Canvas{
 	
-	int[][] mazeData;
+	int[][] mazeData ;
 
 	
 	public MazeDisplayer(Composite parent, int style) {

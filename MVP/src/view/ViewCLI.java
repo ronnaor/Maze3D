@@ -243,6 +243,15 @@ public class ViewCLI extends CommonView {
 		printOutput("");
 	}
 
+	@Override
+	public void changeProp(String[] args) {
+		if (args[1].equalsIgnoreCase("GUI"))
+		{
+			boot.Run.main(args);
+		}
+		
+	}
+
 	
 
 }

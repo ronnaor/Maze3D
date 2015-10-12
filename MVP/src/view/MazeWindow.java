@@ -13,15 +13,25 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Listener;
 
+import algorithms.mazeGenarators.Maze3d;
+
 
 public class MazeWindow extends BasicWindow{
 
 	Timer timer;
 	TimerTask task;
+	Maze3d maze;
 	int[][] mazeData;
 	
-	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners) {
+	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners ,Maze3d maze) {
 		super(title, width, height, listeners);
+		this.maze = maze;
+		if (maze != null)
+		{
+			int y = this.maze.getStartPosition().getY();
+			this.mazeData = maze.getCrossSectionByY(y);
+		}
+		
 	}
 
 	private void randomWalk(MazeDisplayer maze){
@@ -103,7 +113,7 @@ public class MazeWindow extends BasicWindow{
 
 	@Override
 	void close() {
-		// TODO Auto-generated method stub
+		shell.dispose();
 		
 	}
 

@@ -102,4 +102,10 @@ public interface Model {
 	 */
 	void startDB();
 
+	/**
+	 * set the properties of the model for the properties in the selected file
+	 * @param args the path to the file
+	 */
+	void changeProperties(String[] args);
+
 }

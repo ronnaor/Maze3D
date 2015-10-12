@@ -69,6 +69,9 @@ public class Presenter implements Observer {
 			case "printDir": 
 				view.printDir(args);
 				break;
+			case "properties change": 
+				view.changeProp(args);
+				break;
 			case "printUpdate":
 				view.printOutput(args[1]);
 				break;
@@ -76,7 +79,7 @@ public class Presenter implements Observer {
 				view.error(args[1]);
 				break;
 			default:
-				view.printOutput("no such command");
+				view.error("no such command");
 				break;
 					
 			}
@@ -136,11 +139,14 @@ public class Presenter implements Observer {
 					view.displaySolution(sol);
 				}
 				break;
+			case "open properties":
+				model.changeProperties(args);
+				break;
 			case "exit":
 				model.exit(args);
 				break;
 			default:
-				view.printOutput("no such command");
+				view.error("no such command");
 				break;
 			}
 

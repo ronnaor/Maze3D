@@ -66,6 +66,12 @@ public interface View  {
 	 */
 	void error(String string);
 
+	/**
+	 * change to the view style property
+	 * @param args view style name
+	 */
+	void changeProp(String[] args);
+
 	
 	
 }

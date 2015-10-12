@@ -14,7 +14,14 @@ public abstract class BasicWindow implements Runnable{
 	HashMap<String, Listener> listeners;
 	
  	public BasicWindow(String title, int width,int height,HashMap<String, Listener> inListeners) {
- 		this.display=new Display();
+ 		if(Display.getCurrent()==null)
+ 		{
+ 			this.display=new Display();
+ 		}
+ 		else
+ 		{
+ 			this.display=Display.getCurrent();
+ 		}
  		this.shell  = new Shell(display);
  		this.shell.setSize(width,height);
  		this.shell.setText(title);
@@ -45,6 +52,30 @@ public abstract class BasicWindow implements Runnable{
 
 		 display.dispose(); // dispose OS components
 	}
-	
 
+	public Display getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(Display display) {
+		this.display = display;
+	}
+
+	public Shell getShell() {
+		return shell;
+	}
+
+	public void setShell(Shell shell) {
+		this.shell = shell;
+	}
+
+	public HashMap<String, Listener> getListeners() {
+		return listeners;
+	}
+
+	public void setListeners(HashMap<String, Listener> listeners) {
+		this.listeners = listeners;
+	}
+	
+	
 }
