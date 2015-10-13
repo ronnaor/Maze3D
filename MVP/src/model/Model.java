@@ -107,5 +107,11 @@ public interface Model {
 	 * @param args the path to the file
 	 */
 	void changeProperties(String[] args);
+	/**
+	 * checks of maze exist or not, if it does, it loads it, if not, it creates it.
+	 * @param args name of the maze, sizes of the maze, and type of the maze
+	 * @return the maze to play
+	 */
+	Maze3d play(String[] args);
 
 }

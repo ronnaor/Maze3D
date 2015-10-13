@@ -30,7 +30,7 @@ public class StartWindow extends BasicWindow {
 	@Override
 	void initWidgets() 
 	{
-		shell.setLayout(new GridLayout(2,false));
+		shell.setLayout(new GridLayout(1,false));
 		
 		//combo of the commands to choose from
 		Label commandlabel = new Label(shell, SWT.NULL);

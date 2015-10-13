@@ -142,6 +142,13 @@ public class Presenter implements Observer {
 			case "open properties":
 				model.changeProperties(args);
 				break;
+			case "Play":
+				Maze3d mazep = model.play(args);
+				if (mazep !=null)
+				{
+					view.displayMaze(mazep);
+				}
+				break;
 			case "exit":
 				model.exit(args);
 				break;

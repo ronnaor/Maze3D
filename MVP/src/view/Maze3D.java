@@ -5,12 +5,14 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 
+import algorithms.mazeGenarators.Position;
+
 public class Maze3D extends MazeDisplayer {
 
-	public int characterX=0;
-	public int characterY=2;
-	public int exitX=0;
-	public int exitY=2;
+	int characterX;
+	int characterY;
+	int characterZ;
+
 	
 	private void paintCube(double[] p,double h,PaintEvent e){
         int[] f=new int[p.length];
@@ -30,10 +32,14 @@ public class Maze3D extends MazeDisplayer {
         e.gc.fillPolygon(r);
 		
 	}
-	public Maze3D(Composite parent, int style) {
+	public Maze3D(Composite parent, int style, Position start) {
 		super(parent, style);
-		
+		this.characterX= start.getX();
+		this.characterY = start.getY();
+		this.characterZ = start.getZ();
+
 		final Color white=new Color(null, 255, 255, 255);
+		@SuppressWarnings("unused")
 		final Color black=new Color(null, 150,150,150);
 		setBackground(white);
 		addPaintListener(new PaintListener() {
@@ -76,10 +82,27 @@ public class Maze3D extends MazeDisplayer {
 		});
 	}
 	
-	private void moveCharacter(int x,int y){
+	private void moveCharacter(int x,int y, int z){
 		if(x>=0 && x<mazeData[0].length && y>=0 && y<mazeData.length && mazeData[y][x]==0){
 			characterX=x;
 			characterY=y;
+			characterZ=z;
+			getDisplay().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					redraw();
+				}
+			});
+		}
+	}
+	
+	private void moveCharacterLevel(int x,int y, int z){
+		if(z>=0 && z<maze.getMaze()[0][0].length && maze.getMaze()[y][x][z]==0){
+			characterX=x;
+			characterY=y;
+			characterZ=z;
+			this.mazeData = maze.getCrossSectionByZ(z);
 			getDisplay().syncExec(new Runnable() {
 				
 				@Override
@@ -95,47 +118,51 @@ public class Maze3D extends MazeDisplayer {
 	 */
 	@Override
 	public void moveUp() {
-		int x=characterX;
-		int y=characterY;
-		y=y-1;
-		moveCharacter(x, y);
+		
+		moveCharacter(characterX, characterY-1, characterZ);
 	}
 	/* (non-Javadoc)
 	 * @see view.MazeDisplayer#moveDown()
 	 */
 	@Override
 	public void moveDown() {
-		int x=characterX;
-		int y=characterY;
-		y=y+1;
-		moveCharacter(x, y);
+		moveCharacter(characterX, characterY+1, characterZ);
 	}
 	/* (non-Javadoc)
 	 * @see view.MazeDisplayer#moveLeft()
 	 */
 	@Override
 	public void moveLeft() {
-		int x=characterX;
-		int y=characterY;
-		x=x-1;
-		moveCharacter(x, y);
+		moveCharacter(characterX-1, characterY, characterZ);
 	}
 	/* (non-Javadoc)
 	 * @see view.MazeDisplayer#moveRight()
 	 */
 	@Override
 	public void moveRight() {
-		int x=characterX;
-		int y=characterY;
-		x=x+1;
-		moveCharacter(x, y);
+		moveCharacter(characterX+1, characterY, characterZ);
 	}
 	
 	@Override
-	public void setCharacterPosition(int row, int col) {
-		characterX=col;
-		characterY=row;
-		moveCharacter(col,row);
+	public void movePageUp() {
+		moveCharacterLevel(characterX, characterY, characterZ+1);
+		
+	}
+	@Override
+	public void movePageDown() {
+		moveCharacterLevel(characterX, characterY, characterZ-1);
+		
 	}
 
+	
+	@Override
+	public void setCharacterPosition(int x, int y, int z) {
+		characterX=x;
+		characterY=y;
+		characterZ=z;
+		moveCharacter(x,y,z);
+	}
+
+	
+	
 }

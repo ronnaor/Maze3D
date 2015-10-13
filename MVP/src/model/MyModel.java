@@ -1073,6 +1073,47 @@ public class MyModel extends Observable implements Model {
 			notifyObservers(err);
 		}
 	}
+	@Override
+	public Maze3d play(String[] args) {
+		String[] str = new String[2];
+		//checking if we have all the data we need
+		Integer x,y,z;
+		if (args.length < 5 && !mazes.containsKey(args[1]) ) 
+		{
+			str[0] = "error";
+			str[1] = "not enough data";
+			setChanged();
+			notifyObservers(str);
+			return null;
+		}	
+		//checking that there is no other maze with that name
+		else if (mazes.containsKey(args[1]))
+		{
+			str[0] = "printUpdate";
+			str[1] = "this maze already exists the game will start";
+			setChanged();
+			notifyObservers(str);
+			return mazes.get(args[1]);
+		}
+		//Checking if the the 3 variables are int type (for the maze size)
+		else if (((x=Presenter.tryParseInt(args[2]))==null)|| ((y=Presenter.tryParseInt(args[3]))==null)||
+				((z=Presenter.tryParseInt(args[4]))==null))
+		{
+			str[0] = "error";
+			str[1] = "data input does not match the command requiremnts";
+			setChanged();
+			notifyObservers(str);
+			return null;
+		}
+		else
+		{
+			generate3DMaze(args);
+			while (!mazes.containsKey(args[1])){}
+			return mazes.get(args[1]);
+		}
+		
+		
+	}
 	
 
 }
