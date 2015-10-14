@@ -114,4 +114,11 @@ public interface Model {
 	 */
 	Maze3d play(String[] args);
 
+	/**
+	 * solve the maze and return the solution
+	 * @param args the maze name 
+	 * @return the solution
+	 */
+	Solution<Position> sol(String[] args);
+
 }

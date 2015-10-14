@@ -53,7 +53,7 @@ public class StartWindow extends BasicWindow {
 	     first.pack();
 	     
 	     Label l2 =new Label(shell, SWT.NULL);
-	     l2.setText("Insert x size for generate maze:");
+	     l2.setText("Insert x size if necessary::");
 	     Text seconed = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     seconed.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     seconed.setText("");
@@ -62,7 +62,7 @@ public class StartWindow extends BasicWindow {
 	     seconed.pack();
 	     
 	     Label l3 =new Label(shell, SWT.NULL);
-	     l3.setText("Insert y size for generate maze:");
+	     l3.setText("Insert y size if necessary::");
 	     Text third = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     third.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     third.setText("");
@@ -71,7 +71,7 @@ public class StartWindow extends BasicWindow {
 	     third.pack();
 	     
 	     Label l4 =new Label(shell, SWT.NULL);
-	     l4.setText("Insert z size for generate maze:");
+	     l4.setText("Insert z size if necessary::");
 	     Text fourth = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     fourth.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     fourth.setText("");
@@ -134,9 +134,8 @@ public class StartWindow extends BasicWindow {
 	@Override
 	public void close() 
 	{
-		
 		shell.dispose();
-
+	
 	}
 	public void errMessageBox(Exception e)
 	{

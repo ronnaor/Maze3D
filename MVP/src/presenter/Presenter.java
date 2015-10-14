@@ -149,6 +149,13 @@ public class Presenter implements Observer {
 					view.displayMaze(mazep);
 				}
 				break;
+			case "sol":
+				Solution<Position> solution = model.sol(args);
+				if (solution !=null)
+				{
+					view.displaySolution(solution);
+				}
+				break;
 			case "exit":
 				model.exit(args);
 				break;

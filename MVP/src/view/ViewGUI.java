@@ -22,12 +22,13 @@ public class ViewGUI extends CommonView {
 	Maze3d maze;
 	Position pos;
 	KeyListener arrowKeyListener;
+	Solution<Position> solution;
 	
 	public ViewGUI() {
 		this.listeners=new HashMap<String,Listener>();
 		initListeners();
-		this.startWindow =  new StartWindow("maze window", 300, 500,listeners);
-		this.mazeWindow = new MazeWindow("maze window", 300, 500,listeners, maze,arrowKeyListener);
+		this.startWindow =  new StartWindow("menu", 300, 500,listeners);
+		this.mazeWindow = new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, "");
 		
 	}
 	
@@ -61,29 +62,26 @@ public class ViewGUI extends CommonView {
 				{
 					setChanged();
 					notifyObservers(args);
+					while(maze==null){}
 					if (maze!= null)
 					{
-						mazeWindow =  new MazeWindow("maze window", 300, 500,listeners, maze,arrowKeyListener);
+						pos = maze.getStartPosition();
+						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
 					
 				}
 				else if (args[0].equals("load maze"))
 				{
-					startWindow.close();
+	
 					args[0] = "display";
 					setChanged();
 					notifyObservers(args);
 					if (maze != null)
 					{
-						mazeWindow =  new MazeWindow("maze window", 300, 500,listeners, maze,arrowKeyListener);
+						pos = maze.getStartPosition();
+						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
-					}
-					else
-					{
-						startWindow =  new StartWindow("maze window", 300, 500,listeners);
-						startWindow.errMessageBox("This maze does not exists");
-						startWindow.run();
 					}
 				}
 				else
@@ -106,15 +104,79 @@ public class ViewGUI extends CommonView {
 				notifyObservers(args);
 				if (!startWindow.shell.isDisposed())
 				{
+					startWindow.setDisplayDisposed(true);
 					startWindow.close();
 				}
 				if (!mazeWindow.shell.isDisposed())
 				{
+					mazeWindow.setDisplayDisposed(true);
 					mazeWindow.close();
 				}
 				
 			}
 		}); 
+		
+		listeners.put("start",new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				pos = maze.getStartPosition();
+				mazeWindow.move("START", makeUpPossiblle(),makeDownPossiblle());
+			}
+		});
+		listeners.put("reset",new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				pos = maze.getStartPosition();
+				mazeWindow.move("START", makeUpPossiblle(),makeDownPossiblle());
+			}
+		});
+		
+		listeners.put("hint",new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				pos = maze.getStartPosition();
+				mazeWindow.move("START", makeUpPossiblle(),makeDownPossiblle());
+			}
+		});
+		
+		listeners.put("sol",new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				String[] str = new String[5];
+				str[0] = "sol";
+				str[1] = mazeWindow.getMazeName();
+				str[2] = ((Integer)pos.getX()).toString();
+				str[3] = ((Integer)pos.getY()).toString();
+				str[4] = ((Integer)pos.getZ()).toString();
+				setChanged();
+				notifyObservers(str);
+				while (solution == null){}
+				for (Position p: solution.getPath())
+				{
+					pos = p;
+					mazeWindow.move(p, makeUpPossiblle(),makeDownPossiblle());
+				}
+			
+			}
+		});
+		
+		listeners.put("menu",new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				
+				if (!mazeWindow.shell.isDisposed())
+				{
+					mazeWindow.close();
+				}
+				
+				
+			}
+		});
 		
 		arrowKeyListener=new KeyListener() {
 			
@@ -127,58 +189,58 @@ public class ViewGUI extends CommonView {
 			@Override
 			public void keyReleased(KeyEvent arg) {
 				
-				int x=mazeWindow.now.getX();
-				int y=mazeWindow.now.getY();
-				int z=mazeWindow.now.getZ();
+				int x=pos.getX();
+				int y=pos.getY();
+				int z=pos.getZ();
 				pos = new Position(x, y, z);
 				int[][][] array=maze.getMaze();
 				if(arg.keyCode==SWT.ARROW_RIGHT)
 				{
 					
-					if((x<array.length-1)&&(array[x+1][y][z]==0))
+					if((z<array[0][0].length-1) && (array[x][y][z+1]==0))
 					{
-						mazeWindow.setNow(new Position(x+1, y, z));
+						pos = new Position(x, y, z+1);
 						mazeWindow.move("RIGHT", makeUpPossiblle(),makeDownPossiblle());
 					}
 				}
 				else if(arg.keyCode==SWT.ARROW_LEFT)
 				{
-					if((x>0)&&(array[x-1][y][z]==0))
+					if((z>0)&&(array[x][y][z-1]==0))
 					{
-						mazeWindow.setNow(new Position(x-1, y, z));
+						pos = new Position(x, y, z-1);
 						mazeWindow.move("LEFT", makeUpPossiblle(),makeDownPossiblle());
 					}
 				}
 				else if(arg.keyCode==SWT.ARROW_UP)
 				{
-					if((y<array[0].length-1)&&(array[x][y+1][z]==0))
+					if((y>0)&&(array[x][y-1][z]==0))
 					{
-						mazeWindow.setNow(new Position(x, y+1, z));
+						pos = new Position(x, y-1, z);
 						mazeWindow.move("UP", makeUpPossiblle(),makeDownPossiblle());
 					}
 
 				}
 				else if(arg.keyCode==SWT.ARROW_DOWN)
 				{
-					if((y>0)&&(array[x][y-1][z]==0))
+					if((y<array[0].length-1)&&(array[x][y+1][z]==0))
 					{
-						mazeWindow.setNow(new Position(x, y-1, z));
+						pos = new Position(x, y+1, z);
 						mazeWindow.move("DOWN", makeUpPossiblle(),makeDownPossiblle());
 					}
 				}
 				else if(arg.keyCode==SWT.PAGE_DOWN)
 				{
-					if((z>0)&&(array[x][y][z-1]==0))
+					if((x>0)&&(array[x-1][y][z]==0))
 					{
-						mazeWindow.setNow(new Position(x, y, z-1));
+						pos = new Position(x-1, y, z);
 						mazeWindow.move("PAGE_DOWN", makeUpPossiblle(),makeDownPossiblle());
 					}
 				}
 				else if(arg.keyCode==SWT.PAGE_UP)
 				{
-					if((z<array.length-1)&&(array[x][y][z+1]==0))
+					if((x<array.length-1)&&(array[x+1][y][z]==0))
 					{
-						mazeWindow.setNow(new Position(x, y, z+1));
+						pos = new Position(x+1, y, z);
 						mazeWindow.move("PAGE_UP", makeUpPossiblle(),makeDownPossiblle());
 					}
 				}
@@ -194,7 +256,7 @@ public class ViewGUI extends CommonView {
 		{
 			int[][][] data=maze.getMaze();
 			
-			if((pos.getZ()>0)&&(data[pos.getX()][pos.getY()][pos.getZ()-1]==0))
+			if((pos.getX()>0)&&(data[pos.getX()-1][pos.getY()][pos.getZ()]==0))
 			{
 				return true;
 			}
@@ -214,7 +276,7 @@ public class ViewGUI extends CommonView {
 		{
 			int[][][] data=maze.getMaze();
 			
-			if((pos.getZ()<data[0][0].length-1)&&(data[pos.getX()][pos.getY()][pos.getZ()+1]==0))
+			if((pos.getX()<data.length-1)&&(data[pos.getX()+1][pos.getY()][pos.getZ()]==0))
 			{
 				return true;
 			}
@@ -247,10 +309,7 @@ public class ViewGUI extends CommonView {
 	}
 
 	@Override
-	public void printDir(String[] arr) {
-		// TODO Auto-generated method stub
-
-	}
+	public void printDir(String[] arr) {}
 
 	@Override
 	public void displayMaze(Maze3d maze) {
@@ -259,28 +318,20 @@ public class ViewGUI extends CommonView {
 
 	@Override
 	public void displayCrossSectionBy(int[][] arr, String axis, String index) {
-		MazeWindow mW = new MazeWindow("maze", 500, 500, listeners, maze,arrowKeyListener);
-		mW.setMazeData(arr);
+		MazeWindow mW = new MazeWindow("maze", 500, 500, listeners, maze,arrowKeyListener, args[1]);
 		mW.run();
 
 	}
 
 	@Override
-	public void displayMazeSize(int size, String name) {
-		// TODO Auto-generated method stub
-
-	}
+	public void displayMazeSize(int size, String name) {}
 
 	@Override
-	public void displayFileSize(long size, String name) {
-		// TODO Auto-generated method stub
-
-	}
+	public void displayFileSize(long size, String name) {}
 
 	@Override
 	public void displaySolution(Solution<Position> sol) {
-		// TODO Auto-generated method stub
-
+		this.solution =sol;
 	}
 
 	@Override

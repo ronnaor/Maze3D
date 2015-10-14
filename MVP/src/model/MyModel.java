@@ -937,13 +937,13 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public void save2DB(DBObject obj) {
-		org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
+		/*org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
 		 Session session = sessionFactory.openSession();
 		 SaveToDB manager = new SaveToDB(session);
 	
 		 manager.saveObj(obj);
 		 session.flush();
-		 session.close();
+		 session.close();*/
 	}
 	@Override
 	public void startDB() {
@@ -982,42 +982,7 @@ public class MyModel extends Observable implements Model {
 			      //Creating the father table
 			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/DB", "root", "Aa123456!");
 			      stmt = conn.createStatement();
-			     /* sql = "CREATE TABLE IF NOT EXISTS `All` " +
-		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT," +
-		                   " `NAME` VARCHAR(255),"+
-		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE"+
-						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-			      stmt.executeUpdate(sql);			      
-			      //creating the childs tables
-			      //MAZE TABLE
-			      sql = "CREATE TABLE IF NOT EXISTS `mazes` " +
-		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT," +
-		                   " `SIMPLEMAZE` BLOB,"+
-		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE,"+
-		                   " CONSTRAINT `FK_MAZE_ID` FOREIGN KEY (`MAZE_ID`) REFERENCES `All` (`MAZE_ID`)"+
-						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-			      stmt.executeUpdate(sql);
-			      //SOLUTION TaBLE
-			      sql = "CREATE TABLE IF NOT EXISTS `Solutions` " +
-		                   "(`MAZE_ID` int(255) not NULL AUTO_INCREMENT, " +
-		                   " `NUMMOVES` int(255),"+			                   
-		                   " PRIMARY KEY (`MAZE_ID`) USING BTREE,"+
-		                   " CONSTRAINT `FK_SOLUTION_ID` FOREIGN KEY (`MAZE_ID`) REFERENCES `All` (`MAZE_ID`)"+
-						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";			
-			      stmt.executeUpdate(sql);
-			      //POSITION TABLE
-			      sql = "CREATE TABLE IF NOT EXISTS `Positions` " +
-		                   "(`posID` int(255) not NULL AUTO_INCREMENT, " +
-		                   " `X` int(255),"+
-		                   " `Y` int(255),"+			                   
-		                   " `Z` int(255),"+			                   
-		                   " PRIMARY KEY (`posID`) USING BTREE,"+
-		                   "KEY `FK_MAZE_TRANSACTION_MAZE_ID` (`MAZE_ID`),"+
-		                   "CONSTRAINT `FK_MAZE_TRANSACTION_MAZE_ID` FOREIGN KEY (`MAZE_ID`) "+ 
-		                   "REFERENCES `Solutions` (`MAZE_ID`) ON DELETE CASCADE ON UPDATE CASCADE"+
-						") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-			      stmt.executeUpdate(sql);
-			      */
+			    
 			   }catch(Exception se1){
 				   String[] err = new String[2];
 					err[0] = "error";
@@ -1067,8 +1032,6 @@ public class MyModel extends Observable implements Model {
 			String[] err = new String[2];
 			err[0] = "error";
 			err[1] = "error";
-			System.out.println(e.getStackTrace());
-			e.printStackTrace();
 			setChanged();
 			notifyObservers(err);
 		}
@@ -1111,6 +1074,38 @@ public class MyModel extends Observable implements Model {
 			while (!mazes.containsKey(args[1])){}
 			return mazes.get(args[1]);
 		}
+		
+		
+	}
+	@Override
+	public Solution<Position> sol(String[] args) {
+		
+		String[] str = new String[2];
+		//checking if we have all the data we need
+		if (args.length < 5 ) 
+		{
+			str[0] = "error";
+			str[1] = "not enough data";
+			setChanged();
+			notifyObservers(str);
+			return null;
+		}	
+		else
+		{
+			Maze3d tempMaze = mazes.get(args[1]);
+			
+			int x=Presenter.tryParseInt(args[2]);
+			int y=Presenter.tryParseInt(args[3]);
+			int z=Presenter.tryParseInt(args[4]);
+			tempMaze.setStartPosition(new Position(x,y,z));// set the position as the start position of this maze
+			mazes.put(args[1]+"mid", tempMaze);
+			args[1]= args[1]+"mid";
+			solve(args);
+			while (!solutions.containsKey(args[1])){}
+			return solutions.get(args[1]);
+		}	
+				
+		
 		
 		
 	}

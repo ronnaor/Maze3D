@@ -14,51 +14,19 @@ import algorithms.mazeGenarators.Position;
 public abstract class MazeDisplayer extends Canvas{
 	
 	Maze3d maze;
-	int[][] mazeData ;
-	Position start ;
-	Position exit ;
+
 	
 	public MazeDisplayer(Composite parent, int style) {
 		super(parent, style);
 	}
 
 	
-
 	public Maze3d getMaze() {
 		return maze;
 	}
 
 	public void setMaze(Maze3d maze) {
 		this.maze = maze;
-	}
-
-	public int[][] getMazeData() {
-		return mazeData;
-	}
-
-
-	public void setMazeData(int[][] mazeData) {
-		this.mazeData = mazeData;
-	}
-
-
-	public Position getStart() {
-		return start;
-	}
-
-
-	public void setStart(Position start) {
-		this.start = start;
-	}
-
-
-	public Position getExit() {
-		return exit;
-	}
-
-
-	public void setExit(Position exit) {
-		this.exit = exit;
 	}
 
 
@@ -75,5 +43,9 @@ public abstract class MazeDisplayer extends Canvas{
 	public  abstract void movePageUp();
 
 	public  abstract void movePageDown();
+
+	public abstract void moveStart();
+
+	public abstract void move(Position p);
 
 }

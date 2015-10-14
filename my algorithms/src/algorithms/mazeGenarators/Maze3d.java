@@ -220,7 +220,25 @@ public abstract class Maze3d implements Maze3dGenerator{
 	 */
 	public Position getStartPosition() {
 		return startPosition;
+		
 	}
+	
+	/**
+	 * set start position
+	 * @param startPosition
+	 */
+	public void setStartPosition(Position startPosition) {
+		this.startPosition = startPosition;
+	}
+
+	/**
+	 * set goal position
+	 * @param goalPosition
+	 */
+	public void setGoalPosition(Position goalPosition) {
+		this.goalPosition = goalPosition;
+	}
+
 	/**
 	 * get possible moves from a position
 	 * @param p the position we check

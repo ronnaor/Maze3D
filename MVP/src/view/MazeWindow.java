@@ -1,7 +1,6 @@
 package view;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -24,29 +24,32 @@ public class MazeWindow extends BasicWindow{
 	Timer timer;
 	TimerTask task;
 	Maze3d maze;
-	int[][] mazeData;
-	Position now;
 	Label up;
 	Label down;
 	Button menu;
 	Button start;
 	Button reset;
 	Button hint;
-	Button solve;
+	Button sol;
 	Button save;
+	Button exit;
 	MazeDisplayer mazed;
 	KeyListener arrowKeyListener;
+	Image upIm;
+	Image downIm;
+	String mazeName;
 	
-	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners ,Maze3d maze,KeyListener arrowKeyListener) {
+	
+	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners ,Maze3d maze,KeyListener arrowKeyListener, String mazeName) {
 		super(title, width, height, listeners);
 		this.maze = maze;
-		if (maze != null)
-		{
-			int z = this.maze.getStartPosition().getZ();
-			this.mazeData = maze.getCrossSectionByZ(z);
-			this.now = maze.getStartPosition();
-		}
 		this.arrowKeyListener=arrowKeyListener;
+		this.mazeName = mazeName;
+		Image temp = new Image(display, "images/up.jpg");
+		upIm = new Image(display, temp.getImageData().scaledTo(60,50));
+		temp = new Image(display, "images/down.jpg");
+		downIm = new Image(display, temp.getImageData().scaledTo(60,50));
+		
 	}
 
 	
@@ -54,50 +57,54 @@ public class MazeWindow extends BasicWindow{
 	void initWidgets() {
 		shell.setLayout(new GridLayout(2,false));
 		
-		this.start=new Button(shell, SWT.PUSH);
+		start=new Button(shell, SWT.PUSH);
 		start.setText("Start");
 		start.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		
-		this.mazed=new Maze3D(shell, SWT.BORDER, maze.getStartPosition());
-		mazed.setMazeData(mazeData);
-		mazed.setStart(maze.getStartPosition());
-		mazed.setExit(maze.getGoalPosition());
+		mazed=new Maze2D(shell, SWT.BORDER, maze.getStartPosition());
 		mazed.setMaze(maze);
 		mazed.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true,1,10));
 		mazed.addKeyListener(arrowKeyListener);
 		
-		this.reset=new Button(shell, SWT.PUSH);
+		reset=new Button(shell, SWT.PUSH);
 		reset.setText("reset");
 		reset.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		reset.setEnabled(false);
 		
-		this.hint=new Button(shell, SWT.PUSH);
+		
+		hint=new Button(shell, SWT.PUSH);
 		hint.setText("hint");
 		hint.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		hint.setEnabled(false);
+		hint.addListener(SWT.Selection,listeners.get("hint"));
 		
-		this.solve=new Button(shell, SWT.PUSH);
-		solve.setText("solve");
-		solve.setLayoutData(new GridData(SWT.FILL,SWT.FILL, false, false, 1, 1));
-		solve.setEnabled(false);
+		sol=new Button(shell, SWT.PUSH);
+		sol.setText("solve");
+		sol.setLayoutData(new GridData(SWT.FILL,SWT.FILL, false, false, 1, 1));
+		sol.setEnabled(false);
+		sol.addListener(SWT.Selection,listeners.get("sol"));
 		
-		this.save=new Button(shell, SWT.PUSH);
-		save.setText("save game");
-		save.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		save.setEnabled(false);
-		
-		this.menu=new Button(shell, SWT.PUSH);
+		menu=new Button(shell, SWT.PUSH);
 		menu.setText("stop play");
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		menu.setEnabled(false);
+		menu.addListener(SWT.Selection,listeners.get("menu"));
 		
-		this.up = new Label(shell, SWT.ARROW_UP);
+		exit =new Button(shell,SWT.PUSH);
+	    exit.setText("exit");
+	    exit.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+	    exit.addListener(SWT.Selection,listeners.get("exit"));
 		
-		this.down = new Label(shell, SWT.ARROW_UP);
+		up = new Label(shell, SWT.BORDER);
+		up.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));;
+		up.setImage(upIm);
+		up.setVisible(false);
 		
-		
-		
-		
+		down = new Label(shell, SWT.BORDER);
+		down.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));;
+		down.setImage(downIm);
+		down.setVisible(false);
+		 
+	
 		start.addSelectionListener(new SelectionListener() {
 			
 			@Override
@@ -105,12 +112,13 @@ public class MazeWindow extends BasicWindow{
 				
 				timer=new Timer();
 				task=new TimerTask() {
+					
 					@Override
 					public void run() {
 						display.syncExec(new Runnable() {
 							@Override
 							public void run() {
-								//mazed.setCharacterPosition(maze.getStartPosition().getX(),maze.getStartPosition().getY(),maze.getStartPosition().getZ());
+								
 							}
 						});
 					}
@@ -118,44 +126,64 @@ public class MazeWindow extends BasicWindow{
 				timer.scheduleAtFixedRate(task, 0, 100);				
 				start.setEnabled(false);
 				reset.setEnabled(true);
+				hint.setEnabled(true);
+				sol.setEnabled(true);
 			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {}
 		});
+		
+		start.addListener(SWT.Selection,listeners.get("start"));
 		
 		reset.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				task.cancel();
 				timer.cancel();
-				start.setEnabled(true);
-				reset.setEnabled(false);
+				task.cancel();
+				timer=new Timer();
+				task=new TimerTask() {
+					@Override
+					public void run() {
+						display.syncExec(new Runnable() {
+							@Override
+							public void run() {
+								
+							}
+						});
+					}
+				};				
+				timer.scheduleAtFixedRate(task, 0, 100);				
+			
 			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {}
 		});
+		reset.addListener(SWT.Selection,listeners.get("reset"));
+		
+		
+		
 		
 	}
 
 	@Override
 	void close() {
-		shell.dispose();
+		
+		if (timer!=null)
+		{
+			timer.cancel();
+		}
+		if (task!=null)
+		{
+			task.cancel();
+		}
+		this.shell.dispose();
 		
 	}
 
-	public int[][] getMazeData() {
-		return mazeData;
-	}
-
-	public void setMazeData(int[][] mazeData) {
-		this.mazeData = mazeData;
-	}
-
-
-
+	
 	public Maze3d getMaze() {
 		return maze;
 	}
@@ -168,55 +196,64 @@ public class MazeWindow extends BasicWindow{
 
 
 
-	public Position getNow() {
-		return now;
+	public String getMazeName() {
+		return mazeName;
 	}
 
 
-
-	public void setNow(Position now) {
-		this.now = now;
+	public void setMazeName(String mazeName) {
+		this.mazeName = mazeName;
 	}
-
 
 
 	public void move(String direction, boolean upPossiblle, boolean downPossiblle) {
 		
 			
-			/*display.syncExec(new Runnable() {
+			display.syncExec(new Runnable() {
 
 				@Override
 				public void run() {
 					
-						down.setEnabled(downPossiblle);
-						up.setEnabled(upPossiblle);
+						down.setVisible(downPossiblle);
+						up.setVisible(upPossiblle);
 				}
-			});*/
-
+			});
+		
+			if(direction.equals("UP"))
+				mazed.moveUp();
+			if(direction.equals("DOWN"))
+				mazed.moveDown();
+			if(direction.equals("RIGHT"))
+				mazed.moveRight();
+			if(direction.equals("LEFT"))
+				mazed.moveLeft();
+			if(direction.equals("PAGE_DOWN"))
+				mazed.movePageDown();
+			if(direction.equals("PAGE_UP"))
+				mazed.movePageUp();
+			if(direction.equals("START"))
+				mazed.moveStart();
 			
-			walk(mazed, direction);
 			
 		}
+
+
+	public void move(Position p, boolean upPossiblle, boolean downPossiblle) {
+		display.syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				
+					down.setVisible(downPossiblle);
+					up.setVisible(upPossiblle);
+			}
+		});
+		
+		mazed.move(p);
+		
+	}
 		
 	
 
-
-	private void walk(MazeDisplayer maze , String dir){
-		
-		if(dir.equals("UP"))
-			maze.moveUp();
-		if(dir.equals("DOWN"))
-			maze.moveDown();
-		if(dir.equals("RIGHT"))
-			maze.moveRight();
-		if(dir.equals("LEFT"))
-			maze.moveLeft();
-		if(dir.equals("PAGE_DOWN"))
-			maze.movePageDown();
-		if(dir.equals("PAGE_UP"))
-			maze.movePageUp();;
-		
-		maze.redraw();
-	}
 
 }
