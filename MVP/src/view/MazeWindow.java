@@ -272,13 +272,21 @@ public class MazeWindow extends BasicWindow{
 	 * what happens when the maze is solved
 	 */
 	public void solved() {
-		start.setEnabled(true);
-		reset.setEnabled(false);
-		hint.setEnabled(false);
-		sol.setEnabled(false);
-		down.setVisible(false);
-		up.setVisible(false);
-		solving = false;
+		display.syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				start.setEnabled(true);
+				reset.setEnabled(false);
+				hint.setEnabled(false);
+				sol.setEnabled(false);
+				down.setVisible(false);
+				up.setVisible(false);
+				solving = false;
+			}
+		});
+		
 		if (timer!=null)
 		{
 			timer.cancel();

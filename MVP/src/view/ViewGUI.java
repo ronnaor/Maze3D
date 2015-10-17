@@ -65,7 +65,10 @@ public class ViewGUI extends CommonView {
 					if (maze!= null)
 					{
 						pos = maze.getStartPosition();
-						startWindow.close();
+						if (!startWindow.shell.isDisposed())
+						{
+							startWindow.close();
+						}
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
@@ -80,7 +83,10 @@ public class ViewGUI extends CommonView {
 					if (maze != null)
 					{
 						pos = maze.getStartPosition();
-						startWindow.close();
+						if (!startWindow.shell.isDisposed())
+						{
+							startWindow.close();
+						}
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
@@ -246,7 +252,7 @@ public class ViewGUI extends CommonView {
 			
 			@Override
 			public void handleEvent(Event arg0) {
-				
+				maze = null;
 				if (!mazeWindow.shell.isDisposed())
 				{
 					mazeWindow.close();
