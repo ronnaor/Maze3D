@@ -72,6 +72,9 @@ public class Presenter implements Observer {
 			case "properties change": 
 				view.changeProp(args);
 				break;
+			case "generated":
+				view.mazegenerated(args[1]);
+				break;
 			case "printUpdate":
 				view.printOutput(args[1]);
 				break;
@@ -154,6 +157,7 @@ public class Presenter implements Observer {
 				if (solution !=null)
 				{
 					view.displaySolution(solution);
+					model.removeMidMaze(args);
 				}
 				break;
 			case "exit":

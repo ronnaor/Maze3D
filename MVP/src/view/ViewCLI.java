@@ -126,6 +126,14 @@ public class ViewCLI extends CommonView {
 	}
 
 	@Override
+	public void mazegenerated(String string) {
+		out.println(string);
+		out.flush();
+		
+	}
+
+	
+	@Override
 	public void error(String string) {
 		out.println(string);
 		out.flush();	
@@ -252,6 +260,7 @@ public class ViewCLI extends CommonView {
 		
 	}
 
+	
 	
 
 }

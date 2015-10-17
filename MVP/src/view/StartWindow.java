@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -128,7 +127,11 @@ public class StartWindow extends BasicWindow {
 	     exit.pack();
 	   
 	     exit.addListener(SWT.Selection,listeners.get("exit"));
-			shell.pack();
+	     
+	     //x-button listener
+	     shell.addListener(SWT.Close, listeners.get("exit"));
+	     
+		 shell.pack();
 }
 
 	@Override
@@ -137,34 +140,7 @@ public class StartWindow extends BasicWindow {
 		shell.dispose();
 	
 	}
-	public void errMessageBox(Exception e)
-	{
-		MessageBox messageBox = new MessageBox(shell,  SWT.ICON_ERROR| SWT.OK);
-		messageBox.setMessage(e.getMessage());
-		messageBox.setText("Error");
-		messageBox.open();
-	}
 	
-	public void errMessageBox(String error)
-	{
-		MessageBox messageBox = new MessageBox(shell,SWT.ICON_ERROR| SWT.OK);
-		messageBox.setMessage(error);
-		messageBox.setText("Error");
-		messageBox.open();
-	}
-	
-	public void updateMessageBox(String str)
-	{
-		display.syncExec(new Runnable(){
-			@Override
-			public void run() {
-				MessageBox messageBox = new MessageBox(shell,SWT.ICON_INFORMATION| SWT.OK);
-				messageBox.setMessage(str);
-				messageBox.setText("Update");
-				messageBox.open();
-			}
-				});
-	}
 	
 	public String[] getArgs() {
 		return args;

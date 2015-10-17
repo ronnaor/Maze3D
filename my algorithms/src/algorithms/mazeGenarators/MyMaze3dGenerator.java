@@ -5,6 +5,14 @@ package algorithms.mazeGenarators;
  *
  */
 public class MyMaze3dGenerator extends Maze3d {
+	public MyMaze3dGenerator() {
+		
+	}
+	
+	public MyMaze3dGenerator(Maze3d maze) {
+		super(maze);
+	}
+	
 	
 	/**
 	 * implement Maze3d abstract method generate

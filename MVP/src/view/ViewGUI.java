@@ -1,7 +1,6 @@
 package view;
 
 import java.util.HashMap;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -66,6 +65,7 @@ public class ViewGUI extends CommonView {
 					if (maze!= null)
 					{
 						pos = maze.getStartPosition();
+						startWindow.close();
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
@@ -80,6 +80,7 @@ public class ViewGUI extends CommonView {
 					if (maze != null)
 					{
 						pos = maze.getStartPosition();
+						startWindow.close();
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
@@ -137,8 +138,52 @@ public class ViewGUI extends CommonView {
 			
 			@Override
 			public void handleEvent(Event arg0) {
-				pos = maze.getStartPosition();
-				mazeWindow.move("START", makeUpPossiblle(),makeDownPossiblle());
+				String[] str = new String[5];
+				str[0] = "sol";
+				str[1] = mazeWindow.getMazeName();
+				str[2] = ((Integer)pos.getX()).toString();
+				str[3] = ((Integer)pos.getY()).toString();
+				str[4] = ((Integer)pos.getZ()).toString();
+				setChanged();
+				notifyObservers(str);
+				while (solution == null){}
+				Position [] positions = new Position[solution.getPath().size()];
+				int cnt = solution.getPath().size()-1;
+				for (Position p: solution.getPath())
+				{
+					positions[cnt] = p;
+					cnt--;
+				}
+				Thread thread=new Thread(new Runnable() {
+					
+					@Override
+					public void run() 
+					{
+						
+						try {
+							Thread.sleep(800);
+							pos = positions[1];
+							mazeWindow.move(pos, makeUpPossiblle(),makeDownPossiblle());
+							if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+							{
+								mazeWindow.solved();
+							}
+							
+						} catch (Exception e) {
+							if (!mazeWindow.shell.isDisposed())
+							{
+								mazeWindow.errMessageBox(e);
+							}
+							
+						}
+					
+						
+					}
+				});
+				thread.start();
+				
+				
+			
 			}
 		});
 		
@@ -155,11 +200,44 @@ public class ViewGUI extends CommonView {
 				setChanged();
 				notifyObservers(str);
 				while (solution == null){}
+				Position [] positions = new Position[solution.getPath().size()];
+				int cnt = solution.getPath().size()-1;
 				for (Position p: solution.getPath())
 				{
-					pos = p;
-					mazeWindow.move(p, makeUpPossiblle(),makeDownPossiblle());
+					positions[cnt] = p;
+					cnt--;
 				}
+				Thread thread=new Thread(new Runnable() {
+					
+					@Override
+					public void run() 
+					{
+						for (Position p: positions)
+						{
+							try {
+								Thread.sleep(800);
+								pos = p;
+								mazeWindow.move(p, makeUpPossiblle(),makeDownPossiblle());
+								if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+								{
+									mazeWindow.solved();
+								}
+								
+								
+							} catch (Exception e) {
+								if (!mazeWindow.shell.isDisposed())
+								{
+									mazeWindow.errMessageBox(e);
+								}
+							}
+							
+						}
+						
+					}
+				});
+				thread.start();
+				
+				
 			
 			}
 		});
@@ -173,6 +251,8 @@ public class ViewGUI extends CommonView {
 				{
 					mazeWindow.close();
 				}
+				startWindow =  new StartWindow("menu", 300, 500,listeners);
+				startWindow.run();
 				
 				
 			}
@@ -182,12 +262,15 @@ public class ViewGUI extends CommonView {
 			
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg) {
+				
+				if (!mazeWindow.isSolving())
+				{
+					return;
+				}
 				
 				int x=pos.getX();
 				int y=pos.getY();
@@ -201,6 +284,10 @@ public class ViewGUI extends CommonView {
 					{
 						pos = new Position(x, y, z+1);
 						mazeWindow.move("RIGHT", makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+						{
+							mazeWindow.solved();
+						}
 					}
 				}
 				else if(arg.keyCode==SWT.ARROW_LEFT)
@@ -209,6 +296,10 @@ public class ViewGUI extends CommonView {
 					{
 						pos = new Position(x, y, z-1);
 						mazeWindow.move("LEFT", makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+						{
+							mazeWindow.solved();
+						}
 					}
 				}
 				else if(arg.keyCode==SWT.ARROW_UP)
@@ -217,6 +308,10 @@ public class ViewGUI extends CommonView {
 					{
 						pos = new Position(x, y-1, z);
 						mazeWindow.move("UP", makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+						{
+							mazeWindow.solved();
+						}
 					}
 
 				}
@@ -226,6 +321,10 @@ public class ViewGUI extends CommonView {
 					{
 						pos = new Position(x, y+1, z);
 						mazeWindow.move("DOWN", makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+						{
+							mazeWindow.solved();
+						}
 					}
 				}
 				else if(arg.keyCode==SWT.PAGE_DOWN)
@@ -234,6 +333,10 @@ public class ViewGUI extends CommonView {
 					{
 						pos = new Position(x-1, y, z);
 						mazeWindow.move("PAGE_DOWN", makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+						{
+							mazeWindow.solved();
+						}
 					}
 				}
 				else if(arg.keyCode==SWT.PAGE_UP)
@@ -242,6 +345,10 @@ public class ViewGUI extends CommonView {
 					{
 						pos = new Position(x+1, y, z);
 						mazeWindow.move("PAGE_UP", makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+						{
+							mazeWindow.solved();
+						}
 					}
 				}
 				
@@ -299,15 +406,20 @@ public class ViewGUI extends CommonView {
 	}
 	
 	@Override
-	public void printOutput(String string) {
-		if (!startWindow.shell.isDisposed())
+	public void printOutput(String string) {}
+
+	@Override
+	public void mazegenerated(String string) {
+		if (!mazeWindow.shell.isDisposed())
+		{
+			mazeWindow.updateMessageBox(string);
+		}
+		else if (!startWindow.shell.isDisposed())
 		{
 			startWindow.updateMessageBox(string);
 		}
 		
-
 	}
-
 	@Override
 	public void printDir(String[] arr) {}
 
@@ -336,7 +448,11 @@ public class ViewGUI extends CommonView {
 
 	@Override
 	public void error(String string) {
-		if (!startWindow.shell.isDisposed())
+		if (!mazeWindow.shell.isDisposed())
+		{
+			mazeWindow.errMessageBox(string);
+		}
+		else if (!startWindow.shell.isDisposed())
 		{
 			startWindow.errMessageBox(string);
 		}
@@ -363,6 +479,8 @@ public class ViewGUI extends CommonView {
 		}
 		
 	}
+
+	
 	
 	
 

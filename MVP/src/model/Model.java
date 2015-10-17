@@ -121,4 +121,10 @@ public interface Model {
 	 */
 	Solution<Position> sol(String[] args);
 
+	/**
+	 * remove a temp maze and solution from model
+	 * @param args
+	 */
+	void removeMidMaze(String[] args);
+
 }

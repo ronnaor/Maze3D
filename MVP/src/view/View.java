@@ -72,6 +72,12 @@ public interface View  {
 	 */
 	void changeProp(String[] args);
 
+	/**
+	 * update that a maze was generated in the model
+	 * @param string
+	 */
+	void mazegenerated(String string);
+
 	
 	
 }

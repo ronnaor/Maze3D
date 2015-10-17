@@ -38,6 +38,7 @@ public class MazeWindow extends BasicWindow{
 	Image upIm;
 	Image downIm;
 	String mazeName;
+	boolean solving;
 	
 	
 	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners ,Maze3d maze,KeyListener arrowKeyListener, String mazeName) {
@@ -45,11 +46,11 @@ public class MazeWindow extends BasicWindow{
 		this.maze = maze;
 		this.arrowKeyListener=arrowKeyListener;
 		this.mazeName = mazeName;
-		Image temp = new Image(display, "images/up.jpg");
-		upIm = new Image(display, temp.getImageData().scaledTo(60,50));
-		temp = new Image(display, "images/down.jpg");
-		downIm = new Image(display, temp.getImageData().scaledTo(60,50));
-		
+		Image temp = new Image(display, "./resources/images/up.jpg");
+		this.upIm = new Image(display, temp.getImageData().scaledTo(60,50));
+		temp = new Image(display, "./resources/images/down.jpg");
+		this.downIm = new Image(display, temp.getImageData().scaledTo(60,50));
+		this.solving = false;
 	}
 
 	
@@ -104,7 +105,7 @@ public class MazeWindow extends BasicWindow{
 		down.setImage(downIm);
 		down.setVisible(false);
 		 
-	
+		//start-button listeners
 		start.addSelectionListener(new SelectionListener() {
 			
 			@Override
@@ -128,6 +129,7 @@ public class MazeWindow extends BasicWindow{
 				reset.setEnabled(true);
 				hint.setEnabled(true);
 				sol.setEnabled(true);
+				solving = true;
 			}
 			
 			@Override
@@ -136,6 +138,7 @@ public class MazeWindow extends BasicWindow{
 		
 		start.addListener(SWT.Selection,listeners.get("start"));
 		
+		//reset-button listeners
 		reset.addSelectionListener(new SelectionListener() {
 			
 			@Override
@@ -163,7 +166,8 @@ public class MazeWindow extends BasicWindow{
 		});
 		reset.addListener(SWT.Selection,listeners.get("reset"));
 		
-		
+		//x-button listener
+		shell.addListener(SWT.Close, listeners.get("exit"));
 		
 		
 	}
@@ -206,6 +210,12 @@ public class MazeWindow extends BasicWindow{
 	}
 
 
+	/**
+	 * move the character to the new position
+	 * @param direction String the direction to move the character
+	 * @param upPossiblle bool if can move floor up from new position
+	 * @param downPossiblle bool if can move floor down from new position
+	 */
 	public void move(String direction, boolean upPossiblle, boolean downPossiblle) {
 		
 			
@@ -237,7 +247,12 @@ public class MazeWindow extends BasicWindow{
 			
 		}
 
-
+	/**
+	 * move the character to the new position
+	 * @param p the new position
+	 * @param upPossiblle bool if can move floor up from new position
+	 * @param downPossiblle bool if can move floor down from new position
+	 */
 	public void move(Position p, boolean upPossiblle, boolean downPossiblle) {
 		display.syncExec(new Runnable() {
 
@@ -251,6 +266,38 @@ public class MazeWindow extends BasicWindow{
 		
 		mazed.move(p);
 		
+	}
+
+	/**
+	 * what happens when the maze is solved
+	 */
+	public void solved() {
+		start.setEnabled(true);
+		reset.setEnabled(false);
+		hint.setEnabled(false);
+		sol.setEnabled(false);
+		down.setVisible(false);
+		up.setVisible(false);
+		solving = false;
+		if (timer!=null)
+		{
+			timer.cancel();
+		}
+		if (task!=null)
+		{
+			task.cancel();
+		}
+		updateMessageBox("maze solved");
+	}
+
+
+	public boolean isSolving() {
+		return solving;
+	}
+
+
+	public void setSolving(boolean solving) {
+		this.solving = solving;
 	}
 		
 	

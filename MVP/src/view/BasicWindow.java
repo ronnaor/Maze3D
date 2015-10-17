@@ -2,8 +2,10 @@ package view;
 
 import java.util.HashMap;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -37,6 +39,60 @@ public abstract class BasicWindow implements Runnable{
  	 */
  	abstract void close();
 
+ 	
+	
+ 	
+ 	
+ 	/**
+ 	 * show error massage
+ 	 * @param e the error
+ 	 */
+ 	public void errMessageBox(Exception e)
+	{
+ 		display.syncExec(new Runnable(){
+			@Override
+			public void run() {
+				MessageBox messageBox = new MessageBox(shell,  SWT.ICON_ERROR| SWT.OK);
+				messageBox.setMessage(e.getMessage());
+				messageBox.setText("Error");
+				messageBox.open();
+			}
+				});
+		
+	}
+	/**
+	 * show error massage
+	 * @param error String the error
+	 */
+	public void errMessageBox(String error)
+	{
+		display.syncExec(new Runnable(){
+			@Override
+			public void run() {
+				MessageBox messageBox = new MessageBox(shell,SWT.ICON_ERROR| SWT.OK);
+				messageBox.setMessage(error);
+				messageBox.setText("Error");
+				messageBox.open();
+			}
+				});
+		
+	}
+	/**
+	 * show update
+	 * @param str String the update
+	 */
+	public void updateMessageBox(String str)
+	{
+		display.syncExec(new Runnable(){
+			@Override
+			public void run() {
+				MessageBox messageBox = new MessageBox(shell,SWT.ICON_INFORMATION| SWT.OK);
+				messageBox.setMessage(str);
+				messageBox.setText("Update");
+				messageBox.open();
+			}
+				});
+	}
 
 	@Override
 	public void run() {

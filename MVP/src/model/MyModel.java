@@ -331,7 +331,7 @@ public class MyModel extends Observable implements Model {
 											String s = future.get();
 											if (s.equals("maze "+args[1]+" is ready"))
 											{
-												str[0] = "printUpdate";
+												str[0] = "generated";
 												str[1] = "maze "+args[1]+" is ready";
 												setChanged();
 												notifyObservers(str);
@@ -1040,6 +1040,7 @@ public class MyModel extends Observable implements Model {
 	public Maze3d play(String[] args) {
 		String[] str = new String[2];
 		//checking if we have all the data we need
+		@SuppressWarnings("unused")
 		Integer x,y,z;
 		if (args.length < 5 && !mazes.containsKey(args[1]) ) 
 		{
@@ -1092,20 +1093,34 @@ public class MyModel extends Observable implements Model {
 		}	
 		else
 		{
-			Maze3d tempMaze = mazes.get(args[1]);
-			
+			Maze3d tempMaze = new MyMaze3dGenerator(mazes.get(args[1]));  
+			args[1]= args[1]+"mid";
 			int x=Presenter.tryParseInt(args[2]);
 			int y=Presenter.tryParseInt(args[3]);
 			int z=Presenter.tryParseInt(args[4]);
 			tempMaze.setStartPosition(new Position(x,y,z));// set the position as the start position of this maze
-			mazes.put(args[1]+"mid", tempMaze);
-			args[1]= args[1]+"mid";
+			mazes.put(args[1], tempMaze);
 			solve(args);
 			while (!solutions.containsKey(args[1])){}
 			return solutions.get(args[1]);
 		}	
 				
 		
+		
+		
+	}
+	
+	@Override
+	public void removeMidMaze(String[] args) {
+		args[1]= args[1];
+		if (solutions.containsKey(args[1]))
+		{
+			solutions.remove(args[1]);
+		}
+		if (mazes.containsKey(args[1]))
+		{
+			mazes.remove(args[1]);
+		}
 		
 		
 	}

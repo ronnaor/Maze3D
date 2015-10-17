@@ -3,6 +3,7 @@ package view;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import algorithms.mazeGenarators.Position;
@@ -13,6 +14,9 @@ public class Maze2D extends MazeDisplayer {
 	int characterY;
 	int characterZ;
 
+	Image startIm; 
+	Image finishIm;
+	Image characterIm;
 	
 	public Maze2D(Composite parent, int style, Position start) {
 		super(parent, style);
@@ -20,6 +24,10 @@ public class Maze2D extends MazeDisplayer {
 		this.characterY = start.getY();
 		this.characterZ = start.getZ();
 
+		startIm = new Image(getDisplay(), "./resources/images/start.jpg");
+		finishIm = new Image(getDisplay(), "./resources/images/finish.jpg");
+		characterIm = new Image(getDisplay(), "./resources/images/character.jpg");
+		
 		final Color white=new Color(null, 255, 255, 255);
 		setBackground(white);
 		addPaintListener(new PaintListener() {
@@ -59,10 +67,21 @@ public class Maze2D extends MazeDisplayer {
 						}
 					}
 
-					e.gc.setBackground(new Color(null,130,220,0));
-					e.gc.fillOval(characterZ*w, characterY*h, w, h);							
-					e.gc.setBackground(new Color(null,130,220,0));
-					e.gc.setBackground(new Color(null,0,0,0));
+					if(characterX==maze.getStartPosition().getX())
+					{
+						e.gc.drawImage(startIm, 0, 0, startIm.getBounds().width,startIm.getBounds().height,maze.getStartPosition().getZ()*w,maze.getStartPosition().getY()*h ,w ,h);						
+						e.gc.setBackground(new Color(null,0,0,0));
+					}
+					
+					if(characterX==maze.getGoalPosition().getX())
+					{
+						e.gc.drawImage(finishIm, 0, 0, finishIm.getBounds().width,finishIm.getBounds().height,maze.getGoalPosition().getZ()*w,maze.getGoalPosition().getY()*h ,w ,h);						
+						e.gc.setBackground(new Color(null,0,0,0));
+					}
+					
+					
+					e.gc.drawImage(characterIm, 0, 0, characterIm.getBounds().width,characterIm.getBounds().height,characterZ*w,characterY*h ,w ,h);
+					
 				}
 				  
 				
@@ -131,6 +150,7 @@ public class Maze2D extends MazeDisplayer {
 	
 	@Override
 	public void move(Position p) {
+		
 		setCharacterPosition(p.getX(),p.getY(),p.getZ());
 		
 	}
