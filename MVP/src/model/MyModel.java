@@ -1,21 +1,19 @@
 package model;
 
 import java.beans.XMLDecoder;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -24,13 +22,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Maze3dByteArr;
@@ -43,10 +34,7 @@ import algorithms.search.MazeAirDistance;
 import algorithms.search.MazeManhattenDistance;
 import algorithms.search.MazeSearchable;
 import algorithms.search.Solution;
-import db.DBObject;
-import db.SaveToDB;
-import db.SimpelingMaze;
-import db.Solutions;
+
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.Presenter;
@@ -64,13 +52,16 @@ public class MyModel extends Observable implements Model {
 	String generateAlg;
 	String solveAlg;
 	String viewStyle ;
+
 	
 	/**
 	 * Ctor of MyModel
 	 */
 	public MyModel() {
+		
 		this.mazes = new HashMap<String, Maze3d>();
 		this.solutions = new HashMap<String, Solution<Position>>();
+		loadFile();
 		try {// get properties
 			XMLDecoder xml=new XMLDecoder(new FileInputStream("prop.xml"));
 			Properties properties=(Properties)xml.readObject();
@@ -85,15 +76,7 @@ public class MyModel extends Observable implements Model {
 			this.generateAlg = "my";
 			this.solveAlg = "bfs";
 			this.viewStyle = "GUI";
-		}
-		try {
-			startDB();
-		} catch (Exception e) {
-			System.out.println(e.getLocalizedMessage());
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-			
+		}			
 	
 	}
 	/**
@@ -629,16 +612,6 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
-								save2DB(obj);
-							} catch (Exception e) {
-								String[] err = new String[2];
-								err[0] = "error";
-								err[1] = "no DB conection";
-								setChanged();
-								notifyObservers(err);
-							}
 							return "solution for "+ args[1]+ " is ready";
 							
 						}
@@ -653,16 +626,6 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
-								save2DB(obj);
-							} catch (Exception e) {
-								String[] err = new String[2];
-								err[0] = "error";
-								err[1] = "no DB conection";
-								setChanged();
-								notifyObservers(err);
-							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -676,16 +639,6 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
-								save2DB(obj);
-							} catch (Exception e) {
-								String[] err = new String[2];
-								err[0] = "error";
-								err[1] = "no DB conection";
-								setChanged();
-								notifyObservers(err);
-							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -700,19 +653,6 @@ public class MyModel extends Observable implements Model {
 						{
 							solutions.put(args[1], s);
 		
-							try {
-								SimpelingMaze d =new SimpelingMaze(mazes.get(args[1]));
-								Solutions b =new Solutions(s);
-								DBObject obj = new DBObject(args[1],d ,b);
-								save2DB(obj);
-							} catch (Exception e) {
-								System.out.println(e.getStackTrace());
-								String[] err = new String[2];
-								err[0] = "error";
-								err[1] = "no DB conection";
-								setChanged();
-								notifyObservers(err);
-							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -727,16 +667,6 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
-								save2DB(obj);
-							} catch (Exception e) {
-								String[] err = new String[2];
-								err[0] = "error";
-								err[1] = "no DB conection";
-								setChanged();
-								notifyObservers(err);
-							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -750,16 +680,6 @@ public class MyModel extends Observable implements Model {
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
-							try {
-								DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(s));
-								save2DB(obj);
-							} catch (Exception e) {
-								String[] err = new String[2];
-								err[0] = "error";
-								err[1] = "no DB conection";
-								setChanged();
-								notifyObservers(err);
-							}
 							return "solution for "+ args[1]+ " is ready";
 						}
 						else
@@ -938,106 +858,6 @@ public class MyModel extends Observable implements Model {
 		return obj;
 	}
 	@Override
-	public void save2DB(DBObject obj) {
-
-		try {
-			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
-			 Session session = sessionFactory.openSession();
-			 SaveToDB manager = new SaveToDB(session);
-			 //saving data to db for the first time
-			 
-			 Transaction tx = session.beginTransaction();
-			 manager.saveObj(obj);
-			 tx.commit();
-			 
-			 session.flush();
-			 session.close();
-		} catch (HibernateException e) {
-			System.out.println("fail at save");
-			e.printStackTrace();
-		}
-	}
-	@Override
-	public void startDB() {
-			//creating db
-			Connection conn = null;
-			   Statement stmt = null;
-			   try{
-			      //STEP 2: Register JDBC driver
-			      Class.forName("com.mysql.jdbc.Driver");
-
-			      //STEP 3: Open a connection
-			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/", "root", "Aa123456!");
-
-			      //STEP 4: Execute a query
-			      stmt = conn.createStatement();
-			      //creating the DB
-			      String sql = "CREATE DATABASE IF NOT EXISTS `DB`;";
-			      stmt.executeUpdate(sql);
-			      try{
-				         if(stmt!=null)
-				            stmt.close();
-				      }catch(SQLException se2){
-				      }
-				      try{
-				         if(conn!=null)
-				            conn.close();
-				      }catch(SQLException se){
-				    	  String[] err = new String[2];
-							err[0] = "error";
-							err[1] = "couldn't close db";
-							setChanged();
-							notifyObservers(err);
-				      }//end finally try
-			    
-			   }catch(Exception se1){
-				   String[] err = new String[2];
-					err[0] = "error";
-					err[1] = "couldn't create db";
-					setChanged();
-					notifyObservers(err);
-			   }finally{
-			      //finally block used to close resources
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){
-			      }
-			      try{
-			         if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){
-			    	  String[] err = new String[2];
-						err[0] = "error";
-						err[1] = "couldn't close db";
-						setChanged();
-						notifyObservers(err);
-			      }//end finally try
-			   }//end try
-			   
-			 //creating session
-			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
-			Session session = sessionFactory.openSession();
-
-			
-			Query query = session.createQuery("from DBObject");
-
-			@SuppressWarnings("unchecked")
-			List <DBObject>list = query.list();
-			Iterator<DBObject> it=list.iterator();
-
-			DBObject object;
-			
-			while (it.hasNext()){
-				object=it.next();
-
-				this.mazes.put(object.getName(), object.getFixMaze());
-				this.solutions.put(object.getName(), object.getFixSolution());			
-			}
-			session.close();
-		}
-	
-	@Override
 	public Maze3d play(String[] args) {
 		String[] str = new String[2];
 		//checking if we have all the data we need
@@ -1114,14 +934,6 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void removeMidMaze(String[] args) {
 		args[1]= args[1];
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
-		 Session session = sessionFactory.openSession();
-		 SaveToDB manager = new SaveToDB(session);
-		 DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(solutions.get(args[1])));
-		 //delete data from db
-		 manager.deleteObj(obj);
-		 session.flush();
-		 session.close();
 		if (solutions.containsKey(args[1]))
 		{
 			solutions.remove(args[1]);
@@ -1131,6 +943,109 @@ public class MyModel extends Observable implements Model {
 			mazes.remove(args[1]);
 		}
 		
+	}
+	@Override
+	public void saveFile() {
+		String[] str = new String[2];
+		try {
+			
+			File mazesFile = new File("Solutions.zip");
+			FileWriter fw = new FileWriter(mazesFile,false);
+			BufferedWriter bw = new BufferedWriter(fw);
+			for (String mazeName : this.solutions.keySet()) 
+			{
+				//Overriding the data in the file because we already loaded it into the memory
+				
+				bw.write(mazeName);	
+				//adding special characters in order to identify objects
+				bw.write("@@@");
+				bw.flush();
+				
+				byte[] byteMaze = new byte[this.mazes.get(mazeName).toByteArray().length];
+				byteMaze= this.mazes.get(mazeName).toByteArray();	
+				for (byte b : byteMaze)
+				{
+					bw.write((int)b);
+					bw.flush();
+				}
+				
+				bw.write("@@@");
+				for (Position p :this.solutions.get(mazeName).getPath())
+				{
+					bw.write(p.getX()+"#"+p.getY()+"#"+p.getZ()+"#");
+					bw.flush();
+				}
+				bw.write("\n");
+				bw.flush();
+				
+			}
+			bw.close();
+			
+		} catch (FileNotFoundException e) {
+			str[0] = "error";
+			str[1] = "File wasn't created";
+			setChanged();
+			notifyObservers(str);
+		} catch (IOException e) {
+			str[0] = "error";
+			str[1] = "File wasn't created";
+			setChanged();
+			notifyObservers(str);
+		}
+		
+	}
+	@Override
+	public void loadFile() {
+		
+		 try{
+			 File mazesFile = new File("Solutions.zip");
+			 if (!mazesFile.exists())
+			 {
+				 return;
+			 }
+			 else
+			 { 
+				 //opening the file for reading
+			    FileInputStream fstream = new FileInputStream("Solutions.zip");
+			    BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+			    String strLine;
+			    //getting the data line by line which represents one maze per line
+			    while ((strLine = br.readLine()) != null)   {
+			    	String[] line = strLine.split("@@@");
+			    	//getting the name
+			      String name = line[0];
+			      //Getting the maze
+			      char[] tempMaze = new char[line[1].toCharArray().length];
+			      byte[] bMaze = new byte[line[1].toCharArray().length];
+			      tempMaze = line[1].toCharArray();
+			      int cnt = 0;
+			      for (char c :tempMaze)
+			      {
+			    	  bMaze[cnt]=(byte)c;
+			    	  cnt++;
+			      }
+			      this.mazes.put(name, new Maze3dByteArr(bMaze));
+			      //getting the solution
+			      String[] posArr = line[2].split("#");
+			      ArrayList<Position> tempList=new ArrayList<Position>();
+			      for (int i =0; i<posArr.length;i+=3)
+			      {
+			    	  int tempX = Integer.parseInt(posArr[i]);
+			    	  int tempY = Integer.parseInt(posArr[i+1]);
+			    	  int tempZ = Integer.parseInt(posArr[i+2]);
+			    	  tempList.add(new Position(tempX,tempY,tempZ));
+			      }
+			      this.solutions.put(name, new Solution<Position>(tempList));
+			     
+			    }
+			    
+			    //Close the input stream
+			    br.close();
+			 }
+			  } catch (Exception e) {
+			      e.printStackTrace();
+			    }
+			  
 	}
 	
 

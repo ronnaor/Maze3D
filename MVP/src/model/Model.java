@@ -5,7 +5,7 @@ import java.util.HashMap;
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Position;
 import algorithms.search.Solution;
-import db.DBObject;
+
 
 /**
  * interface Model
@@ -19,11 +19,6 @@ public interface Model {
 	 */
 	void getDir(String[] args);
 	
-	 /**
-	 * saving the data to the DB
-	 * @param obj the object we will save to the db
-	 */
-	void save2DB(DBObject obj);
 	/**
 	 * merging the mazes and solutions hasmpas into one hashmap
 	 * @return one hashmap all the mazes, solutions and names of this maze 
@@ -96,11 +91,6 @@ public interface Model {
 	 */
 	void exit(String[] args);
 	
-	/**
-	 *method that creates db and it's tables only if they don't exist
-	 *if they do exist, it loads the data from this tables 
-	 */
-	void startDB();
 
 	/**
 	 * set the properties of the model for the properties in the selected file
@@ -126,5 +116,12 @@ public interface Model {
 	 * @param args
 	 */
 	void removeMidMaze(String[] args);
-
+	/**
+	 * saving the maze,it's name and solution to a compressed gzip file
+	 */
+	void saveFile();
+	/**
+	 * loading the maze,it's name and solution from a compressed gzip file
+	 */
+	void loadFile();
 }

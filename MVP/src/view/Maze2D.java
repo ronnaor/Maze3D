@@ -17,6 +17,7 @@ public class Maze2D extends MazeDisplayer {
 	Image startIm; 
 	Image finishIm;
 	Image characterIm;
+	Image wallIm;
 	
 	public Maze2D(Composite parent, int style, Position start) {
 		super(parent, style);
@@ -27,6 +28,7 @@ public class Maze2D extends MazeDisplayer {
 		startIm = new Image(getDisplay(), "./resources/images/start.jpg");
 		finishIm = new Image(getDisplay(), "./resources/images/finish.jpg");
 		characterIm = new Image(getDisplay(), "./resources/images/character.jpg");
+		wallIm = new Image(getDisplay(), "./resources/images/wall.jpg");
 		
 		final Color white=new Color(null, 255, 255, 255);
 		setBackground(white);
@@ -61,7 +63,8 @@ public class Maze2D extends MazeDisplayer {
 							int pixelY = h * i;
 							if (mazeData[characterX][i][j] != 0)
 							{
-								e.gc.fillRectangle(pixelX, pixelY, w, h);
+								e.gc.drawImage(wallIm, 0, 0, wallIm.getBounds().width,wallIm.getBounds().height,pixelX,pixelY ,w ,h);	
+								//e.gc.fillRectangle(pixelX, pixelY, w, h);
 							}
 
 						}

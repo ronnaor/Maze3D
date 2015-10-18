@@ -134,6 +134,11 @@ public class Presenter implements Observer {
 				break;
 			case "solve":
 				model.solve(args);
+				Solution<Position> solFile = model.sol(args);
+				if (solFile !=null)
+				{
+					model.saveFile();
+				}
 				break;
 			case "display solution":
 				Solution<Position> sol= model.getSoultion(args);
@@ -157,6 +162,7 @@ public class Presenter implements Observer {
 				if (solution !=null)
 				{
 					view.displaySolution(solution);
+					model.saveFile();
 					model.removeMidMaze(args);
 				}
 				break;
