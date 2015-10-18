@@ -59,36 +59,47 @@ public class ViewGUI extends CommonView {
 				}
 				else if (args[0].equals("Play"))
 				{
+					if (!startWindow.shell.isDisposed())
+					{
+						startWindow.close();
+					}
 					setChanged();
 					notifyObservers(args);
 					while(maze==null){}
 					if (maze!= null)
 					{
 						pos = maze.getStartPosition();
-						if (!startWindow.shell.isDisposed())
-						{
-							startWindow.close();
-						}
+						
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
+					}
+					else
+					{
+						startWindow =  new StartWindow("menu", 300, 500,listeners);
+						startWindow.run();
 					}
 					
 				}
 				else if (args[0].equals("load maze"))
 				{
-	
+					if (!startWindow.shell.isDisposed())
+					{
+						startWindow.close();
+					}
 					args[0] = "display";
 					setChanged();
 					notifyObservers(args);
 					if (maze != null)
 					{
 						pos = maze.getStartPosition();
-						if (!startWindow.shell.isDisposed())
-						{
-							startWindow.close();
-						}
+						
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
+					}
+					else
+					{
+						startWindow =  new StartWindow("menu", 300, 500,listeners);
+						startWindow.run();
 					}
 				}
 				else

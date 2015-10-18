@@ -25,9 +25,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import algorithms.mazeGenarators.Maze3d;
@@ -85,7 +87,7 @@ public class MyModel extends Observable implements Model {
 			this.viewStyle = "GUI";
 		}
 		try {
-			//startDB();
+			startDB();
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
 			System.out.println(e.getMessage());
@@ -937,18 +939,26 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public void save2DB(DBObject obj) {
-		/*org.hibernate.SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory(); 
-		 Session session = sessionFactory.openSession();
-		 SaveToDB manager = new SaveToDB(session);
-	
-		 manager.saveObj(obj);
-		 session.flush();
-		 session.close();*/
+
+		try {
+			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
+			 Session session = sessionFactory.openSession();
+			 SaveToDB manager = new SaveToDB(session);
+			 //saving data to db for the first time
+			 
+			 Transaction tx = session.beginTransaction();
+			 manager.saveObj(obj);
+			 tx.commit();
+			 
+			 session.flush();
+			 session.close();
+		} catch (HibernateException e) {
+			System.out.println("fail at save");
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void startDB() {
-		try {
-			
 			//creating db
 			Connection conn = null;
 			   Statement stmt = null;
@@ -979,9 +989,6 @@ public class MyModel extends Observable implements Model {
 							setChanged();
 							notifyObservers(err);
 				      }//end finally try
-			      //Creating the father table
-			      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/DB", "root", "Aa123456!");
-			      stmt = conn.createStatement();
 			    
 			   }catch(Exception se1){
 				   String[] err = new String[2];
@@ -1023,19 +1030,13 @@ public class MyModel extends Observable implements Model {
 			
 			while (it.hasNext()){
 				object=it.next();
+
 				this.mazes.put(object.getName(), object.getFixMaze());
 				this.solutions.put(object.getName(), object.getFixSolution());			
 			}
 			session.close();
-
-		} catch (Exception e) {
-			String[] err = new String[2];
-			err[0] = "error";
-			err[1] = "error";
-			setChanged();
-			notifyObservers(err);
 		}
-	}
+	
 	@Override
 	public Maze3d play(String[] args) {
 		String[] str = new String[2];
@@ -1113,6 +1114,14 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void removeMidMaze(String[] args) {
 		args[1]= args[1];
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory(); 
+		 Session session = sessionFactory.openSession();
+		 SaveToDB manager = new SaveToDB(session);
+		 DBObject obj = new DBObject(args[1],new SimpelingMaze(mazes.get(args[1])) ,new Solutions(solutions.get(args[1])));
+		 //delete data from db
+		 manager.deleteObj(obj);
+		 session.flush();
+		 session.close();
 		if (solutions.containsKey(args[1]))
 		{
 			solutions.remove(args[1]);
@@ -1121,7 +1130,6 @@ public class MyModel extends Observable implements Model {
 		{
 			mazes.remove(args[1]);
 		}
-		
 		
 	}
 	
