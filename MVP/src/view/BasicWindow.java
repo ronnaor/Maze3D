@@ -8,14 +8,23 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-
+/**
+ * abstract class that implements Runnable
+ *
+ */
 public abstract class BasicWindow implements Runnable{
 	
 	Display display;
 	Shell shell;
 	HashMap<String, Listener> listeners;
 	Boolean displayDisposed;
-	
+	/**
+	 * Ctor that gets the params in order to build the window
+	 * @param title the text of the window
+	 * @param width int of the width
+	 * @param height int of the height
+	 * @param inListeners hashmaps of all the listeners for the window
+	 */
  	public BasicWindow(String title, int width,int height,HashMap<String, Listener> inListeners) {
  		if(Display.getCurrent()==null)
  		{
@@ -32,7 +41,9 @@ public abstract class BasicWindow implements Runnable{
  		this.shell.setText(title);
  		this.listeners=inListeners;
 	}
- 	
+ 	/**
+ 	 * initilazing the widgets
+ 	 */
  	abstract void initWidgets();
  	/**
  	 * closing the window

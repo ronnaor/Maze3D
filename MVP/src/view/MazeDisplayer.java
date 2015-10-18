@@ -7,15 +7,20 @@ import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Position;
 
 
-
-// this is (1) the common type, and (2) a type of widget
-// (1) we can switch among different MazeDisplayers
-// (2) other programmers can use it naturally
+/**
+* this is (1) the common type, and (2) a type of widget
+* (1) we can switch among different MazeDisplayers
+* (2) other programmers can use it naturally
+*/
 public abstract class MazeDisplayer extends Canvas{
 	
 	Maze3d maze;
 
-	
+	/**
+	 * Constructs a new instance of this class given its parent and a style value describing its behavior and appearance.
+	 * @param parent contains relevant controls
+	 * @param style define the style
+	 */
 	public MazeDisplayer(Composite parent, int style) {
 		super(parent, style);
 	}

@@ -7,7 +7,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import algorithms.mazeGenarators.Position;
-
+/**
+ * class that extends MazeDisplayer and will show the maze as 2d
+ *
+ */
 public class Maze2D extends MazeDisplayer {
 
 	int characterX;
@@ -18,7 +21,12 @@ public class Maze2D extends MazeDisplayer {
 	Image finishIm;
 	Image characterIm;
 	Image wallIm;
-	
+	/**
+	 * ctor for maze 2d
+	 * @param parent holds the controls
+	 * @param style define the style
+	 * @param start define the starting point
+	 */
 	public Maze2D(Composite parent, int style, Position start) {
 		super(parent, style);
 		this.characterX= start.getX();
@@ -91,7 +99,12 @@ public class Maze2D extends MazeDisplayer {
 			}
 		});
 	}
-	
+	/**
+	 * move the charecter by the ints given
+	 * @param x define x axis
+	 * @param y define y axis
+	 * @param z define z axis
+	 */
 	private void moveCharacter(int x,int y, int z){
 		
 			getDisplay().syncExec(new Runnable() {
@@ -104,31 +117,23 @@ public class Maze2D extends MazeDisplayer {
 		}
 	
 	
-	/* (non-Javadoc)
-	 * @see view.MazeDisplayer#moveUp()
-	 */
+
 	@Override
 	public void moveUp() {
 		
 		setCharacterPosition(characterX, characterY-1, characterZ);
 	}
-	/* (non-Javadoc)
-	 * @see view.MazeDisplayer#moveDown()
-	 */
+
 	@Override
 	public void moveDown() {
 		setCharacterPosition(characterX, characterY+1, characterZ);
 	}
-	/* (non-Javadoc)
-	 * @see view.MazeDisplayer#moveLeft()
-	 */
+
 	@Override
 	public void moveLeft() {
 		setCharacterPosition(characterX, characterY, characterZ-1);
 	}
-	/* (non-Javadoc)
-	 * @see view.MazeDisplayer#moveRight()
-	 */
+
 	@Override
 	public void moveRight() {
 		setCharacterPosition(characterX, characterY, characterZ+1);

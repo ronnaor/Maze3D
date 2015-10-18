@@ -10,7 +10,11 @@ import org.eclipse.swt.widgets.Listener;
 import algorithms.mazeGenarators.Maze3d;
 import algorithms.mazeGenarators.Position;
 import algorithms.search.Solution;
-
+/**
+ *  class ViewGUI extends Observable implements View, 
+ * displays data and user commands to the presenter to act upon that data.
+ *
+ */
 public class ViewGUI extends CommonView {
 
 	StartWindow startWindow;
@@ -22,7 +26,9 @@ public class ViewGUI extends CommonView {
 	Position pos;
 	KeyListener arrowKeyListener;
 	Solution<Position> solution;
-	
+	/**
+	 * ctor that constructs the gui using listeners, startWindow and mazeWindow
+	 */
 	public ViewGUI() {
 		this.listeners=new HashMap<String,Listener>();
 		initListeners();
@@ -30,7 +36,9 @@ public class ViewGUI extends CommonView {
 		this.mazeWindow = new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, "");
 		
 	}
-	
+	/**
+	 * initiliazing the listeners
+	 */
 	public void initListeners()
 	{
 
@@ -374,7 +382,10 @@ public class ViewGUI extends CommonView {
 			
 		};
 	}
-	
+	/**
+	 * cheking if page up could be possible
+	 * @return true if yes
+	 */
 	public boolean makeDownPossiblle() {
 		if(maze!=null)
 		{
@@ -394,7 +405,10 @@ public class ViewGUI extends CommonView {
 			return false;
 		}
 	}
-
+	/**
+	 * cheking if page down could be possible
+	 * @return true if yes
+	 */
 	public boolean makeUpPossiblle() {
 		if(maze!=null)
 		{

@@ -1,0 +1,296 @@
+commit 8d5834e539ab0d6094e685be4385c230a8a99fe2
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 18 20:16:05 2015 +0300
+
+    4 complete with no db
+
+commit 1e1111e696c87d4b12e7f6acbf8a700563be3195
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 18 15:45:02 2015 +0300
+
+    gui fix
+
+commit 567dd4e3b288b358abf4a4dd6531b63e4e0b4066
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 18 12:17:23 2015 +0300
+
+    DB -Blob
+
+commit 748bc9a8b514789756071e338b7e070e0a8eba30
+Author: Ron <ron.naor@gmail.com>
+Date:   Sat Oct 17 18:31:59 2015 +0300
+
+    gui fix problems
+
+commit ffc37b7a5e562f8aba9537428029d649dd7efc3e
+Author: Ron <ron.naor@gmail.com>
+Date:   Sat Oct 17 18:13:58 2015 +0300
+
+    my algorithms jar update
+
+commit 1692b47252a3f51a1b764727633f5955f6f99cf4
+Author: Ron <ron.naor@gmail.com>
+Date:   Sat Oct 17 18:11:22 2015 +0300
+
+    gui
+
+commit fe7dfbd224771f5edd2d0238ce134843bfe3ea5d
+Author: Ron <ron.naor@gmail.com>
+Date:   Wed Oct 14 22:07:18 2015 +0300
+
+    maze window progress
+
+commit 6a1f244bfda7143cd9ba7c94c4eab082d1ad8d96
+Author: rideler <shaykr@etoro.com>
+Date:   Tue Oct 13 21:12:39 2015 +0300
+
+    bad gui
+
+commit d411429ea2d8bbb2210a3367b4d926e6cf7b4a99
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Oct 12 20:45:04 2015 +0300
+
+    properties file update
+
+commit 1ce4c562dedf8b8f30cba5f0a988e54d312af76c
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Oct 12 18:57:57 2015 +0300
+
+    GUI start window
+
+commit b059c95af5233a2bd85f2c555c7399e632133121
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 11 23:56:07 2015 +0300
+
+    HQL creates tables
+
+commit ea3fbdd2181a26c5ee73fce09169e19ecc0709f3
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 11 16:47:26 2015 +0300
+
+    gui fail start
+
+commit 931305b5705a91a8e16c5e1a331c331c4c5f302d
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 11 12:15:39 2015 +0300
+
+    DB mapping is fixed.
+    Queries of sol and pos need to be solved
+
+commit f39a5e0438d3cf00547f4cfdd23899c41cbf3d0b
+Author: rideler <shaykr@etoro.com>
+Date:   Fri Oct 9 01:33:41 2015 +0300
+
+    final step before resulting the db errors
+
+commit da8d1303c5cbe5ea49c69d3f7c11b0ad530a9a68
+Author: rideler <shaykr@etoro.com>
+Date:   Tue Oct 6 18:24:28 2015 +0300
+
+    Db-errors
+    start gui
+
+commit 8dbe8c32f0c63a5730bf5972cd11dd2b3a014e8a
+Author: rideler <shaykr@etoro.com>
+Date:   Tue Oct 6 00:06:39 2015 +0300
+
+    db final stuckoverflow
+
+commit 30c52700bf2ab5ae4b6da33787f51f5b798c5407
+Author: rideler <shaykr@etoro.com>
+Date:   Tue Oct 6 00:05:30 2015 +0300
+
+    Db final -still error
+
+commit c93a1ad30b899aeda957ea145b41aa509f2ae5a9
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 4 23:54:02 2015 +0300
+
+    problems before hql load
+
+commit 519df789437dab2dfeacbb4553af109402516f5e
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Oct 4 17:57:06 2015 +0300
+
+    GUI start
+
+commit 8ac04df58063c8b5a4eb8c3963a34d0d85f6814a
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Oct 4 16:19:06 2015 +0300
+
+    Handling errors mvp
+
+commit 052eab127a2fb7d23d63a197ec8f53e8f0603b6a
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Oct 4 15:45:48 2015 +0300
+
+    jars
+
+commit e9f955bd99e492fbfbd1df70ffde94eaa4f6e807
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Oct 4 15:23:26 2015 +0300
+
+    mymodel db try catch
+
+commit c7e808e63dbe6f974a6739dacd8096e6efe89b45
+Author: rideler <shaykr@etoro.com>
+Date:   Sun Oct 4 03:21:41 2015 +0300
+
+    HQL save
+
+commit 1558bee3dd102c57f4c7ba2a59639321862ce69c
+Author: Ron <ron.naor@gmail.com>
+Date:   Sat Oct 3 18:30:44 2015 +0300
+
+    mymodel prop update
+
+commit b61d4e3e32afb2fc8a56ea678e50740785790b07
+Author: Ron <ron.naor@gmail.com>
+Date:   Sat Oct 3 17:57:08 2015 +0300
+
+    part 4.4 4.5
+
+commit f996df5580319d6bfc8565485bd554afa1d9f2cb
+Author: rideler <shaykr@etoro.com>
+Date:   Tue Sep 29 22:00:25 2015 +0300
+
+    part 4.2 before hashmap and file saving
+
+commit f5048f308f3053089ba51a1ce243bac7aacb798d
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 28 18:33:29 2015 +0300
+
+    mvc lib
+
+commit af09e67422caed5507abe5a387b7b081913c2f46
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 28 18:29:19 2015 +0300
+
+    generate
+
+commit e9fdfab22be0f4902b8683070f723bf2acb102c2
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 28 18:05:52 2015 +0300
+
+    printDir
+
+commit aab45944bb08ee599dffafe745edf396f232c13c
+Author: rideler <shaykr@etoro.com>
+Date:   Mon Sep 28 18:00:38 2015 +0300
+
+    not working
+
+commit 8d2aff179363d3667a90061e4696a04ab73557dc
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 28 16:22:38 2015 +0300
+
+    MVP before checks
+
+commit 08860590c1804bf651541fdfb15b3c3c154a40d9
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 28 15:57:14 2015 +0300
+
+    MVP before checks
+
+commit 9e4559ff9c3c122df1acd32f12f3d5be08ee46c9
+Author: rideler <shaykr@etoro.com>
+Date:   Mon Sep 28 02:00:55 2015 +0300
+
+    java doc + comment fixes
+    addition to part 4.1
+
+commit 53af8acd0162c0bbc27792afe2c0abadcb127be9
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Sep 27 18:08:33 2015 +0300
+
+    MVP presenter2
+
+commit 6a035608130d4eca5b6fdc3bee78b54b93731cfa
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Sep 27 16:06:22 2015 +0300
+
+    MVP Presenter
+
+commit dac09fb8c790e196b914c1fbb0d6a1b847e38822
+Author: Ron <ron.naor@gmail.com>
+Date:   Sat Sep 26 14:23:55 2015 +0300
+
+    MVP structure
+
+commit a8ac5f8574ecfb3b145219d8aebb4556096c91c0
+Author: rideler <shaykr@etoro.com>
+Date:   Fri Sep 25 15:57:07 2015 +0300
+
+    Add mvp after problems
+
+commit 6ee18a862357c66cb09637f481b3a0c7fe3ccb3c
+Author: Ron <ron.naor@gmail.com>
+Date:   Wed Sep 23 21:21:06 2015 +0300
+
+    part 3
+
+commit 7ab01b6c6464ac64bc7c21eda07048bd79d67b5c
+Author: rideler <shaykr@etoro.com>
+Date:   Wed Sep 23 21:07:13 2015 +0300
+
+    Final QA,load have problem only at my place
+
+commit 064fadd68c709ff2e789836ab59b84e4bee474fd
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 21 23:06:56 2015 +0300
+
+    part 3 first checks
+
+commit 85de5934b88264eddff7323bd59925239d9b304b
+Author: kremersh <kremersh@DJ13.cs.colman.ac.il>
+Date:   Mon Sep 21 20:44:23 2015 +0300
+
+    part 3 before QA
+
+commit 8686073c16718b4258b4a2caab191ca80ee46c63
+Author: kremersh <kremersh@WS04.cs.colman.ac.il>
+Date:   Mon Sep 21 14:00:11 2015 +0300
+
+    update 3.4
+
+commit 61da48ca8f645a771d134221533bbe33665c1f54
+Author: Ron <ron.naor@gmail.com>
+Date:   Sun Sep 20 18:11:16 2015 +0300
+
+    part 3 update
+
+commit 2c2e394c3a5ce37590306b02488f1dad0250166e
+Author: rideler <shaykr@etoro.com>
+Date:   Sat Sep 19 20:33:19 2015 +0300
+
+    part 3.4
+
+commit c1a5f03f3c9c1c980d3a34544f6ece861e8675b0
+Author: rideler <rideler@gmail.com>
+Date:   Sat Sep 19 19:51:57 2015 +0300
+
+    Part 3.3
+
+commit ac32b99fa84d1064f2ab4c1cbb16252f83b16907
+Author: rideler <shaykr@etoro.com>
+Date:   Wed Sep 16 23:27:15 2015 +0300
+
+    part 3.2
+
+commit 33a771872660bd448ae6a657b4298e9fa39ab9a8
+Author: rideler <rideler@gmail.com>
+Date:   Wed Sep 16 21:55:21 2015 +0300
+
+    input output stream
+
+commit ce10408cfb965d265ab786a38561f69437a03b60
+Author: Ron <ron.naor@gmail.com>
+Date:   Mon Sep 14 19:03:31 2015 +0300
+
+    io start
+
+commit 3daf7c1281889e2c3a2fc133827e3d87daec5d80
+Author: Ron <ron.naor@gmail.com>
+Date:   Fri Sep 11 20:38:33 2015 +0300
+
+    my algorithms 11.9

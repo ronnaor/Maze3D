@@ -12,7 +12,7 @@ import algorithms.search.Solution;
 import presenter.Presenter;
 
 /**
- *  class MyView extends Observable implements View, 
+ *  class ViewCLI extends Observable implements View, 
  * displays data and user commands to the presenter to act upon that data.
  *
  */
@@ -24,9 +24,9 @@ public class ViewCLI extends CommonView {
 	private ArrayList<String> commands;
 	
 	/**
-	 * Ctor
-	 * @param in BufferedReader
-	 * @param out PrintWriter
+	 * Ctor that build the command line ui
+	 * @param in BufferedReader the input stream
+	 * @param out PrintWriter the output stream
 	 */
 	public ViewCLI(BufferedReader in,PrintWriter out) {
 		this.in = in;
@@ -240,7 +240,10 @@ public class ViewCLI extends CommonView {
 	public void setCommands(ArrayList<String> commands) {
 		this.commands = commands;
 	}
-
+/**
+ * printing the commands that should be shown to the user
+ * @param commands - list that holds the names of the commands
+ */
 	public void printCommands(ArrayList<String> commands)
 	{
 		printOutput("");
