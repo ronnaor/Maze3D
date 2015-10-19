@@ -63,7 +63,7 @@ public class MyModel extends Observable implements Model {
 		this.solutions = new HashMap<String, Solution<Position>>();
 		loadFile();
 		try {// get properties
-			XMLDecoder xml=new XMLDecoder(new FileInputStream("prop.xml"));
+			XMLDecoder xml=new XMLDecoder(new FileInputStream("./resources/prop.xml"));
 			Properties properties=(Properties)xml.readObject();
 			this.exe = Executors.newFixedThreadPool(properties.getNumThreads());
 			this.generateAlg = properties.getGenerateAlgorithm();
@@ -949,7 +949,7 @@ public class MyModel extends Observable implements Model {
 		String[] str = new String[2];
 		try {
 			
-			File mazesFile = new File("Solutions.zip");
+			File mazesFile = new File("./resources/Solutions.zip");
 			FileWriter fw = new FileWriter(mazesFile,false);
 			BufferedWriter bw = new BufferedWriter(fw);
 			for (String mazeName : this.solutions.keySet()) 
@@ -998,7 +998,7 @@ public class MyModel extends Observable implements Model {
 	public void loadFile() {
 		
 		 try{
-			 File mazesFile = new File("Solutions.zip");
+			 File mazesFile = new File("./resources/Solutions.zip");
 			 if (!mazesFile.exists())
 			 {
 				 return;
@@ -1006,7 +1006,7 @@ public class MyModel extends Observable implements Model {
 			 else
 			 { 
 				 //opening the file for reading
-			    FileInputStream fstream = new FileInputStream("Solutions.zip");
+			    FileInputStream fstream = new FileInputStream("./resources/Solutions.zip");
 			    BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 			    String strLine;
 			    //getting the data line by line which represents one maze per line

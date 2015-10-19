@@ -36,5 +36,8 @@ public class AStarTest {
 		Assert.assertNotNull(AStarAirManhatten.search(mazeSearchable)); //Check for errors in  AStarAirManhatten search method that gets mazeSearchable
 	}
 
-	
+	/*public static void main(String[] args) {
+		AStarTest a = new AStarTest();
+		a.test();
+	}*/
 }

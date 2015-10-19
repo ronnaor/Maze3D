@@ -5,5 +5,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/my algorithms"/>
 	<classpathentry exported="true" kind="lib" path="lib/my algorithms.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/swt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_linux_32.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_linux_64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_Mac.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_win_32.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_win_64.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

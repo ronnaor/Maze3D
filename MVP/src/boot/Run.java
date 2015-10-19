@@ -29,7 +29,7 @@ public class Run {
 		else
 		{
 			try {
-				XMLDecoder xml=new XMLDecoder(new FileInputStream("prop.xml"));
+				XMLDecoder xml=new XMLDecoder(new FileInputStream("./resources/prop.xml"));
 				Properties properties=(Properties)xml.readObject();
 				switch(properties.getViewStyle()){
 				case "CLI":
