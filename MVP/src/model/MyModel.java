@@ -74,7 +74,7 @@ public class MyModel extends Observable implements Model {
 
 			this.exe = Executors.newFixedThreadPool(13);
 			this.generateAlg = "my";
-			this.solveAlg = "bfs";
+			this.solveAlg = "A* manhatten";
 			this.viewStyle = "GUI";
 		}			
 	
@@ -609,6 +609,7 @@ public class MyModel extends Observable implements Model {
 					if ((args.length>2) && (args[2].equalsIgnoreCase("BFS")))
 					{
 						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -648,7 +649,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if(solveAlg.equalsIgnoreCase("BFS"))
 					{
-						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s= new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -663,7 +664,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if(solveAlg.equalsIgnoreCase("A* manhatten"))					
 					{
-						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s= new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -677,6 +678,7 @@ public class MyModel extends Observable implements Model {
 					if(solveAlg.equalsIgnoreCase("A* air"))
 					{
 						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						
 						if (s!=null)
 						{
 							solutions.put(args[1], s);

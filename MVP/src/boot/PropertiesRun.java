@@ -16,16 +16,16 @@ public class PropertiesRun {
 		
 		try {
 			/*xml = new XMLEncoder(new FileOutputStream("./resources/prop.xml"));
-			xml.writeObject(new Properties(13, "my", "bfs", "CLI"));
+			xml.writeObject(new Properties(13, "my", "A* manhatten", "CLI"));
 			xml.close();*/
 			xml = new XMLEncoder(new FileOutputStream("./resources/prop.xml"));
 			xml.writeObject(new Properties(13, "my", "A* air", "GUI"));
 			xml.close();
 			xmlGUI = new XMLEncoder(new FileOutputStream("./resources/propGUI.xml"));
-			xmlGUI.writeObject(new Properties(13, "my", "bfs", "GUI"));
+			xmlGUI.writeObject(new Properties(13, "my", "A* manhatten", "GUI"));
 			xmlGUI.close();
 			xmlCLI = new XMLEncoder(new FileOutputStream("./resources/propCLI.xml"));
-			xmlCLI.writeObject(new Properties(13, "my", "A* air", "CLI"));
+			xmlCLI.writeObject(new Properties(13, "my", "bfs", "CLI"));
 			xmlCLI.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());

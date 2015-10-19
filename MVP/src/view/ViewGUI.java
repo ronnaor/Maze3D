@@ -26,6 +26,8 @@ public class ViewGUI extends CommonView {
 	Position pos;
 	KeyListener arrowKeyListener;
 	Solution<Position> solution;
+	boolean mazeNull ;
+	boolean solNull ;
 	/**
 	 * ctor that constructs the gui using listeners, startWindow and mazeWindow
 	 */
@@ -34,6 +36,8 @@ public class ViewGUI extends CommonView {
 		initListeners();
 		this.startWindow =  new StartWindow("menu", 300, 500,listeners);
 		this.mazeWindow = new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, "");
+		this.mazeNull=true;
+		this.solNull=true;
 		
 	}
 	/**
@@ -73,9 +77,10 @@ public class ViewGUI extends CommonView {
 					}
 					setChanged();
 					notifyObservers(args);
-					while(maze==null){}
-					if (maze!= null)
+					while (mazeNull){}
+					if (maze != null)
 					{
+						mazeNull=true;
 						pos = maze.getStartPosition();
 						//open the game window
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
@@ -83,6 +88,7 @@ public class ViewGUI extends CommonView {
 					}
 					else
 					{
+						mazeNull=true;
 						//open the startWindow
 						startWindow =  new StartWindow("menu", 300, 500,listeners);
 						startWindow.run();
@@ -100,6 +106,7 @@ public class ViewGUI extends CommonView {
 					notifyObservers(args);
 					if (maze != null)
 					{
+						mazeNull=true;
 						pos = maze.getStartPosition();
 						//open the game window
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
@@ -107,6 +114,7 @@ public class ViewGUI extends CommonView {
 					}
 					else
 					{
+						mazeNull=true;
 						//open the startWindow
 						startWindow =  new StartWindow("menu", 300, 500,listeners);
 						startWindow.run();
@@ -173,42 +181,51 @@ public class ViewGUI extends CommonView {
 				str[4] = ((Integer)pos.getZ()).toString();
 				setChanged();
 				notifyObservers(str);
-				while (solution == null){}
-				Position [] positions = new Position[solution.getPath().size()];
-				int cnt = solution.getPath().size()-1;
-				for (Position p: solution.getPath())
+				while (solNull){}
+				if (solution != null)
 				{
-					positions[cnt] = p;
-					cnt--;
-				}
-				Thread thread=new Thread(new Runnable() {
-					
-					@Override
-					public void run() 
+					solNull=true;
+					Position [] positions = new Position[solution.getPath().size()];
+					int cnt = solution.getPath().size()-1;
+					for (Position p: solution.getPath())
 					{
+						positions[cnt] = p;
+						cnt--;
+					}
+					Thread thread=new Thread(new Runnable() {
 						
-						try {
-							Thread.sleep(800);
-							pos = positions[1];
-							mazeWindow.move(pos, makeUpPossiblle(),makeDownPossiblle());
-							if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
-							{
-								mazeWindow.solved();
-							}
+						@Override
+						public void run() 
+						{
 							
-						} catch (Exception e) {
-							if (!mazeWindow.shell.isDisposed())
-							{
-								mazeWindow.errMessageBox(e);
+							try {
+								Thread.sleep(800);
+								pos = positions[1];
+								mazeWindow.move(pos, makeUpPossiblle(),makeDownPossiblle());
+								if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+								{
+									mazeWindow.solved();
+								}
+								
+							} catch (Exception e) {
+								if (!mazeWindow.shell.isDisposed())
+								{
+									mazeWindow.errMessageBox(e);
+								}
+								
 							}
+						
 							
 						}
-					
-						
-					}
-				});
-				thread.start();
+					});
+					thread.start();
+				}
 				
+				else
+				{
+					solNull=true;
+					error("problem with geting hint try again");
+				}
 				
 			
 			}
@@ -226,45 +243,52 @@ public class ViewGUI extends CommonView {
 				str[4] = ((Integer)pos.getZ()).toString();
 				setChanged();
 				notifyObservers(str);
-				while (solution == null){}
-				Position [] positions = new Position[solution.getPath().size()];
-				int cnt = solution.getPath().size()-1;
-				for (Position p: solution.getPath())
+				while (solNull){}
+				if (solution != null)
 				{
-					positions[cnt] = p;
-					cnt--;
-				}
-				Thread thread=new Thread(new Runnable() {
-					
-					@Override
-					public void run() 
+					solNull=true;
+					Position [] positions = new Position[solution.getPath().size()];
+					int cnt = solution.getPath().size()-1;
+					for (Position p: solution.getPath())
 					{
-						for (Position p: positions)
+						positions[cnt] = p;
+						cnt--;
+					}
+					Thread thread=new Thread(new Runnable() {
+						
+						@Override
+						public void run() 
 						{
-							try {
-								Thread.sleep(800);
-								pos = p;
-								mazeWindow.move(p, makeUpPossiblle(),makeDownPossiblle());
-								if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
-								{
-									mazeWindow.solved();
+							for (Position p: positions)
+							{
+								try {
+									Thread.sleep(800);
+									pos = p;
+									mazeWindow.move(p, makeUpPossiblle(),makeDownPossiblle());
+									if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
+									{
+										mazeWindow.solved();
+									}
+									
+									
+								} catch (Exception e) {
+									if (!mazeWindow.shell.isDisposed())
+									{
+										mazeWindow.errMessageBox(e);
+									}
 								}
 								
-								
-							} catch (Exception e) {
-								if (!mazeWindow.shell.isDisposed())
-								{
-									mazeWindow.errMessageBox(e);
-								}
 							}
 							
 						}
-						
-					}
-				});
-				thread.start();
-				
-				
+					});
+					thread.start();
+				}
+				else
+				{
+					solNull=true;
+					error("problem with geting hint try again");
+				}
 			
 			}
 		});
@@ -459,6 +483,9 @@ public class ViewGUI extends CommonView {
 	@Override
 	public void displayMaze(Maze3d maze) {
 		this.maze = maze;
+		this.mazeNull = false;
+		
+		
 	}
 
 	@Override
@@ -477,6 +504,7 @@ public class ViewGUI extends CommonView {
 	@Override
 	public void displaySolution(Solution<Position> sol) {
 		this.solution =sol;
+		this.solNull = false;
 	}
 
 	@Override
@@ -496,6 +524,9 @@ public class ViewGUI extends CommonView {
 	public void changeProp(String[] args) {
 		if (args[1].equalsIgnoreCase("CLI"))
 		{
+			String[] exit = new String[] {"exit"};
+			setChanged();
+			notifyObservers(exit); //close all threads working from Model
 			if (!startWindow.shell.isDisposed())
 			{
 				startWindow.close();

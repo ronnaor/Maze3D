@@ -156,13 +156,23 @@ public class Presenter implements Observer {
 				{
 					view.displayMaze(mazep);
 				}
+				else 
+				{
+					mazep=null;
+					view.displayMaze(mazep);
+				}
 				break;
 			case "sol":
 				Solution<Position> solution = model.sol(args);
 				if (solution !=null)
 				{
 					view.displaySolution(solution);
-					model.saveFile();
+					model.removeMidMaze(args);
+				}
+				else 
+				{
+					solution=null;
+					view.displaySolution(solution);
 					model.removeMidMaze(args);
 				}
 				break;
