@@ -48,7 +48,7 @@ public class ViewGUI extends CommonView {
 			@Override
 			public void handleEvent(Event arg0) {
 				args = startWindow.getArgs();
-				if(args[0].equals("open properties"))
+				if(args[0].equals("open properties")) // open file dialog and select file 
 				{
 					FileDialog file=new FileDialog(startWindow.getShell(),SWT.OPEN);
 					file.setText("Open");
@@ -57,7 +57,7 @@ public class ViewGUI extends CommonView {
 					String path = file.open();
 					args[1] = path;
 					setChanged();
-					notifyObservers(args);
+					notifyObservers(args); 
 				}
 				//generate new maze
 				else if (args[0].equals("generate 3d maze"))
@@ -65,11 +65,11 @@ public class ViewGUI extends CommonView {
 					setChanged();
 					notifyObservers(args);
 				}
-				else if (args[0].equals("Play"))
+				else if (args[0].equals("Play")) // generate new maze and start playing it (if already exists play the old maze
 				{
 					if (!startWindow.shell.isDisposed())
 					{
-						startWindow.close();
+						startWindow.close(); //close startWindow
 					}
 					setChanged();
 					notifyObservers(args);
@@ -77,22 +77,23 @@ public class ViewGUI extends CommonView {
 					if (maze!= null)
 					{
 						pos = maze.getStartPosition();
-						
+						//open the game window
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
 					else
 					{
+						//open the startWindow
 						startWindow =  new StartWindow("menu", 300, 500,listeners);
 						startWindow.run();
 					}
 					
 				}
-				else if (args[0].equals("load maze"))
+				else if (args[0].equals("load maze")) //load a maze that is already exists
 				{
 					if (!startWindow.shell.isDisposed())
 					{
-						startWindow.close();
+						startWindow.close(); //close startWindow
 					}
 					args[0] = "display";
 					setChanged();
@@ -100,12 +101,13 @@ public class ViewGUI extends CommonView {
 					if (maze != null)
 					{
 						pos = maze.getStartPosition();
-						
+						//open the game window
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
 					else
 					{
+						//open the startWindow
 						startWindow =  new StartWindow("menu", 300, 500,listeners);
 						startWindow.run();
 					}
@@ -120,29 +122,29 @@ public class ViewGUI extends CommonView {
 			}
 		}); 
 		
-		listeners.put("exit",new Listener() 
+		listeners.put("exit",new Listener() //exit the program
 		{
 			
 			@Override
 			public void handleEvent(Event arg0) {
 				args = new String[] {"exit"};
 				setChanged();
-				notifyObservers(args);
+				notifyObservers(args); //close all threads working from Model
 				if (!startWindow.shell.isDisposed())
 				{
 					startWindow.setDisplayDisposed(true);
-					startWindow.close();
+					startWindow.close(); //close startWindow
 				}
 				if (!mazeWindow.shell.isDisposed())
 				{
 					mazeWindow.setDisplayDisposed(true);
-					mazeWindow.close();
+					mazeWindow.close(); //close mazeWindow
 				}
 				
 			}
 		}); 
 		
-		listeners.put("start",new Listener() {
+		listeners.put("start",new Listener() { //start play the maze
 			
 			@Override
 			public void handleEvent(Event arg0) {
@@ -150,7 +152,7 @@ public class ViewGUI extends CommonView {
 				mazeWindow.move("START", makeUpPossiblle(),makeDownPossiblle());
 			}
 		});
-		listeners.put("reset",new Listener() {
+		listeners.put("reset",new Listener() { //reset the game to the start
 			
 			@Override
 			public void handleEvent(Event arg0) {
@@ -159,7 +161,7 @@ public class ViewGUI extends CommonView {
 			}
 		});
 		
-		listeners.put("hint",new Listener() {
+		listeners.put("hint",new Listener() { //move one step in the correct way to the finish
 			
 			@Override
 			public void handleEvent(Event arg0) {
@@ -212,7 +214,7 @@ public class ViewGUI extends CommonView {
 			}
 		});
 		
-		listeners.put("sol",new Listener() {
+		listeners.put("sol",new Listener() { //solve the game
 			
 			@Override
 			public void handleEvent(Event arg0) {
@@ -267,7 +269,7 @@ public class ViewGUI extends CommonView {
 			}
 		});
 		
-		listeners.put("menu",new Listener() {
+		listeners.put("menu",new Listener() { //return to startWindow
 			
 			@Override
 			public void handleEvent(Event arg0) {
@@ -283,7 +285,7 @@ public class ViewGUI extends CommonView {
 			}
 		});
 		
-		arrowKeyListener=new KeyListener() {
+		arrowKeyListener=new KeyListener() { //add keys listeners
 			
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -292,7 +294,7 @@ public class ViewGUI extends CommonView {
 			@Override
 			public void keyReleased(KeyEvent arg) {
 				
-				if (!mazeWindow.isSolving())
+				if (!mazeWindow.isSolving()) //if the game did not start or ended the listener do nothing 
 				{
 					return;
 				}
@@ -305,7 +307,7 @@ public class ViewGUI extends CommonView {
 				if(arg.keyCode==SWT.ARROW_RIGHT)
 				{
 					
-					if((z<array[0][0].length-1) && (array[x][y][z+1]==0))
+					if((z<array[0][0].length-1) && (array[x][y][z+1]==0)) // try moving one step right
 					{
 						pos = new Position(x, y, z+1);
 						mazeWindow.move("RIGHT", makeUpPossiblle(),makeDownPossiblle());
@@ -315,7 +317,7 @@ public class ViewGUI extends CommonView {
 						}
 					}
 				}
-				else if(arg.keyCode==SWT.ARROW_LEFT)
+				else if(arg.keyCode==SWT.ARROW_LEFT) // try moving one step left
 				{
 					if((z>0)&&(array[x][y][z-1]==0))
 					{
@@ -327,7 +329,7 @@ public class ViewGUI extends CommonView {
 						}
 					}
 				}
-				else if(arg.keyCode==SWT.ARROW_UP)
+				else if(arg.keyCode==SWT.ARROW_UP) // try moving one step up
 				{
 					if((y>0)&&(array[x][y-1][z]==0))
 					{
@@ -340,7 +342,7 @@ public class ViewGUI extends CommonView {
 					}
 
 				}
-				else if(arg.keyCode==SWT.ARROW_DOWN)
+				else if(arg.keyCode==SWT.ARROW_DOWN) // try moving one step down
 				{
 					if((y<array[0].length-1)&&(array[x][y+1][z]==0))
 					{
@@ -352,7 +354,7 @@ public class ViewGUI extends CommonView {
 						}
 					}
 				}
-				else if(arg.keyCode==SWT.PAGE_DOWN)
+				else if(arg.keyCode==SWT.PAGE_DOWN) // try moving one step floor down
 				{
 					if((x>0)&&(array[x-1][y][z]==0))
 					{
@@ -364,7 +366,7 @@ public class ViewGUI extends CommonView {
 						}
 					}
 				}
-				else if(arg.keyCode==SWT.PAGE_UP)
+				else if(arg.keyCode==SWT.PAGE_UP) // try moving one step floor up
 				{
 					if((x<array.length-1)&&(array[x+1][y][z]==0))
 					{
@@ -383,7 +385,7 @@ public class ViewGUI extends CommonView {
 		};
 	}
 	/**
-	 * cheking if page up could be possible
+	 * Checking if page up could be possible
 	 * @return true if yes
 	 */
 	public boolean makeDownPossiblle() {
@@ -406,7 +408,7 @@ public class ViewGUI extends CommonView {
 		}
 	}
 	/**
-	 * cheking if page down could be possible
+	 * Checking if page down could be possible
 	 * @return true if yes
 	 */
 	public boolean makeUpPossiblle() {

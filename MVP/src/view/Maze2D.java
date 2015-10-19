@@ -33,10 +33,10 @@ public class Maze2D extends MazeDisplayer {
 		this.characterY = start.getY();
 		this.characterZ = start.getZ();
 
-		startIm = new Image(getDisplay(), "./resources/images/start.jpg");
-		finishIm = new Image(getDisplay(), "./resources/images/finish.jpg");
-		characterIm = new Image(getDisplay(), "./resources/images/character.jpg");
-		wallIm = new Image(getDisplay(), "./resources/images/wall.jpg");
+		startIm = new Image(getDisplay(), "./resources/images/start.jpg"); //get image of start position
+		finishIm = new Image(getDisplay(), "./resources/images/finish.jpg"); //get image of goal position
+		characterIm = new Image(getDisplay(), "./resources/images/character.jpg"); //get image of character
+		wallIm = new Image(getDisplay(), "./resources/images/wall.jpg"); //get image of the walls
 		
 		final Color white=new Color(null, 255, 255, 255);
 		setBackground(white);
@@ -71,8 +71,7 @@ public class Maze2D extends MazeDisplayer {
 							int pixelY = h * i;
 							if (mazeData[characterX][i][j] != 0)
 							{
-								e.gc.drawImage(wallIm, 0, 0, wallIm.getBounds().width,wallIm.getBounds().height,pixelX,pixelY ,w ,h);	
-								//e.gc.fillRectangle(pixelX, pixelY, w, h);
+								e.gc.drawImage(wallIm, 0, 0, wallIm.getBounds().width,wallIm.getBounds().height,pixelX,pixelY ,w ,h);	//draw walls
 							}
 
 						}
@@ -80,18 +79,18 @@ public class Maze2D extends MazeDisplayer {
 
 					if(characterX==maze.getStartPosition().getX())
 					{
-						e.gc.drawImage(startIm, 0, 0, startIm.getBounds().width,startIm.getBounds().height,maze.getStartPosition().getZ()*w,maze.getStartPosition().getY()*h ,w ,h);						
+						e.gc.drawImage(startIm, 0, 0, startIm.getBounds().width,startIm.getBounds().height,maze.getStartPosition().getZ()*w,maze.getStartPosition().getY()*h ,w ,h);	//draw start position					
 						e.gc.setBackground(new Color(null,0,0,0));
 					}
 					
 					if(characterX==maze.getGoalPosition().getX())
 					{
-						e.gc.drawImage(finishIm, 0, 0, finishIm.getBounds().width,finishIm.getBounds().height,maze.getGoalPosition().getZ()*w,maze.getGoalPosition().getY()*h ,w ,h);						
+						e.gc.drawImage(finishIm, 0, 0, finishIm.getBounds().width,finishIm.getBounds().height,maze.getGoalPosition().getZ()*w,maze.getGoalPosition().getY()*h ,w ,h);	//draw goal position						
 						e.gc.setBackground(new Color(null,0,0,0));
 					}
 					
 					
-					e.gc.drawImage(characterIm, 0, 0, characterIm.getBounds().width,characterIm.getBounds().height,characterZ*w,characterY*h ,w ,h);
+					e.gc.drawImage(characterIm, 0, 0, characterIm.getBounds().width,characterIm.getBounds().height,characterZ*w,characterY*h ,w ,h); //draw character in his current position
 					
 				}
 				  
@@ -100,10 +99,10 @@ public class Maze2D extends MazeDisplayer {
 		});
 	}
 	/**
-	 * move the charecter by the ints given
-	 * @param x define x axis
-	 * @param y define y axis
-	 * @param z define z axis
+	 * move the character to his new position
+	 * @param x define x position
+	 * @param y define y position
+	 * @param z define z position
 	 */
 	private void moveCharacter(int x,int y, int z){
 		

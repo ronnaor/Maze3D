@@ -8,7 +8,7 @@
    <int>13</int>
   </void>
   <void property="solveAlgorithm">
-   <string>bfs</string>
+   <string>A* air</string>
   </void>
   <void property="viewStyle">
    <string>CLI</string>

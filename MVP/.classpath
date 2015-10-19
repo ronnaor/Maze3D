@@ -2,49 +2,8 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/my algorithms"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/New"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/antlr-2.7.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/antlr-2.7.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/c3p0-0.9.1-pre6.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/commons-collections-3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/dom4j-1.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/geronimo-jta_1.1_spec-1.1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/hibernate-commons-annotations-5.0.0.Final.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/hibernate-core-5.0.2.Final.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/hibernate-testing.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/hibernate3.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jandex-1.2.2.Final.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/javassist-3.12.0.GA.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/javassist-3.18.1-GA.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jboss-common-jdbc-wrapper-src.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jboss-common-jdbc-wrapper.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jboss-logging-3.3.0.Final.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jcl-over-slf4j-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jcl-over-slf4j-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jta-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jul-to-slf4j-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/jul-to-slf4j-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/log4j-over-slf4j-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/log4j-over-slf4j-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/my algorithms.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/mysql-connector-java-5.1.36-bin.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-api-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-api-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-api-1.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-jcl-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-jcl-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-jdk14-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-jdk14-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-log4j12-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-log4j12-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-migrator-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-migrator-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-nop-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-nop-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-simple-1.5.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/slf4j-simple-1.5.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="jarNew/swt.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/my algorithms"/>
+	<classpathentry exported="true" kind="lib" path="lib/my algorithms.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

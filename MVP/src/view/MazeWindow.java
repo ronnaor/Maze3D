@@ -40,7 +40,16 @@ public class MazeWindow extends BasicWindow{
 	String mazeName;
 	boolean solving;
 	
-	
+	/**
+	 * constructor for mazeWindow
+	 * @param title the name of the window
+	 * @param width start width of window
+	 * @param height start height of window
+	 * @param listeners HashMap of listeners for the widgets in the window
+	 * @param maze the maze we will work with
+	 * @param arrowKeyListener KeyListener 
+	 * @param mazeName the name of the maze
+	 */
 	public MazeWindow(String title, int width, int height,HashMap<String, Listener> listeners ,Maze3d maze,KeyListener arrowKeyListener, String mazeName) {
 		super(title, width, height, listeners);
 		this.maze = maze;
@@ -57,49 +66,56 @@ public class MazeWindow extends BasicWindow{
 	@Override
 	void initWidgets() {
 		shell.setLayout(new GridLayout(2,false));
-		
+		//start button
 		start=new Button(shell, SWT.PUSH);
 		start.setText("Start");
 		start.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		
+		//Maze2D the maze
 		mazed=new Maze2D(shell, SWT.BORDER, maze.getStartPosition());
 		mazed.setMaze(maze);
 		mazed.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true,1,10));
 		mazed.addKeyListener(arrowKeyListener);
 		
+		//reset button
 		reset=new Button(shell, SWT.PUSH);
 		reset.setText("reset");
 		reset.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		reset.setEnabled(false);
 		
-		
+		//hint button
 		hint=new Button(shell, SWT.PUSH);
 		hint.setText("hint");
 		hint.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		hint.setEnabled(false);
-		hint.addListener(SWT.Selection,listeners.get("hint"));
+		hint.addListener(SWT.Selection,listeners.get("hint")); //add listener from listeners
 		
+		// solve button
 		sol=new Button(shell, SWT.PUSH);
 		sol.setText("solve");
 		sol.setLayoutData(new GridData(SWT.FILL,SWT.FILL, false, false, 1, 1));
 		sol.setEnabled(false);
-		sol.addListener(SWT.Selection,listeners.get("sol"));
+		sol.addListener(SWT.Selection,listeners.get("sol")); //add listener from listeners
 		
+		//stop play and go back to menu button
 		menu=new Button(shell, SWT.PUSH);
 		menu.setText("stop play");
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		menu.addListener(SWT.Selection,listeners.get("menu"));
+		menu.addListener(SWT.Selection,listeners.get("menu")); //add listener from listeners
 		
+		//exit button
 		exit =new Button(shell,SWT.PUSH);
 	    exit.setText("exit");
 	    exit.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-	    exit.addListener(SWT.Selection,listeners.get("exit"));
+	    exit.addListener(SWT.Selection,listeners.get("exit")); //add listener from listeners
 		
+	    //image of up that is enabled when can move up a floor
 		up = new Label(shell, SWT.BORDER);
 		up.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));;
 		up.setImage(upIm);
 		up.setVisible(false);
 		
+		//image of down that is enabled when can move down a floor
 		down = new Label(shell, SWT.BORDER);
 		down.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));;
 		down.setImage(downIm);
@@ -187,24 +203,35 @@ public class MazeWindow extends BasicWindow{
 		
 	}
 
-	
+	//getters and setters
+	/**
+	 * get maze
+	 * @return MAze3d
+	 */
 	public Maze3d getMaze() {
 		return maze;
 	}
 
-
-
+	/**
+	 * set maze
+	 * @param maze Maze3d
+	 */
 	public void setMaze(Maze3d maze) {
 		this.maze = maze;
 	}
 
-
-
+	/**
+	 * get maze name
+	 * @return String maze name
+	 */
 	public String getMazeName() {
 		return mazeName;
 	}
-
-
+	
+	/**
+	 * set mazeName
+	 * @param mazeName String the name
+	 */
 	public void setMazeName(String mazeName) {
 		this.mazeName = mazeName;
 	}
@@ -298,12 +325,18 @@ public class MazeWindow extends BasicWindow{
 		updateMessageBox("maze solved");
 	}
 
-
+	/**
+	 * check if we are in the middle of solving
+	 * @return boolean
+	 */
 	public boolean isSolving() {
 		return solving;
 	}
 
-
+	/**
+	 * set solving
+	 * @param solving boolean
+	 */
 	public void setSolving(boolean solving) {
 		this.solving = solving;
 	}

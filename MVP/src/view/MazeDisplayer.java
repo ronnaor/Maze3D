@@ -25,32 +25,62 @@ public abstract class MazeDisplayer extends Canvas{
 		super(parent, style);
 	}
 
-	
+	/**
+	 * get the maze
+	 * @return Maze3d
+	 */
 	public Maze3d getMaze() {
 		return maze;
 	}
 
+	/**
+	 * set maze
+	 * @param maze  Maze3d
+	 */
 	public void setMaze(Maze3d maze) {
 		this.maze = maze;
 	}
 
-
+	/**
+	 * set the character in  a position
+	 * @param x x axis position
+	 * @param y y axis position
+	 * @param z z axis position
+	 */
 	public abstract  void setCharacterPosition(int x,int y, int z);
 
+	/**
+	 * move character one step up
+	 */
 	public abstract void moveUp();
-
+	/**
+	 * move character one step down
+	 */
 	public abstract  void moveDown();
-
+	/**
+	 * move character one step left
+	 */
 	public abstract  void moveLeft();
-
+	/**
+	 * move character one step Right
+	 */
 	public  abstract void moveRight();
-	
+	/**
+	 * move character one step floor up
+	 */
 	public  abstract void movePageUp();
-
+	/**
+	 * move character one step floor down
+	 */
 	public  abstract void movePageDown();
-
+	/**
+	 * move character to start position of the maze
+	 */
 	public abstract void moveStart();
-
+	/**
+	 * move character to new position
+	 * @param p position to move to
+	 */
 	public abstract void move(Position p);
 
 }

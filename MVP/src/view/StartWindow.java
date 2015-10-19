@@ -19,6 +19,13 @@ public class StartWindow extends BasicWindow {
 	private String[] commands;
 	private String[] args; 
 	
+	/**
+	 * constructor for startWindow
+	 * @param title the name of the window
+	 * @param width  start width of window
+	 * @param height start height of window
+	 * @param listeners HashMap of listeners for the widgets in the window
+	 */
 	public StartWindow(String title, int width, int height, HashMap<String, Listener> listeners) {
 		super(title, width, height, listeners);
 		//setting the print for the menu
@@ -79,7 +86,7 @@ public class StartWindow extends BasicWindow {
 	     fourth.pack();
 	     
 	     Label l5 =new Label(shell, SWT.NULL);
-	     l5.setText("Insert type of generate maze if necessary:");
+	     l5.setText("Insert type of maze (optional) my/simple :");
 	     Text fifth = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	     fifth.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 	     fifth.setText("");
@@ -92,7 +99,7 @@ public class StartWindow extends BasicWindow {
 	     ok.setText("ok");
 	     ok.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 	     ok.pack();
-	     ok.addSelectionListener(new SelectionListener() {	
+	     ok.addSelectionListener(new SelectionListener() {	//add listeners to ok button
 				@Override
 				public void widgetSelected(SelectionEvent arg0) {
 					try {
@@ -126,7 +133,7 @@ public class StartWindow extends BasicWindow {
 	     exit.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 	     exit.pack();
 	   
-	     exit.addListener(SWT.Selection,listeners.get("exit"));
+	     exit.addListener(SWT.Selection,listeners.get("exit")); //add listeners to exit button
 	     
 	     //x-button listener
 	     shell.addListener(SWT.Close, listeners.get("exit"));
@@ -141,11 +148,18 @@ public class StartWindow extends BasicWindow {
 	
 	}
 	
-	
+	/**
+	 * get args
+	 * @return String[] 
+	 */
 	public String[] getArgs() {
 		return args;
 	}
 	
+	/**
+	 * set args
+	 * @param args String[]
+	 */
 	public void setArgs(String[] args) {
 		this.args = args;
 	}

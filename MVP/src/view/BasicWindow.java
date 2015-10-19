@@ -127,34 +127,66 @@ public abstract class BasicWindow implements Runnable{
 		 }
 	}
 
+	// getters and setters
+	/**
+	 * get the Display
+	 * @return display
+	 */
 	public Display getDisplay() {
 		return display;
 	}
-
+	/**
+	 * set display
+	 * @param display
+	 */
 	public void setDisplay(Display display) {
 		this.display = display;
 	}
 
+	/**
+	 * get shell
+	 * @return the shell
+	 */
 	public Shell getShell() {
 		return shell;
 	}
 
+	/**
+	 * set the shell
+	 * @param shell
+	 */
 	public void setShell(Shell shell) {
 		this.shell = shell;
 	}
 
+	/**
+	 * get the listeners
+	 * @return hashMap of the listeners
+	 */
 	public HashMap<String, Listener> getListeners() {
 		return listeners;
 	}
 
+	/**
+	 * set the listeners
+	 * @param listeners hashMap of the listeners
+	 */
 	public void setListeners(HashMap<String, Listener> listeners) {
 		this.listeners = listeners;
 	}
 
+	/**
+	 * get DisplayDisposed
+	 * @return boolean 
+	 */
 	public Boolean getDisplayDisposed() {
 		return displayDisposed;
 	}
 
+	/**
+	 * set DisplayDisposed
+	 * @param displayDisposed boolean
+	 */
 	public void setDisplayDisposed(Boolean displayDisposed) {
 		this.displayDisposed = displayDisposed;
 	}
