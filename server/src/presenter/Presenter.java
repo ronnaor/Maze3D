@@ -64,10 +64,10 @@ public class Presenter implements Observer {
 			switch(args[0])
 			{
 			case "open server": 
-				
+				model.openServer();
 				break;
 			case "close server": 
-				
+				model.closeServer();
 				break;
 			default:
 				view.displayError("no such command");

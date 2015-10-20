@@ -10,7 +10,7 @@ public interface Model {
 	/**
 	 * open the server
 	 */
-	public void openTheServer();
+	public void openServer();
 	
 	/**
 	 * close the server

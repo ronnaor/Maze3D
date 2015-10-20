@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -37,6 +38,7 @@ import algorithms.search.Solution;
 
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
+import presenter.ClientProperties;
 import presenter.Presenter;
 import presenter.Properties;
 /**
@@ -48,10 +50,13 @@ public class MyModel extends Observable implements Model {
 	private Presenter presenter;
 	private HashMap<String, Maze3d> mazes;
 	private HashMap<String, Solution<Position>> solutions;
-	ExecutorService exe;
-	String generateAlg;
-	String solveAlg;
-	String viewStyle ;
+	private ExecutorService exe;
+	private String generateAlg;
+	private String solveAlg;
+	private String viewStyle ;
+	private Socket theServer;
+	private String serverIP;
+	private int port;
 
 	
 	/**
@@ -77,7 +82,17 @@ public class MyModel extends Observable implements Model {
 			this.solveAlg = "A* manhatten";
 			this.viewStyle = "GUI";
 		}			
-	
+		try {// get properties
+			XMLDecoder xml=new XMLDecoder(new FileInputStream("./resources/propServer.xml"));
+			ClientProperties properties=(ClientProperties)xml.readObject();
+			this.port = properties.getPortServer();
+			this.serverIP = properties.getIpServer();
+			xml.close();
+		} catch (FileNotFoundException e1) {
+
+			this.port = 1234;
+			this.serverIP = "localhost";
+		}
 	}
 	/**
 	 * get the model presenter

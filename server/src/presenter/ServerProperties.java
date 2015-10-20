@@ -6,7 +6,7 @@ import java.io.Serializable;
  * serverProperties class of the properties of the server
  *
  */
-public class serverProperties implements Serializable {
+public class ServerProperties implements Serializable {
 
 	/**
 	 *  serialVersionUID is used as a version control in a Serializable class
@@ -17,9 +17,9 @@ public class serverProperties implements Serializable {
 	private int numClients;
 	
 	/**
-	 * default comstructor
+	 * default constructor
 	 */
-	public serverProperties() {
+	public ServerProperties() {
 		this.port=0;
 		this.numClients=0;
 	}
@@ -28,7 +28,7 @@ public class serverProperties implements Serializable {
 	 * @param port port we use
 	 * @param numClients number of clients
 	 */
-	public serverProperties(int port, int numClients) {
+	public ServerProperties(int port, int numClients) {
 		this.port=port;
 		this.numClients=numClients;
 	}
@@ -37,7 +37,7 @@ public class serverProperties implements Serializable {
 	 * copy constructor
 	 * @param sp serverProperties we copy
 	 */
-	public serverProperties(serverProperties sp) {
+	public ServerProperties(ServerProperties sp) {
 		this.port=sp.port;
 		this.numClients=sp.numClients;
 	}
