@@ -28,17 +28,20 @@ public class ViewGUI extends CommonView {
 	Solution<Position> solution;
 	boolean mazeNull ;
 	boolean solNull ;
+	boolean error;
+	boolean play;
 	/**
 	 * ctor that constructs the gui using listeners, startWindow and mazeWindow
 	 */
 	public ViewGUI() {
 		this.listeners=new HashMap<String,Listener>();
 		initListeners();
+		this.mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, "");
 		this.startWindow =  new StartWindow("menu", 300, 500,listeners);
-		this.mazeWindow = new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, "");
 		this.mazeNull=true;
 		this.solNull=true;
-		
+		this.error = false;	
+		this.play = false;	
 	}
 	/**
 	 * initiliazing the listeners
@@ -66,21 +69,24 @@ public class ViewGUI extends CommonView {
 				//generate new maze
 				else if (args[0].equals("generate 3d maze"))
 				{
+					play = false;
 					setChanged();
 					notifyObservers(args);
 				}
 				else if (args[0].equals("Play")) // generate new maze and start playing it (if already exists play the old maze
 				{
-					if (!startWindow.shell.isDisposed())
-					{
-						startWindow.close(); //close startWindow
-					}
+					play = true;	
 					setChanged();
 					notifyObservers(args);
 					while (mazeNull){}
-					if (maze != null)
+					if (!error)
 					{
+						if (!startWindow.shell.isDisposed())
+						{
+							startWindow.close(); //close startWindow
+						}
 						mazeNull=true;
+						error = false;
 						pos = maze.getStartPosition();
 						//open the game window
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
@@ -88,37 +94,31 @@ public class ViewGUI extends CommonView {
 					}
 					else
 					{
+						play = false;
 						mazeNull=true;
-						//open the startWindow
-						startWindow =  new StartWindow("menu", 300, 500,listeners);
-						startWindow.run();
+						error = false;
 					}
 					
 				}
 				else if (args[0].equals("load maze")) //load a maze that is already exists
 				{
-					if (!startWindow.shell.isDisposed())
-					{
-						startWindow.close(); //close startWindow
-					}
+					
 					args[0] = "display";
 					setChanged();
 					notifyObservers(args);
 					if (maze != null)
 					{
+						if (!startWindow.shell.isDisposed())
+						{
+							startWindow.close(); //close startWindow
+						}
 						mazeNull=true;
 						pos = maze.getStartPosition();
 						//open the game window
 						mazeWindow =  new MazeWindow("game", 300, 500,listeners, maze,arrowKeyListener, args[1]);
 						mazeWindow.run();
 					}
-					else
-					{
-						mazeNull=true;
-						//open the startWindow
-						startWindow =  new StartWindow("menu", 300, 500,listeners);
-						startWindow.run();
-					}
+					
 				}
 				else
 				{
@@ -182,8 +182,9 @@ public class ViewGUI extends CommonView {
 				setChanged();
 				notifyObservers(str);
 				while (solNull){}
-				if (solution != null)
+				if (!error)
 				{
+					error = false;
 					solNull=true;
 					Position [] positions = new Position[solution.getPath().size()];
 					int cnt = solution.getPath().size()-1;
@@ -223,6 +224,7 @@ public class ViewGUI extends CommonView {
 				
 				else
 				{
+					error = false;
 					solNull=true;
 					error("problem with geting hint try again");
 				}
@@ -244,8 +246,9 @@ public class ViewGUI extends CommonView {
 				setChanged();
 				notifyObservers(str);
 				while (solNull){}
-				if (solution != null)
+				if (!error)
 				{
+					error = false;
 					solNull=true;
 					Position [] positions = new Position[solution.getPath().size()];
 					int cnt = solution.getPath().size()-1;
@@ -286,6 +289,7 @@ public class ViewGUI extends CommonView {
 				}
 				else
 				{
+					error = false;
 					solNull=true;
 					error("problem with geting hint try again");
 				}
@@ -467,11 +471,7 @@ public class ViewGUI extends CommonView {
 
 	@Override
 	public void mazegenerated(String string) {
-		if (!mazeWindow.shell.isDisposed())
-		{
-			mazeWindow.updateMessageBox(string);
-		}
-		else if (!startWindow.shell.isDisposed())
+		if (!startWindow.shell.isDisposed() && play == false)
 		{
 			startWindow.updateMessageBox(string);
 		}
@@ -484,8 +484,7 @@ public class ViewGUI extends CommonView {
 	public void displayMaze(Maze3d maze) {
 		this.maze = maze;
 		this.mazeNull = false;
-		
-		
+			
 	}
 
 	@Override
@@ -541,6 +540,20 @@ public class ViewGUI extends CommonView {
 		{
 			startWindow.updateMessageBox("Properties file loaded");
 		}
+		
+	}
+	
+	@Override
+	public void playError() {
+		error = true;
+		this.mazeNull = false;
+		
+	}
+	
+	@Override
+	public void solError() {
+		error = true;
+		this.solNull = false;
 		
 	}
 

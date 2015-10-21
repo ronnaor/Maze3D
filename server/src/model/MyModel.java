@@ -1,8 +1,11 @@
 package model;
 
 import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,27 +23,42 @@ public class MyModel extends Observable implements Model {
 	private int port;
 	private ExecutorService executer;
 	private ServerSocket server;
-	private boolean killServer = true;
+	private boolean killServer;
 	private int numOfClients;
 	private ClinetHandler clinetHandler;
 	private Thread mainServerThread;
-	private int clientsHandled=0;
+	private int clientsHandled;
 	/**
 	 * Ctor that gets the properties from the XML files and set them to the server
 	 * If properties does not exist then it will take default values
 	 */
 	public MyModel() {
 		this.clinetHandler = new MyClientHandler();
-		try {// get properties
+		this.clientsHandled = 0;
+		this.killServer = false;
+		File serverProp=new File("./resources/propServer.xml"); // check if server Properties xml file exists
+		if(!serverProp.exists()) //if the file does not exists
+		{
+			try { //create the xml file
+				XMLEncoder xml = new XMLEncoder(new FileOutputStream("./resources/propServer.xml"));
+				xml.writeObject(new ServerProperties(1234, 10));
+				xml.close();
+			} catch (FileNotFoundException e) {
+				setChanged();
+				notifyObservers(new String[] {"error", e.getMessage()});
+			}
+			
+		}
+		
+		try {// get the server properties from the xml file
 			XMLDecoder xml=new XMLDecoder(new FileInputStream("./resources/propServer.xml"));
 			ServerProperties properties=(ServerProperties)xml.readObject();
 			this.port = properties.getNumClients();
 			this.numOfClients = properties.getNumClients();
 			xml.close();
-		} catch (FileNotFoundException e1) {
-
-			this.port = 1234;
-			this.numOfClients = 10;
+		} catch (Exception e) {
+			setChanged();
+			notifyObservers(new String[] {"error", e.getMessage()});
 		}
 	}
 	
@@ -51,11 +69,11 @@ public class MyModel extends Observable implements Model {
 			server=new ServerSocket(port);
 			server.setSoTimeout(10*1000);
 		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			setChanged();
+			notifyObservers(new String[] {"error", e1.getMessage()});
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			setChanged();
+			notifyObservers(new String[] {"error", e1.getMessage()});
 		}
 		executer=Executors.newFixedThreadPool(numOfClients);
 		
@@ -65,35 +83,48 @@ public class MyModel extends Observable implements Model {
 				while(!killServer){
 					try {
 						final Socket someClient=server.accept();
+						
+						setChanged();
+						notifyObservers(new String[] {"update", someClient.toString()});
+						
 						if(someClient!=null){
 							executer.execute(new Runnable() {									
 								@Override
 								public void run() {
 									try{										
 										clientsHandled++;
-										System.out.println("\thandling client "+clientsHandled);
+										setChanged();
+										notifyObservers(new String[] {"update", "\thandling client nomber: "+clientsHandled});
 										clinetHandler.handleClient(someClient.getInputStream(), someClient.getOutputStream());
 										someClient.close();
-										System.out.println("\tdone handling client "+clientsHandled);										
+										setChanged();
+										notifyObservers(new String[] {"update", "\tdone handling client "+clientsHandled});									
 									}catch(IOException e){
-										e.printStackTrace();
+										setChanged();
+										notifyObservers(new String[] {"error", e.getMessage()});
 									}									
 								}
 							});								
 						}
 					}
 					catch (SocketTimeoutException e){
-						System.out.println("no clinet connected...");
+						setChanged();
+						notifyObservers(new String[] {"error", "no clinet connected"});
 					} 
 					catch (IOException e) {
-						e.printStackTrace();
+						setChanged();
+						notifyObservers(new String[] {"error", e.getMessage()});
 					}
 				}
-				System.out.println("done accepting new clients.");
+				setChanged();
+				notifyObservers(new String[] {"update", "done accepting new clients"});
 			} // end of the mainServerThread task
 		});
 		
 		mainServerThread.start();
+		
+		setChanged();
+		notifyObservers(new String[] {"update", "server is now open, can accept clients"});
 		
 	}
 		
@@ -101,9 +132,9 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void closeServer() {
-		killServer = false;
+		killServer = true;
 		// do not execute jobs in queue, continue to execute running threads
-				System.out.println("shutting down");
+				System.out.println("shutting down the server");
 				executer.shutdown();
 				// wait 10 seconds over and over again until all running jobs have finished
 				@SuppressWarnings("unused")
@@ -111,26 +142,29 @@ public class MyModel extends Observable implements Model {
 				try {
 					while(!(allTasksCompleted=executer.awaitTermination(10, TimeUnit.SECONDS)));
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					setChanged();
+					notifyObservers(new String[] {"error", e.getMessage()});
 				}
 				
-				System.out.println("all the tasks have finished");
+				setChanged();
+				notifyObservers(new String[] {"update", "all tasks finished working"});
 
 				try {
-					mainServerThread.join();		
-					System.out.println("main server thread is done");
+					mainServerThread.join();
+					setChanged();
+					notifyObservers(new String[] {"update", "main server thread is done"});
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					setChanged();
+					notifyObservers(new String[] {"error", e.getMessage()});
 				}
 				
 				try {
 					server.close();
-					System.out.println("server is safely closed");
+					setChanged();
+					notifyObservers(new String[] {"update", "server closed"});
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					setChanged();
+					notifyObservers(new String[] {"error", e.getMessage()});
 				}
 	}
 

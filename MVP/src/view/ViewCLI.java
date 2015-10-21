@@ -263,6 +263,11 @@ public class ViewCLI extends CommonView {
 		
 	}
 
+	@Override
+	public void playError() {}
+
+	@Override
+	public void solError() {}
 	
 	
 

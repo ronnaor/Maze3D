@@ -80,8 +80,11 @@ public class Presenter implements Observer {
 		{
 			switch(args[0])
 			{
-			case "": 
-				
+			case "update": 
+				view.printOutput(args[1]);
+				break;
+			case "error": 
+				view.displayError(args[1]);
 				break;
 			default:
 				view.displayError("no such command");

@@ -158,8 +158,7 @@ public class Presenter implements Observer {
 				}
 				else 
 				{
-					mazep=null;
-					view.displayMaze(mazep);
+					view.playError();
 				}
 				break;
 			case "sol":
@@ -171,8 +170,7 @@ public class Presenter implements Observer {
 				}
 				else 
 				{
-					solution=null;
-					view.displaySolution(solution);
+					view.solError();
 					model.removeMidMaze(args);
 				}
 				break;

@@ -770,7 +770,7 @@ public class MyModel extends Observable implements Model {
 		
 		if(args[1]==null)
 		{
-			path = "./prop.xml";
+			path = "./resources/prop.xml";
 		}
 		
 		else

@@ -84,18 +84,7 @@ public class MyView extends Observable implements View {
 		
 	}
 
-	@Override
-	public void openServer() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void close() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void displayError(String err) {
 		out.println(err);

@@ -12,16 +12,7 @@ public interface View {
 	 */
 	public void start();
 	
-	/**
-	 * open the server
-	 */
-	public void openServer();
-	
-	/**
-	 * close the server 
-	 */
-	public void close();
-	
+
 	/**
 	 * display error 
 	 * @param err string the error 

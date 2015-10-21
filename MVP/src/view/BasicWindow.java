@@ -94,6 +94,7 @@ public abstract class BasicWindow implements Runnable{
 	 */
 	public void updateMessageBox(String str)
 	{
+		
 		display.syncExec(new Runnable(){
 			@Override
 			public void run() {

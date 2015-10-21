@@ -78,6 +78,17 @@ public interface View  {
 	 */
 	void mazegenerated(String string);
 
+	/**
+	 * notify error in generate maze
+	 */
+	void playError();
+
+	/**
+	 * notify error in solve maze
+	 */
+	void solError();
+
+
 	
 	
 }

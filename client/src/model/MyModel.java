@@ -1,6 +1,7 @@
 package model;
 
 import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,11 +33,6 @@ import algorithms.mazeGenarators.Maze3dByteArr;
 import algorithms.mazeGenarators.MyMaze3dGenerator;
 import algorithms.mazeGenarators.Position;
 import algorithms.mazeGenarators.SimpleMaze3dGenerator;
-import algorithms.search.AStar;
-import algorithms.search.BFS;
-import algorithms.search.MazeAirDistance;
-import algorithms.search.MazeManhattenDistance;
-import algorithms.search.MazeSearchable;
 import algorithms.search.Solution;
 
 import io.MyCompressorOutputStream;
@@ -41,6 +40,7 @@ import io.MyDecompressorInputStream;
 import presenter.ClientProperties;
 import presenter.Presenter;
 import presenter.Properties;
+
 /**
  * class MyModel that extends Observable and implements Model will be defining the data to be displayed
  *
@@ -82,16 +82,30 @@ public class MyModel extends Observable implements Model {
 			this.solveAlg = "A* manhatten";
 			this.viewStyle = "GUI";
 		}			
-		try {// get properties
-			XMLDecoder xml=new XMLDecoder(new FileInputStream("./resources/propServer.xml"));
-			ClientProperties properties=(ClientProperties)xml.readObject();
+		//get client properties
+		File serverProp=new File("./resources/propClient.xml"); // check if client Properties xml file exists
+		if(!serverProp.exists()) //if the file does not exists
+		{
+			try { //create the xml file
+				XMLEncoder xmlClient = new XMLEncoder(new FileOutputStream("./resources/propClient.xml"));
+				xmlClient.writeObject(new ClientProperties("localhost", 1234));
+				xmlClient.close();
+			} catch (FileNotFoundException e) {
+				setChanged();
+				notifyObservers(new String[] {"error", e.getMessage()});
+			}
+			
+		}
+		
+		try {// get the client properties from the xml file
+			XMLDecoder xmlClient=new XMLDecoder(new FileInputStream("./resources/propClient.xml"));
+			ClientProperties properties=(ClientProperties)xmlClient.readObject();
 			this.port = properties.getPortServer();
 			this.serverIP = properties.getIpServer();
-			xml.close();
-		} catch (FileNotFoundException e1) {
-
-			this.port = 1234;
-			this.serverIP = "localhost";
+			xmlClient.close();
+		} catch (Exception e) {
+			setChanged();
+			notifyObservers(new String[] {"error", e.getMessage()});
 		}
 	}
 	/**
@@ -599,13 +613,6 @@ public class MyModel extends Observable implements Model {
 			setChanged();
 			notifyObservers(str);
 		}
-		else if(solutions.containsKey(args[1]))
-		{
-			str[0] = "printUpdate";
-			str[1] = "solution for "+ args[1]+ " is ready";
-			setChanged();
-			notifyObservers(str);
-		}
 		else if (!mazes.containsKey(args[1]))
 		{
 			str[0] = "error";
@@ -623,8 +630,8 @@ public class MyModel extends Observable implements Model {
 					//check if the generate algorithm is valid else using solveAlg
 					if ((args.length>2) && (args[2].equalsIgnoreCase("BFS")))
 					{
-						Solution<Position> s=  new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
-						
+						Solution<Position> s= getSolitionFromServer(mazes.get(args[1]), "BFS", args[1]);  //get Solution of the maze from server
+								
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -638,7 +645,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if ((args.length>2) && (args[2].equalsIgnoreCase("A* manhatten")))
 					{
-						Solution<Position> s=  new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s= getSolitionFromServer(mazes.get(args[1]), "A* manhatten", args[1]);  //get Solution of the maze from server 
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -651,7 +658,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if ((args.length>2) && (args[2].equalsIgnoreCase("A* air")))
 					{
-						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s= getSolitionFromServer(mazes.get(args[1]), "A* air", args[1]);  //get Solution of the maze from server
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -664,7 +671,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if(solveAlg.equalsIgnoreCase("BFS"))
 					{
-						Solution<Position> s= new BFS<Position>().search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s= getSolitionFromServer(mazes.get(args[1]), "BFS", args[1]);  //get Solution of the maze from server
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -679,7 +686,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if(solveAlg.equalsIgnoreCase("A* manhatten"))					
 					{
-						Solution<Position> s= new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s= getSolitionFromServer(mazes.get(args[1]), "A* manhatten", args[1]);  //get Solution of the maze from server 
 						if (s!=null)
 						{
 							solutions.put(args[1], s);
@@ -692,7 +699,7 @@ public class MyModel extends Observable implements Model {
 					}
 					if(solveAlg.equalsIgnoreCase("A* air"))
 					{
-						Solution<Position> s=  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(mazes.get(args[1]),1)); //get Solution of the maze
+						Solution<Position> s=  getSolitionFromServer(mazes.get(args[1]), "A* air", args[1]);  //get Solution of the maze from server
 						
 						if (s!=null)
 						{
@@ -704,7 +711,7 @@ public class MyModel extends Observable implements Model {
 							return "no solution was found";
 						}
 					}
-					return null;
+					return "no solution was found";
 				}});
 		//open new thread
 				exe.execute(new Runnable() {
@@ -785,7 +792,7 @@ public class MyModel extends Observable implements Model {
 		
 		if(args[1]==null)
 		{
-			path = "./prop.xml";
+			path = "./resources/prop.xml";
 		}
 		
 		else
@@ -942,10 +949,7 @@ public class MyModel extends Observable implements Model {
 			while (!solutions.containsKey(args[1])){}
 			return solutions.get(args[1]);
 		}	
-				
-		
-		
-		
+					
 	}
 	
 	@Override
@@ -1063,6 +1067,66 @@ public class MyModel extends Observable implements Model {
 			      e.printStackTrace();
 			    }
 			  
+	}
+	
+	/**
+	 * asking the server for solution to a maze
+	 * @param maze the maze we want solution for
+	 * @param solveAlg the search algorithm to work with 
+	 * @return solution Solution<Position> of the maze
+	 */
+	private Solution<Position>getSolitionFromServer(Maze3d maze, String solveAlg, String mazeName)
+	{
+		
+		try {
+			//start new socket to connect to server
+			theServer = new Socket(this.serverIP, this.port);
+			
+			//get the socket output and input streams
+			PrintWriter outToServer = new PrintWriter(theServer.getOutputStream());
+			BufferedReader inFromServer=new BufferedReader(new InputStreamReader(theServer.getInputStream()));
+
+			outToServer.println("Need Solution\n");
+			outToServer.flush();
+			
+			//get answer from server and continue
+			inFromServer.readLine();
+			
+			//create an array list of the solve algorithm and the maze to solve and send it to the server
+			ArrayList<Object> mazeAndAlg=new ArrayList<Object>();
+			mazeAndAlg.add(mazeName);
+			mazeAndAlg.add(solveAlg);
+			mazeAndAlg.add(maze.toByteArray());
+			ObjectOutputStream problemToServer=new ObjectOutputStream(theServer.getOutputStream());
+			problemToServer.writeObject(mazeAndAlg);
+			problemToServer.flush();
+			
+			//get the solution from the server
+			ObjectInputStream solutionFromServer=new ObjectInputStream(theServer.getInputStream());
+			@SuppressWarnings("unchecked")
+			Solution<Position> sol=(Solution<Position>)solutionFromServer.readObject();
+
+			problemToServer.close();
+			solutionFromServer.close();
+			outToServer.close();
+			inFromServer.close();
+			
+			theServer.close();
+			
+			return sol;
+		}
+		catch (Exception e) 
+		{
+			try {
+				theServer.close();
+			} catch (Exception e1) {
+				return null;
+			}
+			return null;
+		}
+		
+
+		
 	}
 	
 
