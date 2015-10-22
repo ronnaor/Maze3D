@@ -59,7 +59,7 @@ public class Presenter implements Observer {
 	@Override
 	public void update(Observable obs, Object obj) {
 		String[] args = (String[])obj;
-		if (obs == model)
+		if (obs == view)
 		{
 			switch(args[0])
 			{
@@ -76,7 +76,7 @@ public class Presenter implements Observer {
 			}
 			
 		}
-		if (obs == view)
+		if (obs == model)
 		{
 			switch(args[0])
 			{

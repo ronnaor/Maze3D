@@ -20,8 +20,8 @@ public class ServerProperties implements Serializable {
 	 * default constructor
 	 */
 	public ServerProperties() {
-		this.port=0;
-		this.numClients=0;
+		this.port = 0;
+		this.numClients = 0;
 	}
 	/**
 	 * constructor

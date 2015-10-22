@@ -53,7 +53,7 @@ public class MyModel extends Observable implements Model {
 		try {// get the server properties from the xml file
 			XMLDecoder xml=new XMLDecoder(new FileInputStream("./resources/propServer.xml"));
 			ServerProperties properties=(ServerProperties)xml.readObject();
-			this.port = properties.getNumClients();
+			this.port = properties.getPort();
 			this.numOfClients = properties.getNumClients();
 			xml.close();
 		} catch (Exception e) {
@@ -75,6 +75,7 @@ public class MyModel extends Observable implements Model {
 			setChanged();
 			notifyObservers(new String[] {"error", e1.getMessage()});
 		}
+
 		executer=Executors.newFixedThreadPool(numOfClients);
 		
 		mainServerThread=new Thread(new Runnable() {			

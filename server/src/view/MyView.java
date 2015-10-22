@@ -62,7 +62,7 @@ public class MyView extends Observable implements View {
 					while(!(str = in.readLine()).equals("close server"))
 					{
 						
-						args = new String[1];
+						args = new String[2];
 						args[0]= str;
 						//send the command and values to the presenter
 						setChanged();
