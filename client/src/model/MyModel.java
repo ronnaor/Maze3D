@@ -57,6 +57,7 @@ public class MyModel extends Observable implements Model {
 	private Socket theServer;
 	private String serverIP;
 	private int port;
+	private boolean mid;
 
 	
 	/**
@@ -64,6 +65,7 @@ public class MyModel extends Observable implements Model {
 	 */
 	public MyModel() {
 		
+		this.mid =false;
 		this.mazes = new HashMap<String, Maze3d>();
 		this.solutions = new HashMap<String, Solution<Position>>();
 		loadFile();
@@ -938,6 +940,7 @@ public class MyModel extends Observable implements Model {
 		}	
 		else
 		{
+			this.mid = true;
 			Maze3d tempMaze = new MyMaze3dGenerator(mazes.get(args[1]));  
 			args[1]= args[1]+"mid";
 			int x=Presenter.tryParseInt(args[2]);
@@ -945,9 +948,10 @@ public class MyModel extends Observable implements Model {
 			int z=Presenter.tryParseInt(args[4]);
 			tempMaze.setStartPosition(new Position(x,y,z));// set the position as the start position of this maze
 			mazes.put(args[1], tempMaze);
-			solve(args);
-			while (!solutions.containsKey(args[1])){}
-			return solutions.get(args[1]);
+			Solution<Position> s =getSolitionFromServer(tempMaze, this.solveAlg, args[1]);
+			solutions.put(args[1], s);
+			this.mid = false;
+			return s;
 		}	
 					
 	}
@@ -1094,6 +1098,7 @@ public class MyModel extends Observable implements Model {
 			
 			//create an array list of the solve algorithm and the maze to solve and send it to the server
 			ArrayList<Object> mazeAndAlg=new ArrayList<Object>();
+			mazeAndAlg.add(this.mid);
 			mazeAndAlg.add(mazeName);
 			mazeAndAlg.add(solveAlg);
 			mazeAndAlg.add(maze.toByteArray());
@@ -1104,8 +1109,8 @@ public class MyModel extends Observable implements Model {
 			//get the solution from the server
 			ObjectInputStream solutionFromServer=new ObjectInputStream(theServer.getInputStream());
 			@SuppressWarnings("unchecked")
-			Solution<Position> sol=(Solution<Position>)solutionFromServer.readObject();
-
+			Solution<Position> sol=new Solution<Position>((Solution<Position>)solutionFromServer.readObject());
+			
 			problemToServer.close();
 			solutionFromServer.close();
 			outToServer.close();

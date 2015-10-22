@@ -1,8 +1,11 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,16 +52,17 @@ public class MyClientHandler implements ClinetHandler{
 		String line;
 		try{
 			if((line=in.readLine()).equals("Need Solution")){
-				out.println("received the request");
+				out.println("received the request\n");
 				out.flush();
 				
 				ObjectInputStream problemFromClientt=new ObjectInputStream(inFromClient);
 				@SuppressWarnings("unchecked")
 				ArrayList<Object> mazeAndAlg=(ArrayList<Object>)problemFromClientt.readObject();
-				String mazeName=(String)mazeAndAlg.get(0);
-				String solveAlg=(String)mazeAndAlg.get(1);
-				Maze3d maze=new Maze3dByteArr((byte[])mazeAndAlg.get(2));
+				String mazeName=(String)mazeAndAlg.get(1);
+				String solveAlg=(String)mazeAndAlg.get(2);
+				Maze3d maze=new Maze3dByteArr((byte[])mazeAndAlg.get(3));
 				
+				ObjectOutputStream solutionToClient=new ObjectOutputStream(outToClient);
 				Solution<Position> s =null;
 				if(solutions.containsKey(mazeName))
 				{
@@ -67,21 +71,36 @@ public class MyClientHandler implements ClinetHandler{
 				else if(solveAlg.equalsIgnoreCase("BFS"))
 				{
 					s = new BFS<Position>().search(new MazeSearchable(maze,1)); //get Solution of the maze
-					solutions.put(mazeName, s);
+					if (!((boolean)mazeAndAlg.get(0)))
+					{
+						mazes.put(mazeName, maze);
+						solutions.put(mazeName, s);
+						saveFile();
+					}
 				}
 				else if(solveAlg.equalsIgnoreCase("A* manhatten"))					
 				{
 					s = new AStar<Position>(new MazeManhattenDistance()).search(new MazeSearchable(maze,1)); //get Solution of the maze
-					solutions.put(mazeName, s);
+					if (!((boolean)mazeAndAlg.get(0)))
+					{
+						mazes.put(mazeName, maze);
+						solutions.put(mazeName, s);
+						saveFile();
+					}
 				}
 				else if(solveAlg.equalsIgnoreCase("A* air"))
 				{
 					s =  new AStar<Position>(new MazeAirDistance()).search(new MazeSearchable(maze,1)); //get Solution of the maze
-					solutions.put(mazeName, s);
+					if (!((boolean)mazeAndAlg.get(0)))
+					{
+						mazes.put(mazeName, maze);
+						solutions.put(mazeName, s);
+						saveFile();
+					}
 				}
 				
 				//return the solution to the client
-				ObjectOutputStream solutionToClient=new ObjectOutputStream(outToClient);
+				
 				solutionToClient.writeObject(s);
 				solutionToClient.flush();
 
@@ -159,5 +178,46 @@ public class MyClientHandler implements ClinetHandler{
 			  
 	}
 	
+	public void saveFile() {
+		try {
+			
+			File mazesFile = new File("./resources/Solutions.zip");
+			FileWriter fw = new FileWriter(mazesFile,false);
+			BufferedWriter bw = new BufferedWriter(fw);
+			for (String mazeName : this.solutions.keySet()) 
+			{
+				//Overriding the data in the file because we already loaded it into the memory
+				
+				bw.write(mazeName);	
+				//adding special characters in order to identify objects
+				bw.write("@@@");
+				bw.flush();
+				
+				byte[] byteMaze = new byte[this.mazes.get(mazeName).toByteArray().length];
+				byteMaze= this.mazes.get(mazeName).toByteArray();	
+				for (byte b : byteMaze)
+				{
+					bw.write((int)b);
+					bw.flush();
+				}
+				
+				bw.write("@@@");
+				for (Position p :this.solutions.get(mazeName).getPath())
+				{
+					bw.write(p.getX()+"#"+p.getY()+"#"+p.getZ()+"#");
+					bw.flush();
+				}
+				bw.write("\n");
+				bw.flush();
+				
+			}
+			bw.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
+	}
 }

@@ -173,6 +173,7 @@ public class ViewGUI extends CommonView {
 			
 			@Override
 			public void handleEvent(Event arg0) {
+				solNull=true;
 				String[] str = new String[5];
 				str[0] = "sol";
 				str[1] = mazeWindow.getMazeName();
@@ -193,33 +194,23 @@ public class ViewGUI extends CommonView {
 						positions[cnt] = p;
 						cnt--;
 					}
-					Thread thread=new Thread(new Runnable() {
+					
 						
-						@Override
-						public void run() 
+					try {
+						pos = positions[1];
+						mazeWindow.move(pos, makeUpPossiblle(),makeDownPossiblle());
+						if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
 						{
-							
-							try {
-								Thread.sleep(800);
-								pos = positions[1];
-								mazeWindow.move(pos, makeUpPossiblle(),makeDownPossiblle());
-								if (pos.getX()==maze.getGoalPosition().getX() && pos.getY()==maze.getGoalPosition().getY() && pos.getZ()==maze.getGoalPosition().getZ())
-								{
-									mazeWindow.solved();
-								}
-								
-							} catch (Exception e) {
-								if (!mazeWindow.shell.isDisposed())
-								{
-									mazeWindow.errMessageBox(e);
-								}
-								
-							}
-						
-							
+							mazeWindow.solved();
 						}
-					});
-					thread.start();
+						
+					} catch (Exception e) {
+						if (!mazeWindow.shell.isDisposed())
+						{
+							mazeWindow.errMessageBox(e);
+						}
+						
+					}
 				}
 				
 				else
@@ -237,6 +228,7 @@ public class ViewGUI extends CommonView {
 			
 			@Override
 			public void handleEvent(Event arg0) {
+				solNull=true;
 				String[] str = new String[5];
 				str[0] = "sol";
 				str[1] = mazeWindow.getMazeName();
@@ -262,6 +254,7 @@ public class ViewGUI extends CommonView {
 						@Override
 						public void run() 
 						{
+							
 							for (Position p: positions)
 							{
 								try {

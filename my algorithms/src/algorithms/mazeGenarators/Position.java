@@ -1,12 +1,18 @@
 package algorithms.mazeGenarators;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Position class
  *
  */
-public class Position {
+public class Position implements Serializable {
+	/**
+	 * serial number for the serialization
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	protected static Random posrand = new Random();
 	private int x;
 	private int y;

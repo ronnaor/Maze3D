@@ -158,6 +158,7 @@ public class Maze2D extends MazeDisplayer {
 	@Override
 	public void move(Position p) {
 		
+		
 		setCharacterPosition(p.getX(),p.getY(),p.getZ());
 		
 	}

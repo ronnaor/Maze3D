@@ -1,11 +1,19 @@
 package algorithms.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  *generic class Solution<T>
  * @param <T> the type of class we will work with 
  */
-public class Solution<T> {
+public class Solution<T> implements Serializable
+{
+	
+	/**
+	 * serial number for the serialization
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	ArrayList<T> path;
 	int numMoves;
 	
