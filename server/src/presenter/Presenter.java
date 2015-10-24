@@ -1,5 +1,6 @@
 package presenter;
 
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,6 +15,8 @@ public class Presenter implements Observer {
 
 	private Model model;
 	private View view;
+	private HashMap<String, Command<Void>> viewCommands;
+	private HashMap<String, Command<Void>> modelCommands;
 	
 	/**
 	 * Ctor for Presenter
@@ -23,6 +26,53 @@ public class Presenter implements Observer {
 	public Presenter(Model model,  View view) {
 		this.model = model;
 		this.view = view;
+		this.viewCommands = new HashMap<String, Command<Void>>();
+		this.modelCommands = new HashMap<String, Command<Void>>(); 
+		initViewCommands();
+		initModelCommands();
+	}
+	/**
+	 * initiate the model commands hashmap
+	 */
+	private void initModelCommands() {
+
+		modelCommands.put("update", new Command<Void>() {
+			
+			@Override
+			public Void doCommand(String[] args) {
+				view.printOutput(args[1]);
+				return null;
+			}		
+		});
+		modelCommands.put("error", new Command<Void>() {
+			
+			@Override
+			public Void doCommand(String[] args) {
+				view.displayError(args[1]);
+				return null;
+			}		
+		});
+	}
+	/**
+	 * initiate the view commands hashmap
+	 */
+	private void initViewCommands() {
+		viewCommands.put("open server", new Command<Void>() {
+			
+			@Override
+			public Void doCommand(String[] args) {
+				model.openServer();
+				return null;
+			}		
+		});
+		viewCommands.put("close server", new Command<Void>() {
+			
+			@Override
+			public Void doCommand(String[] args) {
+				model.closeServer();
+				return null;
+			}		
+		});		
 	}
 	/**
 	 * get the model the presenter work with
@@ -59,41 +109,55 @@ public class Presenter implements Observer {
 	@Override
 	public void update(Observable obs, Object obj) {
 		String[] args = (String[])obj;
-		if (obs == view)
-		{
-			switch(args[0])
-			{
-			case "open server": 
-				model.openServer();
-				break;
-			case "close server": 
-				model.closeServer();
-				break;
-			default:
-				view.displayError("no such command");
-				break;
-					
-			}
-			
-		}
 		if (obs == model)
 		{
-			switch(args[0])
+			if (modelCommands.containsKey(args[0]))
 			{
-			case "update": 
-				view.printOutput(args[1]);
-				break;
-			case "error": 
-				view.displayError(args[1]);
-				break;
-			default:
-				view.displayError("no such command");
-				break;
-					
+				modelCommands.get(args[0]).doCommand(args);
 			}
-
+			else
+			{
+				view.displayError("no such command");
+			}
+		}
+		if (obs == view)
+		{
+			if (viewCommands.containsKey(args[0]))
+			{
+				viewCommands.get(args[0]).doCommand(args);
+			}
+			else
+			{
+				view.displayError("no such command");
+			}
 		}
 	}
-	
-
+	/**
+	 * getting the commands of the view
+	 * @return hashmap with key values as string names and vaules as the commands
+	 */
+	public HashMap<String, Command<Void>> getViewCommands() {
+		return viewCommands;
+	}
+	/**
+	 * settings the hashmap of the view commands
+	 * @param viewCommands hashmap consisting key values as string names and vaules as the commands 
+	 */
+	public void setViewCommands(HashMap<String, Command<Void>> viewCommands) {
+		this.viewCommands = viewCommands;
+	}
+	/**
+	 * getting the commands of the model
+	 * @return hashmap with key values as string names and vaules as the commands
+	 */
+	public HashMap<String, Command<Void>> getModelCommands() {
+		return modelCommands;
+	}
+	/**
+	 * * settings the hashmap of the model commands
+	 * @param modelCommands hashmap consisting key values as string names and vaules as the commands
+	 */
+	public void setModelCommands(HashMap<String, Command<Void>> modelCommands) {
+		this.modelCommands = modelCommands;
+	}
 }

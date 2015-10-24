@@ -284,7 +284,7 @@ public class ViewGUI extends CommonView {
 				{
 					error = false;
 					solNull=true;
-					error("problem with geting hint try again");
+					error("problem with geting solution try again");
 				}
 			
 			}

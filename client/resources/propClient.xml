@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_51" class="java.beans.XMLDecoder">
+ <object class="presenter.ClientProperties">
+  <void property="ipServer">
+   <string>localhost</string>
+  </void>
+  <void property="portServer">
+   <int>1234</int>
+  </void>
+ </object>
+</java>
